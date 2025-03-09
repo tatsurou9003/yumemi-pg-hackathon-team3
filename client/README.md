@@ -33,6 +33,28 @@ ex)`kebab-case.tsx`
 
 ### ライブラリ説明
 
+#### Tanstack Router
+
+型安全かつファイルベースルーティングを備えているルーティングライブラリ。
+`npm run dev`で`routeTree.gen.ts`が自動更新され、勝手にルーティング設定が追加されていく仕組み。
+ページを作る際はsrc/routes/下に作成していく。命名規則は下記の通り。
+
+```
+src/routes/
+├── __root.tsx        # エントリポイントの定義
+├── _layout.tsx       # レイアウトファイル
+├── _layout/          # このディレクトリ配下にレイアウトが適用される
+├── index.tsx         # `/`
+├── posts.tsx         # `/posts`
+├── posts/            # `/posts/`
+│   ├── profile.tsx  # `/posts/profile`
+│   ├── index.tsx    # `/posts`
+│   ├── $postId.tsx  # `/posts/:postId`
+│   ├── $postId.edit.tsx  # `/posts/:postId/edit`
+```
+
+その他の設定は[こちら](https://zenn.dev/calloc134/articles/6680b272a2c2c5#%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E3%81%AE%E6%8C%87%E5%AE%9A)を参照。
+
 #### Orval
 
 TODO:追記
