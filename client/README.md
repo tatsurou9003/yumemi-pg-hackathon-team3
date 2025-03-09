@@ -1,14 +1,19 @@
-## フロントエンド
+# フロントエンド
 
-### 技術構成
+## 技術構成
 
 フレームワーク: React+Vite
+
 UI コンポーネント: shadcn/ui
+
 CSS: Tailwind
+
 Linter & Formatter: ESLint + Prettier
+
 その他ライブラリ等: Orval, Tanstack Router, React Hook Form 等
 
-### ディレクトリ構成
+
+## ディレクトリ構成
 
 ```
 client/
@@ -37,20 +42,21 @@ client/
 └── vite.config.ts             # Vite の設定ファイル
 ```
 
-### 環境構築
+## 環境構築
 
 1. `cd client`
 2. `npm install`
 3. `npm run dev`で開発環境が立ち上がれば ok
 
-### 命名規則
+## 命名規則
 
 ケバブケース
 ex)`kebab-case.tsx`
 
-### ライブラリ説明
 
-#### Tanstack Router
+## ライブラリ説明
+
+### Tanstack Router
 
 型安全かつファイルベースルーティングを備えているルーティングライブラリ。
 `npm run dev`で`routeTree.gen.ts`が自動更新され、勝手にルーティング設定が追加されていく仕組み。
@@ -72,7 +78,7 @@ src/routes/
 
 その他の設定は[こちら](https://zenn.dev/calloc134/articles/6680b272a2c2c5#%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E3%81%AE%E6%8C%87%E5%AE%9A)を参照。
 
-#### Orval
+### Orval
 
 OpenApiのドキュメントから型安全にAPIリクエストのHooksを作成してくれるライブラリ。モックサーバーも立てられるので、`openapi.yaml`さえあれば、API実装が未完了でも容易に繋ぎ込んでいける。
 
