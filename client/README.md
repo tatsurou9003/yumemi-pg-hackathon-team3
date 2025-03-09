@@ -57,5 +57,9 @@ src/routes/
 
 #### Orval
 
-TODO:追記
+OpenApiのドキュメントから型安全にAPIリクエストのHooksを作成してくれるライブラリ。モックサーバーも立てられるので、`openapi.yaml`さえあれば、API実装が未完了でも容易に繋ぎ込んでいける。
+
+TODO:`openapi.yaml`ファイルが作られた後に、設定ファイルを生成し、`npx orval`を実行
+TODO: フックの使い方について追記
+
 ...
