@@ -51,6 +51,7 @@ client/
 ## 命名規則
 
 ケバブケース
+
 ex)`kebab-case.tsx`
 
 
@@ -59,7 +60,9 @@ ex)`kebab-case.tsx`
 ### Tanstack Router
 
 型安全かつファイルベースルーティングを備えているルーティングライブラリ。
+
 `npm run dev`で`routeTree.gen.ts`が自動更新され、勝手にルーティング設定が追加されていく仕組み。
+
 ページを作る際はsrc/routes/下に作成していく。命名規則は下記の通り。
 
 ```
@@ -83,6 +86,7 @@ src/routes/
 OpenApiのドキュメントから型安全にAPIリクエストのHooksを作成してくれるライブラリ。モックサーバーも立てられるので、`openapi.yaml`さえあれば、API実装が未完了でも容易に繋ぎ込んでいける。
 
 TODO:`openapi.yaml`ファイルが作られた後に、設定ファイルを生成し、`npx orval`を実行
+
 TODO: フックの使い方について追記
 
 ...
