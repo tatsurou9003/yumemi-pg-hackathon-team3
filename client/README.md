@@ -11,13 +11,30 @@ Linter & Formatter: ESLint + Prettier
 ### ディレクトリ構成
 
 ```
-src/
-├── components/ # UI コンポーネントの管理（ボタン、モーダル、フォームなどの再利用可能なコンポーネント）
-├── features/ # 特定の機能に関連するコンポーネントやロジック（例：認証、ダッシュボード、ユーザー管理）
-├── hooks/ # カスタムフックの管理（例：useAuth、useFetch、useToggle などの再利用可能なフック）
-├── lib/ # 外部ライブラリやユーティリティ関数の管理（例：API クライアント、フォーマッター、エラーハンドリング）
-├── routes/ # ルート定義とページコンポーネント（ページごとのレイアウトやルーティングを管理）
-├── types/ # 型定義（TypeScript の型、API のレスポンス型、コンポーネントの Props 型などを管理）
+client/
+├── public/                    # 静的ファイル（画像、フォントなど）
+├── src/
+│   ├── components/            # 再利用可能な UI コンポーネント
+│   ├── features/              # 特定のページに関連するコンポーネントやロジック
+│   ├── hooks/                 # カスタムフック
+│   ├── lib/                   # 外部ライブラリのユーティリティ関数
+│   ├── routes/                # ルート定義とページコンポーネント
+│   ├── types/                 # 型定義
+│   ├── main.tsx               # React アプリのエントリーポイント
+│   ├── routeTree.gen.ts       # TanStack Router の自動生成ルートツリー
+│   ├── tailwind.css           # Tailwind CSSのインポートファイル
+│   ├── vite-env.d.ts          # Vite 環境用の TypeScript 定義
+├── .gitignore
+├── components.json            # shadcn/ui用の設定ファイル
+├── eslint.config.js           # ESLint の設定ファイル
+├── index.html                 # Vite プロジェクトの エントリーファイル
+├── package-lock.json
+├── package.json
+├── README.md                  # プロジェクトの説明書
+├── tsconfig.app.json          # TypeScript のアプリ用設定
+├── tsconfig.json              # TypeScript のメイン設定
+├── tsconfig.node.json         # Node.js 用の TypeScript 設定
+└── vite.config.ts             # Vite の設定ファイル
 ```
 
 ### 環境構築
