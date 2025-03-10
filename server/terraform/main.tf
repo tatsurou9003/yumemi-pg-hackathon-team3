@@ -13,6 +13,13 @@ provider "aws" {
   region = var.aws_region
 }
 
+module "amplify" {
+  source         = "./modules/amplify"
+  amplify_app_name  = var.amplify_app_name
+  repository_url = var.repository_url
+  access_token   = var.access_token
+}
+
 module "lambda" {
   source               = "./modules/lambda"
   lambda_function_name = "my_lambda"
