@@ -8,42 +8,32 @@
 
 ## Providers
 
-| Name | Version |
-|------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.7.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 4.67.0 |
+No providers.
 
 ## Modules
 
-No modules.
+| Name | Source | Version |
+|------|--------|---------|
+| <a name="module_amplify"></a> [amplify](#module\_amplify) | ./modules/amplify | n/a |
+| <a name="module_api_gateway"></a> [api\_gateway](#module\_api\_gateway) | ./modules/api_gateway | n/a |
+| <a name="module_lambda"></a> [lambda](#module\_lambda) | ./modules/lambda | n/a |
 
 ## Resources
 
-| Name | Type |
-|------|------|
-| [aws_api_gateway_deployment.api_deployment](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_deployment) | resource |
-| [aws_api_gateway_integration.lambda_integration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_integration) | resource |
-| [aws_api_gateway_method.hello_get](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_method) | resource |
-| [aws_api_gateway_resource.hello](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_resource) | resource |
-| [aws_api_gateway_rest_api.api](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_rest_api) | resource |
-| [aws_api_gateway_stage.api_stage](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_stage) | resource |
-| [aws_iam_policy_attachment.lambda_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_policy_attachment) | resource |
-| [aws_iam_role.lambda_exec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role) | resource |
-| [aws_lambda_function.lambda_function](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function) | resource |
-| [aws_lambda_permission.api_gateway_permission](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission) | resource |
-| [archive_file.lambda_zip](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
+No resources.
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_api_gateway_name"></a> [api\_gateway\_name](#input\_api\_gateway\_name) | API名 | `string` | `"my_api_gateway"` | no |
-| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWSリージョン | `string` | `"ap-northeast-1"` | no |
-| <a name="input_lambda_function_name"></a> [lambda\_function\_name](#input\_lambda\_function\_name) | Lambda関数名 | `string` | `"my_lambda_function"` | no |
+| <a name="input_access_token"></a> [access\_token](#input\_access\_token) | Personal access token | `string` | n/a | yes |
+| <a name="input_amplify_app_name"></a> [amplify\_app\_name](#input\_amplify\_app\_name) | Amplifyアプリの名前 | `string` | n/a | yes |
+| <a name="input_aws_region"></a> [aws\_region](#input\_aws\_region) | AWS region | `string` | `"ap-northeast-1"` | no |
+| <a name="input_repository_url"></a> [repository\_url](#input\_repository\_url) | リポジトリURL | `string` | n/a | yes |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_api_gateway_url"></a> [api\_gateway\_url](#output\_api\_gateway\_url) | 出力（API Gateway のエンドポイント） |
+| <a name="output_api_gateway_url"></a> [api\_gateway\_url](#output\_api\_gateway\_url) | n/a |
 <!-- END_TF_DOCS -->
