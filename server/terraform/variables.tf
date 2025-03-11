@@ -7,11 +7,13 @@ variable "aws_region" {
 variable "amplify_app_name" {
   type        = string
   description = "Amplifyアプリの名前"
+  default = "wa-life-app"
 }
 
 variable "repository_url" {
   type        = string
   description = "リポジトリURL"
+  default     = "https://github.com/tatsurou9003/yumemi-pg-hackathon-team3.git"
 }
 
 variable "access_token" {
