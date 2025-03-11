@@ -4,9 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "client/**"
+      - ".github/workflows/frontend.yaml"
   pull_request:
     branches:
       - main
+    paths:
+      - "client/**"
+      - ".github/workflows/frontend.yaml"
 
 jobs:
   lint-and-build:
