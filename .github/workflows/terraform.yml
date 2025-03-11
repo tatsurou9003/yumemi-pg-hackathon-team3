@@ -33,6 +33,8 @@ jobs:
 
       - name: Terraform Plan
         working-directory: server/terraform
+        env:
+          TF_VAR_access_token: ${{secrets.PERSONAL_ACCESS_TOKEN}}
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
