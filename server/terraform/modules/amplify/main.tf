@@ -23,6 +23,8 @@ frontend:
   cache:
     paths:
       - node_modules/**/*
+  environment:
+    NPM_CONFIG_PRODUCTION: false
   EOF
 }
 
