@@ -37,6 +37,6 @@ resource "aws_amplify_branch" "main_branch" {
   enable_basic_auth = false
 
   environment_variables = {
-    NODE_ENV = "production"
+    "DUMMY_VAR" = "unused"
   }
 }
