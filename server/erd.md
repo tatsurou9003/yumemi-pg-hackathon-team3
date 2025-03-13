@@ -14,7 +14,7 @@ erDiagram
         string password "パスワード"
         string profileImage "プロフィール画像のURL"
         string profileColor "プロフィール背景色"
-        string created_at "作成日時"
+        string createdAt "作成日時"
     }
 
     GROUPS {
