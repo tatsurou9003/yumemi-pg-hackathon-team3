@@ -29,6 +29,7 @@ erDiagram
         string groupId PK "uuid, GSI:RK"
         string userId "uuid, SK, GSI:HK"
         string role "ロール"
+        string status "INVITED, JOINED, REJECTED"
         string invitedBy "招待したユーザーのID"
         string joinedAt "参加日時"
     }

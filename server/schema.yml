@@ -1,20 +1,445 @@
-openapi: 3.0.1
+openapi: 3.0.0
 info:
-  title: wa-life API
+  title: Oogiri App API
   version: 1.0.0
+  description: >
+    ユーザー登録時にはメールアドレスとパスワードのみを登録し、
+    初回ログイン時に追加情報（username、プロフィール画像、背景色など）を更新しつつJWTトークンを返す。
 servers:
-  - url: https://*/dev/
+  - url: https://api.example.com/v1
+tags:
+  - name: Users
+    description: ユーザー登録、ログイン、プロフィール更新に関するエンドポイント
+  - name: Groups
+    description: グループ作成・招待に関するエンドポイント
 paths:
-  /hello:
-    get:
+  /signup:
+    post:
+      tags:
+        - Users
+      summary: ユーザー新規登録
+      description: メールアドレスとパスワードのみでユーザーを新規登録します。
+      requestBody:
+        description: 登録時の基本ユーザー情報（メールアドレス、パスワード）
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRegistration"
+      responses:
+        "201":
+          description: ユーザー登録成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /login:
+    post:
+      tags:
+        - Users
+      summary: ログイン
+      description: メールアドレスとパスワードでログインします。
+      requestBody:
+        description: ログイン時ユーザー情報（メールアドレス、パスワード）
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRegistration"
       responses:
         "200":
-          description: OK
+          description: ログイン成功
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  token:
                     type: string
-                    example: Hello, world!
+                    description: "JWT認証トークン"
+                  userId:
+                    type: string
+                    description: "ユーザーID"
+                  isFirstLogin:
+                    type: boolean
+                    description: "初回ログインかどうかを示すフラグ"
+                required:
+                  - token
+                  - userId
+                  - isFirstLogin
+  /users/{userId}/profile:
+    put:
+      tags:
+        - Users
+      summary: ユーザーのプロフィール登録（初回ログイン時）および更新
+      description: 初回ログイン時に追加情報（ユーザー名、プロフィール画像、背景色）を登録・更新。
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: 更新対象のユーザーID
+      requestBody:
+        description: プロフィール更新情報
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserProfileUpdate"
+      responses:
+        "200":
+          description: プロフィール登録成功。
+  /users/{userId}:
+    get:
+      tags:
+        - Users
+      summary: ユーザー情報取得
+      description: ホーム画面でのユーザーの情報（プロフィール、参加・招待されているグループ）を取得します。
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: 取得対象のユーザーID
+      responses:
+        "200":
+          description: ユーザー情報と参加・招待されているグループ情報
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserWithGroupsResponse"
+
+  /groups:
+    post:
+      tags:
+        - Groups
+      summary: グループ作成
+      description: 新しいグループを作成します。
+      requestBody:
+        description: 作成するグループ情報
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Group"
+      responses:
+        "201":
+          description: グループ作成成功
+  /groups/{groupId}/invite:
+    post:
+      tags:
+        - Groups
+      summary: ユーザー招待
+      description: 指定グループに対してユーザーを招待します。`status` は "INVITED" となります。
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: 招待対象のグループID
+      requestBody:
+        description: 招待するユーザー情報
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupInviteRequest"
+      responses:
+        "200":
+          description: 招待成功
+
+  /groups/{groupId}/{userId}:
+    patch:
+      tags:
+        - Groups
+      summary: グループメンバー更新
+      description: 招待されたユーザーが「参加」または「拒否」するときに status を更新します。
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+      requestBody:
+        description: グループ更新情報
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupMembershipUpdateRequest"
+      responses:
+        "200":
+          description: 更新成功
+
+  /groups/{groupId}/chat:
+    get:
+      tags:
+        - Chat
+      summary: グループチャット履歴取得
+      description: 指定グループのチャット履歴を取得します。
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: チャット履歴を取得するグループのID
+      responses:
+        "200":
+          description: チャット履歴取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChatHistoryResponse"
+        "404":
+          description: 指定されたグループが存在しない場合
+
+components:
+  schemas:
+    UserRegistration:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: 登録に使用するメールアドレス
+        password:
+          type: string
+          description: ユーザーのパスワード
+      required:
+        - email
+        - password
+
+    UserProfileUpdate:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: ユーザーの一意識別子
+        userName:
+          type: string
+          description: ユーザーの表示名
+        profileImage:
+          type: string
+          description: プロフィール画像のURL
+        profileColor:
+          type: string
+          description: プロフィールの背景色
+      required:
+        - userName
+
+    User:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: ユーザーの一意識別子
+
+    Group:
+      type: object
+      properties:
+        groupName:
+          type: string
+        groupImage:
+          type: string
+          description: グループ画像のURL
+        createdBy:
+          type: string
+          description: グループ作成者のユーザーID
+      required:
+        - groupName
+        - createdBy
+
+    GroupMembershipUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [INVITED, JOINED, REJECTED]
+          description: "更新先のステータス。参加時は JOINED、拒否時は REJECTED"
+      required:
+        - status
+
+    GroupInviteRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: 招待されるユーザーのID
+        invitedBy:
+          type: string
+          description: 招待したユーザーのID
+        groupId:
+          type: string
+          description: 招待先のグループID
+      required:
+        - userId
+        - invitedBy
+        - groupId
+
+    GroupMembershipUpdateRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: 参加するユーザーのID
+        groupId:
+          type: string
+          description: 招待先のグループID
+        status:
+          type: string
+          description: 更新先のステータス（JOINED or REJECTED）
+      required:
+        - userId
+        - groupId
+        - status
+
+    UserWithGroupsResponse:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: ユーザーの一意識別子
+        email:
+          type: string
+          format: email
+          description: 登録済みのメールアドレス
+        userName:
+          type: string
+          description: ユーザー名（初回ログイン後に設定）
+        profileImage:
+          type: string
+          description: プロフィール画像のURL
+        profileColor:
+          type: string
+          description: プロフィール背景色
+        groups:
+          type: array
+          description: 参加および招待されているグループのリスト
+          items:
+            $ref: "#/components/schemas/UserGroupMembership"
+
+    UserGroupMembership:
+      type: object
+      properties:
+        groupId:
+          type: string
+          description: グループの一意識別子
+        groupName:
+          type: string
+          description: グループ名
+        groupImage:
+          type: string
+          description: グループ画像のURL
+        role:
+          type: string
+          description: ユーザーのグループ内でのロール
+        status:
+          type: string
+          description: グループへの参加状態（INVITED or JOINEDのみ）
+        invitedBy:
+          type: string
+          description: 招待したユーザーのusername（INVITEDのみ）
+
+    ChatHistoryResponse:
+      type: object
+      description: "グループ内のチャット履歴（テーマ・回答）の一覧"
+      properties:
+        groupId:
+          type: string
+          description: "対象グループのID"
+        themes:
+          type: array
+          description: "グループ内で投稿されたテーマのリスト"
+          items:
+            $ref: "#/components/schemas/ThemeWithAnswers"
+      required:
+        - groupId
+        - themes
+
+    ThemeWithAnswers:
+      type: object
+      description: "テーマ情報と、紐づく回答一覧を含む構造"
+      properties:
+        themeId:
+          type: string
+          description: "テーマの一意識別子"
+        themeText:
+          type: string
+          description: "大喜利のお題文"
+        themeImage:
+          type: string
+          description: "お題画像のURL（任意）"
+        deadline:
+          type: string
+          format: date-time
+          description: "回答受付期限（ISO8601 形式）"
+        prize:
+          type: string
+          description: "テーマに設定された賞品情報（任意）"
+        winner:
+          type: string
+          description: "テーマの勝者（任意）"
+        createdBy:
+          type: string
+          description: "テーマ投稿者のユーザーID"
+        createdAt:
+          type: string
+          format: date-time
+          description: "テーマが投稿された日時"
+        answers:
+          type: array
+          description: "このテーマに対する回答一覧"
+          items:
+            $ref: "#/components/schemas/Answer"
+      required:
+        - themeId
+        - themeText
+        - createdBy
+        - createdAt
+        - answers
+
+    Answer:
+      type: object
+      description: "テーマに対する回答情報"
+      properties:
+        answerId:
+          type: string
+          description: "回答の一意識別子"
+        themeId:
+          type: string
+          description: "回答対象のテーマID"
+        groupId:
+          type: string
+          description: "回答が投稿されたグループのID"
+        answerText:
+          type: string
+          description: "回答内容"
+        createdBy:
+          type: string
+          description: "回答投稿者のユーザーID"
+        createdAt:
+          type: string
+          format: date-time
+          description: "回答が投稿された日時（ISO8601 形式）"
+        goodCount:
+          type: number
+          description: "回答へのいいね数"
+      required:
+        - answerId
+        - themeId
+        - groupId
+        - answerText
+        - createdBy
+        - createdAt
+        - goodCount
