@@ -18,6 +18,8 @@ Linter & Formatter: ESLint + Prettier
 client/
 ├── public/                    # 静的ファイル（画像、フォントなど）
 ├── src/
+│   ├── assets/                # 静的リソース（画像、アイコンなど）
+│   │   └── icons/             # アイコンファイルを格納するフォルダ
 │   ├── components/            # 再利用可能な UI コンポーネント
 │   │   ├── common/            # ボタンなどの汎用コンポーネント
 │   │   ├── layout/            # レイアウト関連コンポーネント
@@ -90,5 +92,11 @@ OpenApiのドキュメントから型安全にAPIリクエストのHooksを作�
 TODO:`openapi.yaml`ファイルが作られた後に、設定ファイルを生成し、`npx orval`を実行
 
 TODO: フックの使い方について追記
+
+### SVGR
+
+SVG画像をReactコンポーネントとして変換するツール。
+
+`npm run svgr`を実行すると、`src/assets/icons`フォルダ内のsvg画像が一括でReactコンポーネントとして`src/components/common/icons`フォルダに変換される。
 
 ...
