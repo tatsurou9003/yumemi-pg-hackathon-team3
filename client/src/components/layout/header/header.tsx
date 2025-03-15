@@ -13,7 +13,9 @@ export const Header: React.FC<HeaderProps> = ({ title, avator }) => {
   return (
     <div className="flex w-full h-[56px] p-2 items-center gap-1.5 bg-[#FF7C2A]">
       <button
-        onClick={() => { }}
+        onClick={() => {
+          console.log("Navigation button clicked");
+        }}
         className="flex justify-center items-center text-white text-[12px]"
       >
         {title === "/home" ? <HamburgerButton /> : <>＜</>}
@@ -22,7 +24,12 @@ export const Header: React.FC<HeaderProps> = ({ title, avator }) => {
         {title}
       </div>
       <div className="flex justify-end">
-        <HeaderAvatar src={avator} onClick={() => { }} />
+        <HeaderAvatar
+          src={avator}
+          onClick={() => {
+            console.log("Avatar clicked");
+          }}
+        />
       </div>
     </div>
   );
