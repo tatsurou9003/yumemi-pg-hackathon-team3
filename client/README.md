@@ -12,7 +12,6 @@ Linter & Formatter: ESLint + Prettier
 
 その他ライブラリ等: Orval, Tanstack Router, React Hook Form 等
 
-
 ## ディレクトリ構成
 
 ```
@@ -20,7 +19,21 @@ client/
 ├── public/                    # 静的ファイル（画像、フォントなど）
 ├── src/
 │   ├── components/            # 再利用可能な UI コンポーネント
+│   │   ├── common/            # ボタンなどの汎用コンポーネント
+│   │   │   ├── Button.tsx
+│   │   │   ├── Modal.tsx
+│   │   │   ├── index.ts
+│   │   ├── layout/            # レイアウト関連コンポーネント
+│   │   │   ├── Header.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── index.ts
 │   ├── features/              # 特定のページに関連するコンポーネントやロジック
+│   │   ├── auth/              # 認証関連
+│   │   │   ├── LoginForm.tsx
+│   │   │   ├── index.ts
+│   │   ├── dashboard/         # ダッシュボード関連
+│   │   │   ├── DashboardCard.tsx
+│   │   │   ├── index.ts
 │   ├── hooks/                 # カスタムフック
 │   ├── lib/                   # 外部ライブラリのユーティリティ関数
 │   ├── routes/                # ルート定義とページコンポーネント
@@ -53,7 +66,6 @@ client/
 ケバブケース
 
 ex)`kebab-case.tsx`
-
 
 ## ライブラリ説明
 
