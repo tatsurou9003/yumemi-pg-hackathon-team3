@@ -1,9 +1,6 @@
-import * as React from "react";
 import type { SVGProps } from "react";
 
-export const HamburgerButton = (
-  props: SVGProps<SVGSVGElement>,
-): JSX.Element => {
+export const HamburgerButton: React.FC<SVGProps<SVGSVGElement>> = (props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
