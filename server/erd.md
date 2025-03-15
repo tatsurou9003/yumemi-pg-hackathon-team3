@@ -34,16 +34,20 @@ erDiagram
         string joinedAt "参加日時"
     }
 
-    THEMES {
-        string themeId PK "uuid"
-        string groupId "uuid, GSI:HK"
-        string themeText "お題文"
-        string themeImage "お題画像"
+    MESSAGES {
+        string messageId PK "uuid"
+        string groupId "uuid"
+        string parentId "uuid, THEMEとANSWERの紐づけID, GSI:PK"
+        string messageType "THEME or ANSWER"
+        string messageText "お題もしくは回答文"
+        string messageImage "アップロード画像"
         string prizeText "賞品説明"
         string deadline "回答期限"
         string winner "勝者のユーザーID"
         string createdBy "作成者"
-        string createdAt "作成日時, GSI:RK"
+        string createdAt "作成日時"
+        string goodCount "いいねの数, GSI:SK"
+        string SK "ANSWERの場合は、値をTHEME#<parentId>#ANSWER#<messageId>に、THEMEの場合は値をTHEME#<messageId>にする"
     }
 
     ANSWERS {

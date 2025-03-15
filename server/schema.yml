@@ -369,60 +369,60 @@ components:
 
     ThemeWithAnswers:
       type: object
-      description: "テーマ情報と、紐づく回答一覧を含む構造"
+      description: "テーマメッセージ情報と、そのテーマに対する回答一覧を含む構造（Messageテーブルのレコードで、messageTypeがTHEMEのもの）"
       properties:
-        themeId:
+        messageId:
           type: string
-          description: "テーマの一意識別子"
-        themeText:
+          description: "テーマメッセージの一意識別子（旧: themeId）"
+        messageText:
           type: string
-          description: "大喜利のお題文"
-        themeImage:
+          description: "お題文"
+        messageImage:
           type: string
           description: "お題画像のURL（任意）"
+        prizeText:
+          type: string
+          description: "テーマに設定された賞品説明（任意）"
         deadline:
           type: string
           format: date-time
-          description: "回答受付期限（ISO8601 形式）"
-        prize:
-          type: string
-          description: "テーマに設定された賞品情報（任意）"
+          description: "回答受付期限（ISO8601形式）"
         winner:
           type: string
-          description: "テーマの勝者（任意）"
+          description: "テーマの勝者のユーザーID（任意）"
         createdBy:
           type: string
           description: "テーマ投稿者のユーザーID"
         createdAt:
           type: string
           format: date-time
-          description: "テーマが投稿された日時"
+          description: "テーマが投稿された日時（ISO8601形式）"
         answers:
           type: array
           description: "このテーマに対する回答一覧"
           items:
             $ref: "#/components/schemas/Answer"
       required:
-        - themeId
-        - themeText
+        - messageId
+        - messageText
         - createdBy
         - createdAt
         - answers
 
     Answer:
       type: object
-      description: "テーマに対する回答情報"
+      description: "回答メッセージ情報（Messageテーブルのレコードで、messageTypeがANSWERのもの）"
       properties:
-        answerId:
+        messageId:
           type: string
-          description: "回答の一意識別子"
-        themeId:
+          description: "回答メッセージの一意識別子（旧: answerId）"
+        parentId:
           type: string
-          description: "回答対象のテーマID"
+          description: "対応するテーマのメッセージID（旧: themeId）"
         groupId:
           type: string
           description: "回答が投稿されたグループのID"
-        answerText:
+        messageText:
           type: string
           description: "回答内容"
         createdBy:
@@ -431,15 +431,15 @@ components:
         createdAt:
           type: string
           format: date-time
-          description: "回答が投稿された日時（ISO8601 形式）"
+          description: "回答が投稿された日時（ISO8601形式）"
         goodCount:
           type: number
           description: "回答へのいいね数"
       required:
-        - answerId
-        - themeId
+        - messageId
+        - parentId
         - groupId
-        - answerText
+        - messageText
         - createdBy
         - createdAt
         - goodCount
