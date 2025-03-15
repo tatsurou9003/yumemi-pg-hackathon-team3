@@ -20,20 +20,10 @@ client/
 ├── src/
 │   ├── components/            # 再利用可能な UI コンポーネント
 │   │   ├── common/            # ボタンなどの汎用コンポーネント
-│   │   │   ├── Button.tsx
-│   │   │   ├── Modal.tsx
-│   │   │   ├── index.ts
 │   │   ├── layout/            # レイアウト関連コンポーネント
-│   │   │   ├── Header.tsx
-│   │   │   ├── Footer.tsx
-│   │   │   ├── index.ts
 │   ├── features/              # 特定のページに関連するコンポーネントやロジック
-│   │   ├── auth/              # 認証関連
-│   │   │   ├── LoginForm.tsx
-│   │   │   ├── index.ts
+│   │   ├── login/             # ログイン関連
 │   │   ├── dashboard/         # ダッシュボード関連
-│   │   │   ├── DashboardCard.tsx
-│   │   │   ├── index.ts
 │   ├── hooks/                 # カスタムフック
 │   ├── lib/                   # 外部ライブラリのユーティリティ関数
 │   ├── routes/                # ルート定義とページコンポーネント
