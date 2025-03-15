@@ -16,9 +16,9 @@ export const Header: React.FC<HeaderProps> = ({ title, avator }) => {
         onClick={() => {
           console.log("Navigation button clicked");
         }}
-        className="flex justify-center items-center text-white text-[12px]"
+        className="flex justify-center items-center p-2 text-white text-[12px]"
       >
-        {title === "/home" ? <HamburgerButton /> : <>＜</>}
+        {title === "ホーム" ? <HamburgerButton /> : <>＜</>}
       </button>
       <div className="flex-grow text-center text-white text-[12px] font-semibold leading-[28px]">
         {title}
