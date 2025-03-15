@@ -38,7 +38,7 @@ erDiagram
         string messageId PK "uuid"
         string groupId "uuid"
         string parentId "uuid, THEMEとANSWERの紐づけID, GSI:PK"
-        string messageType "THEME or ANSWER"
+        string messageType "THEME or ANSWER or CHAT"
         string messageText "お題もしくは回答文"
         string messageImage "アップロード画像"
         string prizeText "賞品説明"
@@ -50,39 +50,25 @@ erDiagram
         string SK "ANSWERの場合は、値をTHEME#<parentId>#ANSWER#<messageId>に、THEMEの場合は値をTHEME#<messageId>にする"
     }
 
-    ANSWERS {
-        string answerId PK "uuid"
-        string groupId "投稿されたグループID"
-        string themeId "お題となるテーマID, GSI1,2:HK"
-        string userId "投稿したユーザID"
-        string answerText "回答文"
-        string createdAt "作成日時, GSI1:RK"
-        number goodCount "いいねの数, GSI2:RK"
-    }
-
     GOODLOGS {
         string logId PK "uuid"
-        string answerId "いいねされたメッセージID, GSI:HK"
+        string messageId "いいねされたメッセージID, GSI:HK"
         string userId "いいねしたユーザーID"
         string createdAt "作成日時, GSI:RK"
     }
 
     USERS ||--o{ GROUPS : "作成"
     USERS ||--o{ GROUP_MEMBERS : "参加"
-    USERS ||--o{ THEMES : "投稿"
-    USERS ||--o{ ANSWERS : "投稿"
+    USERS ||--o{ MESSAGES : "投稿"
     USERS ||--o{ GOODLOGS : "いいね"
 
-    GROUPS ||--o{ THEMES : "持つ"
-    GROUPS ||--o{ ANSWERS : "持つ"
+    GROUPS ||--o{ MESSAGES : "持つ
     GROUPS ||--o{ GROUP_MEMBERS : "参加者"
 
     GROUP_MEMBERS }|--|| USERS : "参加"
     GROUP_MEMBERS }|--|| GROUPS : "所属"
 
-    THEMES ||--o{ ANSWERS : "関連"
-
-    ANSWERS ||--o{ GOODLOGS : "いいね"
+    MESSAGES ||--o{ GOODLOGS : "いいね"
 
     GOODLOGS }|--|| USERS : "いいねした"
 

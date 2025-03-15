@@ -103,6 +103,13 @@ paths:
             type: string
           required: true
           description: 取得対象のユーザーID
+      requestBody:
+        description: ユーザーID
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserIdRequest"
       responses:
         "200":
           description: ユーザー情報と参加・招待されているグループ情報
@@ -110,6 +117,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserWithGroupsResponse"
+
+  /users/search:
+    get:
+      tags:
+        - Users
+      summary: ユーザー検索
+      description: 招待画面でユーザーIDを指定してユーザー情報を検索します。
+      parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: 検索対象のユーザーID
+      requestBody:
+        description: ユーザーID
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserIdRequest"
+      responses:
+        "200":
+          description: ユーザー情報取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserBasicInfo"
+        "404":
+          description: 指定されたユーザーが見つからない場合
 
   /groups:
     post:
@@ -132,7 +169,7 @@ paths:
       tags:
         - Groups
       summary: ユーザー招待
-      description: 指定グループに対してユーザーを招待します。`status` は "INVITED" となります。
+      description: 指定グループに対して複数のユーザーを招待します。`status` は "INVITED" となります。
       parameters:
         - in: path
           name: groupId
@@ -141,7 +178,7 @@ paths:
           required: true
           description: 招待対象のグループID
       requestBody:
-        description: 招待するユーザー情報
+        description: 招待するユーザー情報（複数可）
         required: true
         content:
           application/json:
@@ -245,6 +282,36 @@ components:
           type: string
           description: ユーザーの一意識別子
 
+    UserBasicInfo:
+      type: object
+      description: "ユーザーの基本情報"
+      properties:
+        userId:
+          type: string
+          description: "ユーザーの一意識別子"
+        userName:
+          type: string
+          description: "ユーザーの表示名"
+        profileImage:
+          type: string
+          description: "プロフィール画像のURL"
+        profileColor:
+          type: string
+          description: "プロフィール背景色"
+      required:
+        - userId
+        - userName
+
+    UserIdRequest:
+      type: object
+      description: "ユーザーIDを指定するリクエスト"
+      properties:
+        userId:
+          type: string
+          description: "ユーザーの一意識別子"
+      required:
+        - userId
+
     Group:
       type: object
       properties:
@@ -273,19 +340,21 @@ components:
     GroupInviteRequest:
       type: object
       properties:
-        userId:
-          type: string
-          description: 招待されるユーザーのID
         invitedBy:
           type: string
           description: 招待したユーザーのID
         groupId:
           type: string
           description: 招待先のグループID
+        userIds:
+          type: array
+          description: 招待されるユーザーIDリスト
+          items:
+            type: string
       required:
-        - userId
         - invitedBy
         - groupId
+        - userIds
 
     GroupMembershipUpdateRequest:
       type: object
@@ -353,93 +422,70 @@ components:
 
     ChatHistoryResponse:
       type: object
-      description: "グループ内のチャット履歴（テーマ・回答）の一覧"
+      description: "グループ内のチャット履歴（テーマ、回答、通常のチャットメッセージを時系列で並べた一覧）"
       properties:
         groupId:
           type: string
           description: "対象グループのID"
-        themes:
+        messages:
           type: array
-          description: "グループ内で投稿されたテーマのリスト"
+          description: "時系列にソートされた全メッセージの一覧。各メッセージは messageType により THEME, ANSWER, CHAT を区別する。"
           items:
-            $ref: "#/components/schemas/ThemeWithAnswers"
+            $ref: "#/components/schemas/Message"
       required:
         - groupId
-        - themes
+        - messages
 
-    ThemeWithAnswers:
+    Message:
       type: object
-      description: "テーマメッセージ情報と、そのテーマに対する回答一覧を含む構造（Messageテーブルのレコードで、messageTypeがTHEMEのもの）"
+      description: "統一されたチャットメッセージ。THEME、ANSWER、CHAT のいずれか。"
       properties:
         messageId:
           type: string
-          description: "テーマメッセージの一意識別子（旧: themeId）"
+          description: "メッセージの一意識別子"
+        groupId:
+          type: string
+          description: "メッセージが投稿されたグループのID"
+        messageType:
+          type: string
+          enum:
+            - THEME
+            - ANSWER
+            - CHAT
+          description: "メッセージ種別。THEME：お題、ANSWER：お題に対する回答、CHAT：通常のチャットメッセージ"
         messageText:
           type: string
-          description: "お題文"
+          description: "メッセージ本文（お題、回答、またはチャット文）"
         messageImage:
           type: string
-          description: "お題画像のURL（任意）"
+          description: "アップロード画像のURL（任意）"
         prizeText:
           type: string
-          description: "テーマに設定された賞品説明（任意）"
+          description: "賞品説明（THEME の場合のみ有効）"
         deadline:
           type: string
           format: date-time
-          description: "回答受付期限（ISO8601形式）"
+          description: "回答受付期限（THEME の場合のみ有効）"
         winner:
           type: string
-          description: "テーマの勝者のユーザーID（任意）"
-        createdBy:
-          type: string
-          description: "テーマ投稿者のユーザーID"
-        createdAt:
-          type: string
-          format: date-time
-          description: "テーマが投稿された日時（ISO8601形式）"
-        answers:
-          type: array
-          description: "このテーマに対する回答一覧"
-          items:
-            $ref: "#/components/schemas/Answer"
-      required:
-        - messageId
-        - messageText
-        - createdBy
-        - createdAt
-        - answers
-
-    Answer:
-      type: object
-      description: "回答メッセージ情報（Messageテーブルのレコードで、messageTypeがANSWERのもの）"
-      properties:
-        messageId:
-          type: string
-          description: "回答メッセージの一意識別子（旧: answerId）"
+          description: "テーマの勝者のユーザーID（THEME の場合のみ有効）"
         parentId:
           type: string
-          description: "対応するテーマのメッセージID（旧: themeId）"
-        groupId:
-          type: string
-          description: "回答が投稿されたグループのID"
-        messageText:
-          type: string
-          description: "回答内容"
+          description: "ANSWER の場合、対応するテーマの messageId を示す。THEME や CHAT では不要"
         createdBy:
           type: string
-          description: "回答投稿者のユーザーID"
+          description: "作成者のユーザーID"
         createdAt:
           type: string
           format: date-time
-          description: "回答が投稿された日時（ISO8601形式）"
+          description: "作成日時（ISO8601形式）"
         goodCount:
           type: number
-          description: "回答へのいいね数"
+          description: "回答へのいいね数（ANSWER の場合のみ有効）"
       required:
         - messageId
-        - parentId
         - groupId
+        - messageType
         - messageText
         - createdBy
         - createdAt
-        - goodCount
