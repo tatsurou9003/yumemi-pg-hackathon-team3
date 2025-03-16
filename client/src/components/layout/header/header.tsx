@@ -7,8 +7,6 @@ interface HeaderProps {
   onClick: () => void;
 }
 
-// TODO: 招待カードの追加
-
 export const Header = ({ title, avatar, onClick }: HeaderProps) => {
   return (
     <div className="flex w-full h-[56px] p-2 items-center gap-1.5 bg-[#FF7C2A]">
@@ -26,12 +24,7 @@ export const Header = ({ title, avatar, onClick }: HeaderProps) => {
         {title}
       </div>
       <div className="flex justify-end">
-        <HeaderAvatar
-          src={avatar}
-          onClick={() => {
-            console.log("Avatar clicked");
-          }}
-        />
+        <HeaderAvatar src={avatar} />
       </div>
     </div>
   );
