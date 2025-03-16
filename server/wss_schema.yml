@@ -1,0 +1,152 @@
+openapi: 3.0.0
+info:
+  title: Websocket Schema
+  version: 1.0.0
+  description: >
+    チャットでのメッセージ送信を行うためのWebsocket APIのスキーマ定義です。
+servers:
+  - url: wss://api.amazon.com/dev/
+
+# websocket通信ではpathではなくroutesを使用する。（openAPIではrouteを定義できないため便宜的にpathsで書く）
+# wsにメソッドは存在しないので、便宜的にoptionsを使用して定義している。
+
+paths:
+  /$connect:
+    options:
+      description: WebSocket接続時に呼び出されるルート
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: JWTトークンをクエリパラメータに含んで送信する
+      responses:
+        "200":
+          description: ステータスコードは無くopenイベントが発生
+
+  /$disconnect:
+    options:
+      description: WebSocket切断時に呼び出されるルート
+      responses:
+        "200":
+          description: ステータスコードは無くcloseイベントが発生
+
+  /sendMessage:
+    options:
+      description: メッセージ送信ルート
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SendMessageRequest"
+      responses:
+        "200":
+          description: 投稿ユーザー以外へ送信されるメッセージ（厳密にはレスポンスではない）
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageFromServer"
+
+# サーバーからクライアントに送信されるイベントデータの定義
+components:
+  schemas:
+    # クライアントからサーバーへのリクエスト
+    SendMessageRequest:
+      type: object
+      properties:
+        action:
+          type: string
+          enum: [sendMessage]
+          description: sendMessage固定
+        groupId:
+          type: string
+          description: メッセージ送信先のグループID
+        createdBy:
+          type: string
+          description: メッセージ送信者のユーザーID
+        messageType:
+          type: string
+          enum: [CHAT, THEME]
+          description: メッセージの種類
+        messageText:
+          type: string
+          description: メッセージ本文
+        messageImage:
+          type: string
+          description: 画像URL（オプショナル）
+        prizeText:
+          type: string
+          description: 賞品説明（テーマの場合）
+        deadline:
+          type: string
+          format: date-time（ISO8601）
+          description: 回答期限（テーマの場合）
+        createdAt:
+          type: string
+          format: date-time（ISO8601）
+          description: メッセージ作成日時
+      required:
+        - action
+        - groupId
+        - messageType
+        - messageText
+
+    # 他ユーザーへのメッセージ送信
+    MessageFromServer:
+      type: object
+      properties:
+        messageId:
+          type: string
+          description: サーバーで生成されたメッセージの一意識別子
+        groupId:
+          type: string
+          description: メッセージのグループID
+        messageType:
+          type: string
+          enum: [CHAT, THEME]
+          description: メッセージの種類
+        messageText:
+          type: string
+          description: メッセージ本文
+        messageImage:
+          type: string
+          description: 画像URL（存在する場合のみ）
+        prizeText:
+          type: string
+          description: 賞品説明（THEMEタイプの場合のみ）
+        deadline:
+          type: string
+          format: date-time
+          description: 回答期限（THEMEタイプの場合のみ）
+        createdBy:
+          type: object
+          description: メッセージ作成者情報
+          properties:
+            userId:
+              type: string
+              description: ユーザーID
+            userName:
+              type: string
+              description: ユーザー名
+            profileImage:
+              type: string
+              description: プロフィール画像URL
+            profileColor:
+              type: string
+              description: プロフィール背景色
+          required:
+            - userId
+            - userName
+        createdAt:
+          type: string
+          format: date-time
+          description: メッセージ作成日時
+      required:
+        - type
+        - messageId
+        - groupId
+        - messageType
+        - messageText
+        - createdBy
+        - createdAt
