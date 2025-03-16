@@ -42,7 +42,7 @@ const HeaderAvatar = ({ src }: AvatarProps) => {
       <button
         onClick={toggleUserCard}
         ref={avatarRef}
-        className="border-none bg-transparent"
+        className="border-none bg-transparent cursor-pointer"
       >
         <Avatar>
           <AvatarImage src={src} />

@@ -17,7 +17,7 @@ export const Header = ({ to, title, avatar, onSidebar }: HeaderProps) => {
           onClick={onSidebar}
           className="flex justify-center items-center p-2"
         >
-          <HamburgerButton width="24px" height="24px" />
+          <HamburgerButton width="24px" height="24px  cursor-pointer" />
         </button>
       ) : (
         <Link to={to} className="flex justify-center items-center p-2">
