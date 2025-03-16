@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { HeaderAvatar } from "./header-avatar";
-import { Sidebar } from "../sidebar/sidebar";
 import { ChevronLeft, HamburgerButton } from "@/components/common/icon";
 
 interface HeaderProps {
