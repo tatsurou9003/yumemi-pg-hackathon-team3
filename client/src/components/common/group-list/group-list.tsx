@@ -9,7 +9,7 @@ const GroupList = ({ groupData }: GroupData) => {
         <Link
           key={group.groupId}
           //to={`/home/${group.groupId}`}
-          to="/about" //暫定的に
+          to="/profile" //暫定的に
           className="float-left p-[12px] flex items-center gap-[21px] font-[Inter] truncate"
         >
           <Avatar>
