@@ -20,6 +20,7 @@ erDiagram
     GROUPS {
         string groupId PK "uuid"
         string groupName "グループ名"
+        string memberCount "グループのメンバー数"
         string groupImage "グループ画像のURL"
         string createdBy "作成したユーザーID"
         string createdAt "作成日時"
@@ -36,30 +37,39 @@ erDiagram
 
     MESSAGES {
         string messageId PK "uuid"
-        string groupId "uuid"
-        string parentId "uuid, THEMEとANSWERの紐づけID, GSI:PK"
-        string messageType "THEME or ANSWER or CHAT"
-        string messageText "お題もしくは回答文"
+        string groupId "uuid, SK, GSI1,2:HK"
+        string messageType "THEME or CHAT"
+        string messageText "お題もしくはチャットメッセージ"
         string messageImage "アップロード画像"
         string prizeText "賞品説明"
         string deadline "回答期限"
         string winner "勝者のユーザーID"
-        string createdBy "作成者"
-        string createdAt "作成日時"
-        string goodCount "いいねの数, GSI:SK"
-        string SK "ANSWERの場合は、値をTHEME#<parentId>#ANSWER#<messageId>に、THEMEの場合は値をTHEME#<messageId>にする"
+        string createdBy "作成者のユーザーID"
+        string createdAt "作成日時, GSI1:RK"
+        string messageTypeCreatedAt "messageType#createdAt（複合ソートキー, GSI2:RK"
+    }
+
+    ANSWERS {
+        string answerId "uuid, SK"
+        string parentId PK "親となるテーマのメッセージID, GSI:HK"
+        string answerText "回答文"
+        string answerImage "回答画像"
+        string createdBy "作成者のユーザーID"
+        string createdAt　"作成日時"
+        number goodCount　"いいねの数, GSI:RK"
     }
 
     GOODLOGS {
         string logId PK "uuid"
-        string messageId "いいねされたメッセージID, GSI:HK"
+        string answerId "いいねされたメッセージID, GSI:HK"
         string userId "いいねしたユーザーID"
-        string createdAt "作成日時, GSI:RK"
+        string createdAt "作成・更新日時, GSI:RK"
     }
 
     USERS ||--o{ GROUPS : "作成"
     USERS ||--o{ GROUP_MEMBERS : "参加"
     USERS ||--o{ MESSAGES : "投稿"
+    USERS ||--o{ ANSWERS : "回答"
     USERS ||--o{ GOODLOGS : "いいね"
 
     GROUPS ||--o{ MESSAGES : "持つ
@@ -68,6 +78,7 @@ erDiagram
     GROUP_MEMBERS }|--|| USERS : "参加"
     GROUP_MEMBERS }|--|| GROUPS : "所属"
 
+    MESSAGES ||--o{ ANSWERS : "回答"
     MESSAGES ||--o{ GOODLOGS : "いいね"
 
     GOODLOGS }|--|| USERS : "いいねした"

@@ -3,15 +3,24 @@ info:
   title: Oogiri App API
   version: 1.0.0
   description: >
-    ユーザー登録時にはメールアドレスとパスワードのみを登録し、
-    初回ログイン時に追加情報（username、プロフィール画像、背景色など）を更新しつつJWTトークンを返す。
+    チャットでのテーマ・メッセージ投稿以外のAPIエンドポイントを提供します。
+    ユーザー登録、ログイン、プロフィール更新、グループ作成、招待、回答、いいね、の機能を提供します。
+
+
+    # いいね、回答は通常のREST APIで行う。→ いいねのエンドポイント追加
+
 servers:
-  - url: https://api.example.com/v1
+  - url: https://api.amazon.com/dev/
 tags:
   - name: Users
     description: ユーザー登録、ログイン、プロフィール更新に関するエンドポイント
   - name: Groups
     description: グループ作成・招待に関するエンドポイント
+  - name: Answers
+    description: テーマへの回答、結果確認に関するエンドポイント
+  - name: Likes
+    description: メッセージへのいいねに関するエンドポイント
+
 paths:
   /signup:
     post:
@@ -229,6 +238,13 @@ paths:
             type: string
           required: true
           description: チャット履歴を取得するグループのID
+      requestBody:
+        description: チャット履歴取得対象のグループID
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupIdRequest"
       responses:
         "200":
           description: チャット履歴取得成功
@@ -240,6 +256,118 @@ paths:
                   $ref: "#/components/schemas/ChatHistoryResponse"
         "404":
           description: 指定されたグループが存在しない場合
+
+  /groups/{groupId}/themes:
+    get:
+      tags:
+        - Groups
+      summary: グループ内テーマ全件取得
+      description: 指定グループ内のテーマ全件を取得します。
+      parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: テーマ取得対象のグループID
+      requestBody:
+        description: テーマ取得対象のグループID
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GroupIdRequest"
+      responses:
+        "200":
+          description: テーマ取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Themes"
+        "404":
+          description: 指定されたグループが存在しない場合
+
+  /answers/{messageId}/:
+    post:
+      tags:
+        - Answers
+      summary: テーマへの回答
+      description: テーマに対する回答を投稿します。{messageId} == parentId
+      parameters:
+        - in: path
+          name: messageId
+          schema:
+            type: string
+          required: true
+          description: 回答対象のテーマメッセージID
+      requestBody:
+        description: 回答情報
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Answer"
+      responses:
+        "201":
+          description: 回答投稿成功
+    get:
+      tags:
+        - Answers
+      summary: 回答取得
+      description: テーマに対する回答を取得します。{messageId} == parentId
+      parameters:
+        - in: path
+          name: messageId
+          schema:
+            type: string
+          required: true
+          description: 回答対象のテーマメッセージID
+      requestBody:
+        description: 回答取得対象のテーマメッセージID
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParentIdRequest"
+      responses:
+        "200":
+          description: 回答取得成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/GetThemeAnswer"
+        "404":
+          description: 回答が存在しない場合
+
+  /answers/{answerId}/like:
+    put:
+      tags:
+        - Likes
+      summary: いいね
+      description: 回答に対していいね/いいねの取り消しをします。
+      parameters:
+        - in: path
+          name: answerId
+          schema:
+            type: string
+          required: true
+          description: いいね対象の回答ID
+      requestBody:
+        description: いいね対象の回答ID
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/answerIdRequest"
+      responses:
+        "200":
+          description: いいねの状態更新成功
+        "404":
+          description: 回答が存在しない場合
 
 components:
   schemas:
@@ -326,6 +454,16 @@ components:
       required:
         - groupName
         - createdBy
+
+    GroupIdRequest:
+      type: object
+      description: "グループIDを指定するリクエスト"
+      properties:
+        groupId:
+          type: string
+          description: "グループの一意識別子"
+      required:
+        - groupId
 
     GroupMembershipUpdate:
       type: object
@@ -429,7 +567,7 @@ components:
           description: "対象グループのID"
         messages:
           type: array
-          description: "時系列にソートされた全メッセージの一覧。各メッセージは messageType により THEME, ANSWER, CHAT を区別する。"
+          description: "時系列にソートされた全メッセージの一覧。各メッセージは messageType により THEME, CHAT を区別する。"
           items:
             $ref: "#/components/schemas/Message"
       required:
@@ -438,24 +576,20 @@ components:
 
     Message:
       type: object
-      description: "統一されたチャットメッセージ。THEME、ANSWER、CHAT のいずれか。"
+      description: "統一されたチャットメッセージ。THEME、CHAT のいずれか。"
       properties:
         messageId:
           type: string
           description: "メッセージの一意識別子"
-        groupId:
-          type: string
-          description: "メッセージが投稿されたグループのID"
         messageType:
           type: string
           enum:
             - THEME
-            - ANSWER
             - CHAT
-          description: "メッセージ種別。THEME：お題、ANSWER：お題に対する回答、CHAT：通常のチャットメッセージ"
+          description: "メッセージ種別。THEME：お題、CHAT：通常のチャットメッセージ"
         messageText:
           type: string
-          description: "メッセージ本文（お題、回答、またはチャット文）"
+          description: "メッセージ本文（お題、またはチャット文）"
         messageImage:
           type: string
           description: "アップロード画像のURL（任意）"
@@ -465,27 +599,150 @@ components:
         deadline:
           type: string
           format: date-time
-          description: "回答受付期限（THEME の場合のみ有効）"
+          description: "回答期限（THEME の場合のみ有効）"
         winner:
           type: string
           description: "テーマの勝者のユーザーID（THEME の場合のみ有効）"
-        parentId:
-          type: string
-          description: "ANSWER の場合、対応するテーマの messageId を示す。THEME や CHAT では不要"
         createdBy:
-          type: string
-          description: "作成者のユーザーID"
+          type: object
+          description: "回答者の詳細情報"
+          properties:
+            userId:
+              type: string
+              description: "回答者のユーザーID"
+            userName:
+              type: string
+              description: "回答者のユーザー名"
+            profileImage:
+              type: string
+              description: "回答者のプロフィール画像URL"
+            profileColor:
+              type: string
+              description: "回答者のプロフィール背景色"
+          required:
+            - userId
+            - userName
         createdAt:
           type: string
           format: date-time
           description: "作成日時（ISO8601形式）"
-        goodCount:
-          type: number
-          description: "回答へのいいね数（ANSWER の場合のみ有効）"
       required:
         - messageId
-        - groupId
         - messageType
         - messageText
         - createdBy
         - createdAt
+
+    Answer:
+      type: object
+      properties:
+        groupId:
+          type: string
+          description: "テーマが投稿されたグループID"
+        createdBy:
+          type: string
+          description: "回答者のユーザーID"
+        parentId:
+          type: string
+          description: "回答対象のテーマメッセージID"
+        answerText:
+          type: string
+          description: "回答本文"
+        answerImage:
+          type: string
+          description: "回答画像のURL（任意）"
+      required:
+        - groupId
+        - parentId
+        - createdBy
+        - answerText
+
+    GetThemeAnswer:
+      type: object
+      properties:
+        answerId:
+          type: string
+          description: "回答の一意識別子"
+        groupId:
+          type: string
+          description: "回答が投稿されたグループID"
+        createdBy:
+          type: object
+          description: "回答者の詳細情報"
+          properties:
+            userId:
+              type: string
+              description: "回答者のユーザーID"
+            userName:
+              type: string
+              description: "回答者のユーザー名"
+            profileImage:
+              type: string
+              description: "回答者のプロフィール画像URL"
+            profileColor:
+              type: string
+              description: "回答者のプロフィール背景色"
+          required:
+            - userId
+            - userName
+        answerText:
+          type: string
+          description: "回答本文"
+        answerImage:
+          type: string
+          description: "回答画像のURL（任意）"
+        createdAt:
+          type: string
+          format: date-time
+          description: "回答作成日時（ISO8601形式）"
+        goodCount:
+          type: integer
+          description: "いいねの数"
+        isLiked:
+          type: boolean
+          description: "自分がいいねした回答かどうか"
+      required:
+        - answerId
+        - groupId
+        - createdBy
+        - answerText
+        - createdAt
+        - goodCount
+        - isLiked
+
+    ParentIdRequest:
+      type: object
+      description: "親メッセージIDを指定するリクエスト"
+      properties:
+        parentId:
+          type: string
+          description: "親メッセージの一意識別子"
+      required:
+        - parentId
+
+    Themes:
+      type: object
+      description: "グループ内のテーマ全件"
+      properties:
+        groupId:
+          type: string
+          description: "テーマが投稿されたグループID"
+        themes:
+          type: array
+          description: "テーマのリスト"
+          items:
+            $ref: "#/components/schemas/Message"
+
+    answerIdRequest:
+      type: object
+      description: "いいね対象の回答ID"
+      properties:
+        answerId:
+          type: string
+          description: "いいね対象の回答ID"
+        userId:
+          type: string
+          description: "いいねをするユーザーのID"
+      required:
+        - answerId
+        - userId
