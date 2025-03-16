@@ -59,8 +59,9 @@ export const Layout: React.FC<LayoutProps> = ({
         />
       )}
       <div
-        className={`fixed top-[56px] left-0 h-[calc(100vh_-_56px)] z-40 transition-transform duration-300 ease-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`fixed top-[56px] left-0 h-[calc(100vh_-_56px)] z-40 transition-transform duration-300 ease-out ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <Sidebar version={version} onLogout={onLogout} />
       </div>
