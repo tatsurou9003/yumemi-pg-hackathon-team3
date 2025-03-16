@@ -67,7 +67,7 @@ const HeaderCarousel = ({ images }: HeaderCarouselProps) => {
     <section className="w-full flex justify-center items-center py-4">
       <ChevronLeft
         onClick={prevImage}
-        className="w-[40px] md:w-[56px] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+        className="w-[40px] h-[40px] md:w-[56px] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
       />
       <div className="relative overflow-hidden w-[70%] max-w-[400px]">
         {/* 左側の影オーバーレイ */}
@@ -99,7 +99,7 @@ const HeaderCarousel = ({ images }: HeaderCarouselProps) => {
       </div>
       <ChevronRight
         onClick={nextImage}
-        className="w-[40px] md:w-[56px] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+        className="w-[40px] h-[40px] md:w-[56px] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
       />
     </section>
   );

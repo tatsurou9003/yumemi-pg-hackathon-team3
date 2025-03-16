@@ -1,5 +1,5 @@
 import type { SVGProps } from "react";
-const SvgChevronRight = (props: SVGProps<SVGSVGElement>) => (
+const SvgChevronRightBrown = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
@@ -9,9 +9,9 @@ const SvgChevronRight = (props: SVGProps<SVGSVGElement>) => (
     {...props}
   >
     <path
-      fill="#fff"
+      fill="#743E3E"
       d="m9.705 6-1.41 1.41 4.58 4.59-4.58 4.59L9.705 18l6-6z"
     />
   </svg>
 );
-export default SvgChevronRight;
+export default SvgChevronRightBrown;
