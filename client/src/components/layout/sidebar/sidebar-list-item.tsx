@@ -1,0 +1,20 @@
+import { ChevronRight } from "@/components/common/icon";
+
+interface SidebarListItemProps {
+  text: string;
+  onClick: () => void;
+}
+
+const SidebarListItem = ({ text, onClick }: SidebarListItemProps) => {
+  return (
+    <button
+      onClick={onClick}
+      className="flex items-center justify-between bg-transparent px-6 py-2 w-full"
+    >
+      <span className="text-[#743E3E] font-noto text-sm">{text}</span>
+      <ChevronRight width="24px" height="24px" />
+    </button>
+  );
+};
+
+export default SidebarListItem;
