@@ -7,9 +7,10 @@ const GroupList = ({ groupData }: GroupData) => {
     <div className="flex flex-col bg-[#FFEADD] w-full">
       {groupData.map((group: Group) => (
         <Link
+          key={group.groupId}
           //to={`/home/${group.groupId}`}
           to="/about" //暫定的に
-          className="float-left p-[13px] flex items-center gap-[21px] font-[Inter]"
+          className="float-left p-[12px] flex items-center gap-[21px] font-[Inter] truncate"
         >
           <Avatar>
             <AvatarImage src={group.groupImage} />
