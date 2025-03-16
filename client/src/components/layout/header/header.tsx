@@ -1,31 +1,35 @@
-import { HeaderAvatar } from "./header-avator";
+import { useState } from "react";
+import { HeaderAvatar } from "./header-avatar";
+import { Sidebar } from "../sidebar/sidebar";
 import { ChevronLeft, HamburgerButton } from "@/components/common/icon";
 
 interface HeaderProps {
   title: string;
-  avator: string;
+  avatar: string;
+  onClick: () => void;
 }
 
-// TODO: onClick時のルーティング、サイドバー展開の追加
 // TODO: 招待カードの追加
 
-export const Header: React.FC<HeaderProps> = ({ title, avator }) => {
+export const Header = ({ title, avatar, onClick }: HeaderProps) => {
   return (
     <div className="flex w-full h-[56px] p-2 items-center gap-1.5 bg-[#FF7C2A]">
       <button
-        onClick={() => {
-          console.log("Navigation button clicked");
-        }}
-        className="flex justify-center items-center p-2 text-white text-[12px]"
+        onClick={onClick}
+        className="flex justify-center items-center p-2"
       >
-        {title === "ホーム" ? <HamburgerButton /> : <ChevronLeft />}
+        {title === "ホーム" ? (
+          <HamburgerButton width="24px" height="24px" />
+        ) : (
+          <ChevronLeft width="24px" height="24px" />
+        )}
       </button>
       <div className="flex-grow text-center text-white text-[12px] font-semibold leading-[28px]">
         {title}
       </div>
       <div className="flex justify-end">
         <HeaderAvatar
-          src={avator}
+          src={avatar}
           onClick={() => {
             console.log("Avatar clicked");
           }}

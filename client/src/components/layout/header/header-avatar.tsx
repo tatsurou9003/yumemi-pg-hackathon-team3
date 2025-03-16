@@ -9,12 +9,9 @@ interface AvatarProps {
   onClick: () => void;
 }
 
-export const HeaderAvatar: React.FC<AvatarProps> = ({ src, onClick }) => {
+const HeaderAvatar = ({ src, onClick }: AvatarProps) => {
   return (
-    <button
-      onClick={onClick}
-      style={{ border: "none", background: "transparent" }}
-    >
+    <button onClick={onClick} className="border-none bg-transparent">
       <Avatar>
         <AvatarImage src={src} />
         <AvatarFallback>CN</AvatarFallback>
@@ -22,3 +19,5 @@ export const HeaderAvatar: React.FC<AvatarProps> = ({ src, onClick }) => {
     </button>
   );
 };
+
+export { HeaderAvatar };
