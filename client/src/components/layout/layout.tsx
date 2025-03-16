@@ -3,34 +3,55 @@ import { Header } from "./header/header";
 import { Sidebar } from "./sidebar/sidebar";
 
 interface LayoutProps {
+  path: string;
   version: string;
-  title: string;
   avatar: string;
   children: React.ReactNode;
   onLogout: () => void;
-  onBack: () => void;
 }
 
 export const Layout: React.FC<LayoutProps> = ({
+  path,
   version,
-  title,
   avatar,
   children,
   onLogout,
-  onBack,
 }) => {
+  const titleMap: Record<string, string> = {
+    "/home": "ホーム",
+    "/profile": "プロフィール",
+    // "/home/[roomID]": "グループ名",
+    // "/home/[roomId]/post": "グループ名",
+    // "/home/[roomId]/[threadId]": "グループ名",
+    "/home/group": "グループ作成",
+  };
+  const toMap: Record<string, string> = {
+    "/profile": "/home",
+    // "/home/[roomID]": "/home",
+    // "/home/[roomId]/post": "/home/[roomID]",
+    // "/home/[roomId]/[threadId]": "/home/[roomID]",
+    "/home/group": "/home",
+  };
+  const getTitle = () => {
+    return titleMap[path] || "エラー";
+  };
+  const getTo = () => {
+    return toMap[path] || "/";
+  };
+
   const [isSidebarOpen, setSidebarOpen] = useState(false);
-  const handleClick = () => {
-    if (title === "ホーム") {
-      setSidebarOpen((prevState) => !prevState);
-    } else {
-      onBack();
-    }
+  const handleSidebar = () => {
+    setSidebarOpen((prevState) => !prevState);
   };
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header title={title} avatar={avatar} onClick={handleClick} />
+      <Header
+        to={getTo()}
+        title={getTitle()}
+        avatar={avatar}
+        onSidebar={handleSidebar}
+      />
       <div className="flex flex-row">
         {isSidebarOpen && <Sidebar version={version} onLogout={onLogout} />}
         <main className="flex-1 p-4 bg-white">{children}</main>
