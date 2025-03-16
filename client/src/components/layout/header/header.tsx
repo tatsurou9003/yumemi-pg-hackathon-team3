@@ -1,5 +1,5 @@
 import { HeaderAvatar } from "./header-avator";
-import { HamburgerButton } from "@/components/common/icon";
+import { ChevronLeft, HamburgerButton } from "@/components/common/icon";
 
 interface HeaderProps {
   title: string;
@@ -18,7 +18,7 @@ export const Header: React.FC<HeaderProps> = ({ title, avator }) => {
         }}
         className="flex justify-center items-center p-2 text-white text-[12px]"
       >
-        {title === "ホーム" ? <HamburgerButton /> : <>＜</>}
+        {title === "ホーム" ? <HamburgerButton /> : <ChevronLeft />}
       </button>
       <div className="flex-grow text-center text-white text-[12px] font-semibold leading-[28px]">
         {title}

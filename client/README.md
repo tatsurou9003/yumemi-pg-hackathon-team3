@@ -97,6 +97,6 @@ TODO: フックの使い方について追記
 
 SVG画像をReactコンポーネントとして変換するツール。
 
-`npm run svgr`を実行すると、`src/assets/icons`フォルダ内のsvg画像が一括でReactコンポーネントとして`src/components/common/icons`フォルダに変換される。命名やコード生成に一部難があるので適宜手動で解決してほしい。すまぬ。
+`npm run svgr`を実行すると、`src/assets/icons`フォルダ内のsvg画像が一括でReactコンポーネントとして`src/components/common/icons`フォルダに変換される。
 
 ...
