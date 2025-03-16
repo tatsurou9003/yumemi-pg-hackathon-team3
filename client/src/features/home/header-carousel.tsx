@@ -67,11 +67,11 @@ const HeaderCarousel = ({ images }: HeaderCarouselProps) => {
     <section className="w-full flex justify-center items-center py-4">
       <ChevronLeft
         onClick={prevImage}
-        className="w-[40px] md:w-[56px] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer z-10"
+        className="w-[40px] md:w-[56px] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
       />
       <div className="relative overflow-hidden w-[70%] max-w-[400px]">
         {/* 左側の影オーバーレイ */}
-        <div className="absolute inset-y-0 left-0 w-[10px] z-10 pointer-events-none bg-gradient-to-r from-[rgba(0,0,0,0.2)] to-transparent"></div>
+        <div className="absolute inset-y-0 left-0 w-[10px] z-1 pointer-events-none bg-gradient-to-r from-[rgba(0,0,0,0.2)] to-transparent"></div>
 
         <div
           ref={carouselRef}
@@ -95,11 +95,11 @@ const HeaderCarousel = ({ images }: HeaderCarouselProps) => {
         </div>
 
         {/* 右側の影オーバーレイ */}
-        <div className="absolute inset-y-0 right-0 w-[10px] z-10 pointer-events-none bg-gradient-to-l from-[rgba(0,0,0,0.2)] to-transparent"></div>
+        <div className="absolute inset-y-0 right-0 w-[10px] pointer-events-none bg-gradient-to-l from-[rgba(0,0,0,0.2)] to-transparent"></div>
       </div>
       <ChevronRight
         onClick={nextImage}
-        className="w-[40px] md:w-[56px] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer z-10"
+        className="w-[40px] md:w-[56px] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
       />
     </section>
   );
