@@ -8,7 +8,7 @@ interface SidebarProps {
 
 export const Sidebar = ({ version, onLogout }: SidebarProps) => {
   return (
-    <div className="flex flex-col justify-between items-center flex-shrink-0 w-[280px] h-[calc(100vh_-_56px)] py-10">
+    <div className="flex flex-col justify-between items-center w-[280px] h-full bg-white py-10 shadow-lg">
       <div className="flex flex-col items-start gap-6 w-full">
         <div className="flex items-center gap-4 px-6 py-2 w-full">
           <InfoIcon width="24px" height="24px" />
