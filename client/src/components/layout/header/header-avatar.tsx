@@ -25,8 +25,9 @@ const HeaderAvatar = ({ src }: AvatarProps) => {
         </Avatar>
       </button>
       <div
-        className={`absolute top-[calc(100%_+_3px)] right-0 z-10 transition-opacity duration-200 ${isUserCardOpen ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
+        className={`absolute top-[calc(100%_+_3px)] right-0 z-10 transition-opacity duration-200 ${
+          isUserCardOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
       >
         <UserCard
           name="John Doe"
