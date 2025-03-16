@@ -54,7 +54,7 @@ export const Layout: React.FC<LayoutProps> = ({
       />
       <div className="flex flex-row">
         {isSidebarOpen && <Sidebar version={version} onLogout={onLogout} />}
-        <main className="flex-1 p-4 bg-white">{children}</main>
+        <main className="flex-1 bg-white">{children}</main>
       </div>
     </div>
   );
