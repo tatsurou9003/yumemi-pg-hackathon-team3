@@ -5,6 +5,7 @@ export { default as Character } from "./character";
 export { default as ChevronLeft } from "./chevron-left";
 export { default as ChevronRightBrown } from "./chevron-right-brown";
 export { default as ChevronRight } from "./chevron-right";
+export { default as Clear } from "./clear";
 export { default as CreateOogiri } from "./create-oogiri";
 export { default as FlipCamera } from "./flip-camera";
 export { default as HamburgerButton } from "./hamburger-button";
