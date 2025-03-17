@@ -50,11 +50,11 @@ const Message = (
         <div
           className={`flex ${isSameUser ? "justify-start" : "justify-end"} w-full gap-1 items-center`}
         >
-          {true ? (
-            <Star width="12px" height="12px" />
-          ) : (
-            <StarGray width="12px" height="12px" />
-          )}
+          {/* {true ? ( */}
+          <Star width="12px" height="12px" />
+          {/* ) : ( */}
+          {/* <StarGray width="12px" height="12px" /> */}
+          {/* )} */}
           <div className="text-[#757575] font-bold text-xs">2</div>
         </div>
       </div>
