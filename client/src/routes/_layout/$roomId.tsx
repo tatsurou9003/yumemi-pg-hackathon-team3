@@ -7,7 +7,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
 import { UserData } from "@/types/userData";
 
-export const Route = createFileRoute("/_layout/room")({
+export const Route = createFileRoute("/_layout/$roomId")({
   component: RouteComponent,
 });
 
