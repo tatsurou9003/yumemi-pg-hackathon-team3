@@ -1,6 +1,10 @@
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { HeaderAvatar } from "./header-avatar";
-import { ChevronLeft, HamburgerButton } from "@/components/common/icon";
+import {
+  ChevronLeft,
+  HamburgerButton,
+  StickyNote,
+} from "@/components/common/icon";
 
 interface HeaderProps {
   to: string;
@@ -10,28 +14,41 @@ interface HeaderProps {
 }
 
 export const Header = ({ to, title, avatar, onSidebar }: HeaderProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex w-full h-[56px] p-2 items-center gap-1.5 bg-[#FF7C2A]">
       {title === "ホーム" ? (
-        <button
+        <HamburgerButton
+          width="24px"
+          height="24px"
+          className="cursor-pointer"
           onClick={onSidebar}
-          className="flex justify-center items-center p-2"
-        >
-          <HamburgerButton
-            width="24px"
-            height="24px"
-            className="cursor-pointer"
-          />
-        </button>
+        />
       ) : (
-        <Link to={to} className="flex justify-center items-center p-2">
-          <ChevronLeft width="24px" height="24px" />
-        </Link>
+        <ChevronLeft
+          width="24px"
+          height="24px"
+          className="cursor-pointer"
+          onClick={() => {
+            navigate({ to: to });
+          }}
+        />
       )}
       <div className="flex-grow text-center text-white text-[12px] font-semibold leading-[28px]">
         {title}
       </div>
-      <div className="flex justify-end">
+      <div className="flex items-center justify-end gap-4">
+        {title === "ルーム" && (
+          <StickyNote
+            width="18px"
+            height="18px"
+            className="cursor-pointer"
+            onClick={() => {
+              navigate({ to: "/room" });
+            }}
+          />
+        )}
         <HeaderAvatar src={avatar} />
       </div>
     </div>
