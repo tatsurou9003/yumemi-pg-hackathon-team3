@@ -281,10 +281,11 @@ function RouteComponent() {
         {messages.map((message) =>
           message.messageType === "oogiri" ? (
             <div
-              className={`flex ${message.createdBy.userId === currentUser.userId
-                ? "justify-end"
-                : "justify-start"
-                }`}
+              className={`flex ${
+                message.createdBy.userId === currentUser.userId
+                  ? "justify-end"
+                  : "justify-start"
+              }`}
               key={message.messageId}
             >
               <OogiriMessage
@@ -294,10 +295,11 @@ function RouteComponent() {
             </div>
           ) : (
             <div
-              className={`flex ${message.createdBy.userId === currentUser.userId
-                ? "justify-end"
-                : "justify-start"
-                }`}
+              className={`flex ${
+                message.createdBy.userId === currentUser.userId
+                  ? "justify-end"
+                  : "justify-start"
+              }`}
               key={message.messageId}
             >
               <Message {...message} userId={currentUser.userId} />
