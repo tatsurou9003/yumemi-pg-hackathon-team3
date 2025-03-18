@@ -10,7 +10,7 @@ const CloseOogiri = ({ theme }: CloseOogiriProps) => {
     theme.length > maxLength ? theme.substring(0, maxLength) + "..." : theme;
 
   return (
-    <div className="flex flex-col items-center w-full text-xs text-[#6E6E6E]">
+    <div className="flex flex-col items-center w-full max-w-[500px] text-xs text-[#6E6E6E]">
       <div className="font-bold text-[8px] w-full px-9 py-1 text-center bg-[#D9D9D9] rounded-[4px]">
         【大喜利】{truncatedTheme}が終了しました。
       </div>

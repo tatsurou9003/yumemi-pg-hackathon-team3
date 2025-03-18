@@ -1,20 +1,24 @@
+import { Link } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
-import { UserData } from "@/types/userData";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "@/components/common/avatar/avatar";
 
-const OogiriMessage = (
-  { messageText, messageImage, deadline, createdBy }: MessageData,
-  { userId }: UserData,
-) => {
-  const isSameUser = userId === createdBy.userId;
+type OogiriMessageProps = MessageData & { isSameUser: boolean };
+
+const OogiriMessage = ({
+  messageText,
+  messageImage,
+  deadline,
+  createdBy,
+  isSameUser,
+}: OogiriMessageProps) => {
   const isDead = new Date(deadline) < new Date();
 
   return (
-    <div className="inline-flex items-start gap-6 w-full">
+    <div className="inline-flex items-start gap-6">
       {!isSameUser && (
         <Avatar>
           <AvatarImage src={createdBy.profileImage} />
@@ -23,39 +27,40 @@ const OogiriMessage = (
           </AvatarFallback>
         </Avatar>
       )}
-      <div className="flex flex-col items-center w-full">
+      <div className="flex flex-col items-center">
         <div
-          className={`w-full rounded border border-gray-300 ${isDead ? "bg-[#FFE735]" : "bg-[#FFB8BA]"}`}
+          className={`w-full rounded border border-gray-300 p-4 w-auto ${isDead ? "bg-[#FFE735]" : "bg-[#FFB8BA]"}`}
         >
           {messageImage && !messageText ? (
             <img
               src={messageImage}
               alt="OogiriMessage image"
-              className="rounded w-[168px] h-auto"
+              className="rounded w-full h-auto"
             />
           ) : null}
           {messageText && (
             <div className="flex flex-col justify-center items-start gap-2.5 self-stretch p-[2px_12px_6px_12px]">
               <span className="text-[#743E3E] text-[12px] leading-[20px]">
                 【大喜利】
+                <br />
                 {messageText}
               </span>
               {messageImage && (
                 <img
                   src={messageImage}
                   alt="OogiriMessage image"
-                  className="w-[168px] h-auto"
+                  className="w-full h-auto"
                 />
               )}
             </div>
           )}
         </div>
-        <div
-          className={`flex justify-end w-full text-xs font-bold font-[Noto Sans JP] ${isDead ? "text-[#743E3E]" : "text-[#E73E3E]"
-            }`}
+        <Link
+          to={isDead ? "/home" : "/home"}
+          className={`flex justify-end w-full text-xs font-bold cursor-pointer ${isDead ? "text-[#743E3E]" : "text-[#E73E3E]"}`}
         >
           {isDead ? "回答を見る" : "回答する"}
-        </div>
+        </Link>
       </div>
       {isSameUser && (
         <Avatar>

@@ -13,6 +13,4 @@ export { default as InfoIcon } from "./info-icon";
 export { default as PhotoCamera } from "./photo-camera";
 export { default as Plus } from "./plus";
 export { default as SettingsIcon } from "./settings-icon";
-export { default as StarGray } from "./star-gray";
-export { default as Star } from "./star";
 export { default as StickyNote } from "./sticky-note";

@@ -7,6 +7,8 @@ import {
   PhotoCamera,
 } from "@/components/common/icon";
 
+// form完成後付けたし
+
 const RoomForm = () => {
   const [isCreateOogiriOpen, setCreateOogiriOpen] = useState<boolean>(false);
   const toggleCreateOogiri = () => {
