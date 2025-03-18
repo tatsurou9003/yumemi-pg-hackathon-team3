@@ -275,7 +275,7 @@ function RouteComponent() {
   return (
     <div className="h-[calc(100vh_-_56px)] flex flex-col justify-between bg-[#FFBC92] text-xs bg-[url(/src/assets/character-room.webp)]">
       <div className="flex flex-col gap-4 p-5 overflow-y-auto">
-        <div className="justify-center">
+        <div className="justify-items-center">
           <CloseOogiri theme="ゆめみハッカソンから飛んだエンジニア。何があった？" />
         </div>
         {messages.map((message) =>

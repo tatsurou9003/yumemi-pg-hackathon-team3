@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import {
   Add,
   Album,
@@ -10,6 +11,7 @@ import {
 // form完成後付けたし
 
 const RoomForm = () => {
+  const navigate = useNavigate();
   const [isCreateOogiriOpen, setCreateOogiriOpen] = useState<boolean>(false);
   const toggleCreateOogiri = () => {
     setCreateOogiriOpen((prev) => !prev);
@@ -21,15 +23,41 @@ const RoomForm = () => {
         {isCreateOogiriOpen ? (
           <Clear width="24px" height="24px" onClick={toggleCreateOogiri} />
         ) : (
-          <Add width="24px" height="24px" onClick={toggleCreateOogiri} />
+          <Add
+            width="24px"
+            height="24px"
+            className="cursor-pointer"
+            onClick={toggleCreateOogiri}
+          />
         )}
-        <PhotoCamera width="24px" height="24px" />
-        <Album width="24px" height="24px" />
+        <PhotoCamera
+          width="24px"
+          height="24px"
+          className="cursor-pointer"
+          onClick={() => {
+            navigate({ to: "/home" });
+          }}
+        />
+        <Album
+          width="24px"
+          height="24px"
+          className="cursor-pointer"
+          onClick={() => {
+            navigate({ to: "/home" });
+          }}
+        />
         <form />
       </div>
       {isCreateOogiriOpen && (
-        <div className="flex flex-col w-full px-[78px] py-[18px] items-center">
-          <CreateOogiri width="237px" height="113.8px" />
+        <div className="flex flex-col w-full px-[78px] py-[18px] items-center bg-[#FFF7E4]">
+          <CreateOogiri
+            width="237px"
+            height="113.8px"
+            className="cursor-pointer"
+            onClick={() => {
+              navigate({ to: "/home" });
+            }}
+          />
         </div>
       )}
     </div>

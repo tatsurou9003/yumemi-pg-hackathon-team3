@@ -35,7 +35,7 @@ const OogiriMessage = ({
             <img
               src={messageImage}
               alt="OogiriMessage image"
-              className="rounded w-full h-auto"
+              className="rounded w-[168px] h-auto"
             />
           ) : null}
           {messageText && (
@@ -49,7 +49,7 @@ const OogiriMessage = ({
                 <img
                   src={messageImage}
                   alt="OogiriMessage image"
-                  className="w-full h-auto"
+                  className="w-[168px] h-auto"
                 />
               )}
             </div>

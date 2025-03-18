@@ -30,7 +30,7 @@ const Message = ({
           <img
             src={messageImage}
             alt="Message image"
-            className="rounded w-full h-auto"
+            className="rounded w-[168px] h-auto"
           />
         )}
         {messageText && (
@@ -42,7 +42,7 @@ const Message = ({
               <img
                 src={messageImage}
                 alt="Message image"
-                className="w-full h-auto"
+                className="w-[168px] h-auto"
               />
             )}
           </div>
