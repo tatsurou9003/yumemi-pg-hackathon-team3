@@ -8,6 +8,9 @@ import { MessageData } from "@/types/messageData";
 import { UserData } from "@/types/userData";
 
 export const Route = createFileRoute("/_layout/$roomId")({
+  parseParams: ({ roomId }: { roomId: string }) => ({
+    roomId: decodeURIComponent(roomId).replace(/[^a-zA-Z0-9_-]/g, ""), // `/` を除外
+  }),
   component: RouteComponent,
 });
 
@@ -281,11 +284,10 @@ function RouteComponent() {
         {messages.map((message) =>
           message.messageType === "oogiri" ? (
             <div
-              className={`flex ${
-                message.createdBy.userId === currentUser.userId
-                  ? "justify-end"
-                  : "justify-start"
-              }`}
+              className={`flex ${message.createdBy.userId === currentUser.userId
+                ? "justify-end"
+                : "justify-start"
+                }`}
               key={message.messageId}
             >
               <OogiriMessage
@@ -295,11 +297,10 @@ function RouteComponent() {
             </div>
           ) : (
             <div
-              className={`flex ${
-                message.createdBy.userId === currentUser.userId
-                  ? "justify-end"
-                  : "justify-start"
-              }`}
+              className={`flex ${message.createdBy.userId === currentUser.userId
+                ? "justify-end"
+                : "justify-start"
+                }`}
               key={message.messageId}
             >
               <Message {...message} userId={currentUser.userId} />
