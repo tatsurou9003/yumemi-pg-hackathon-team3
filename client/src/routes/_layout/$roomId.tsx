@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import CloseOogiri from "@/features/room/close-oogiri";
 import Message from "@/features/room/message";
 import OogiriMessage from "@/features/room/oogiri-message";
-import RoomForm from "@/features/room/room-form";
+import RoomFooter from "@/features/room/room-footer";
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
 import { UserData } from "@/types/userData";
@@ -312,7 +312,7 @@ function RouteComponent() {
         <div ref={messagesEndRef} />
       </div>
       <div>
-        <RoomForm />
+        <RoomFooter />
       </div>
     </div>
   );
