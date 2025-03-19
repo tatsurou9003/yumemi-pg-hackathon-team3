@@ -18,10 +18,53 @@ resource "aws_iam_role" "lambda_exec" {
 EOF
 }
 
+# DynamoDBアクセス用のIAMポリシー
+resource "aws_iam_policy" "lambda_dynamodb_policy" {
+  name        = "lambda_dynamodb_policy"
+  description = "IAM policy for Lambda to access DynamoDB"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem",
+        "dynamodb:UpdateItem",
+        "dynamodb:DeleteItem",
+        "dynamodb:BatchGetItem",
+        "dynamodb:BatchWriteItem",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:*:*:table/users",
+        "arn:aws:dynamodb:*:*:table/groups",
+        "arn:aws:dynamodb:*:*:table/group_members",
+        "arn:aws:dynamodb:*:*:table/messages",
+        "arn:aws:dynamodb:*:*:table/answers",
+        "arn:aws:dynamodb:*:*:table/goodlogs",
+        "arn:aws:dynamodb:*:*:table/*/index/*"
+      ]
+    }
+  ]
+}
+EOF
+}
+
+# LambdaロールにCloudWatchのポリシーをアタッチ
 resource "aws_iam_policy_attachment" "lambda_logs" {
   name       = "lambda_logs"
   roles      = [aws_iam_role.lambda_exec.name]
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
+# LambdaロールにDynamoDBポリシーをアタッチ
+resource "aws_iam_role_policy_attachment" "lambda_dynamodb" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
 }
 
 data "archive_file" "lambda_zip" {
