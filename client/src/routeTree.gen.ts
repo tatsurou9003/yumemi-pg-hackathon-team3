@@ -41,6 +41,12 @@ const LayoutHomeRoute = LayoutHomeImport.update({
   getParentRoute: () => LayoutRoute,
 } as any);
 
+const LoginRoute = LoginImport.update({
+  id: "/login",
+  path: "/login",
+  getParentRoute: () => LoginRoute,
+})
+
 // Populate the FileRoutesByPath interface
 
 declare module "@tanstack/react-router" {
@@ -52,6 +58,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof IndexImport;
       parentRoute: typeof rootRoute;
     };
+    "/login": {
+      id: "/_layout";
+      path: "";
+      fullPath: "";
+      preLoaderRoute: typeof LoginImport;
+      parentRoute: typeof LoginRoute;
+    },
     "/_layout": {
       id: "/_layout";
       path: "";
