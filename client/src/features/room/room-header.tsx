@@ -14,4 +14,3 @@ const RoomHeader = ({ title }: RoomHeaderProps) => {
 };
 
 export default RoomHeader;
-
