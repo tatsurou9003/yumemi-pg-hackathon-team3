@@ -1,66 +1,57 @@
-import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm, ControllerRenderProps } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/common/button/button";
 import {
-  Add,
-  Album,
-  Clear,
-  CreateOogiri,
-  PhotoCamera,
-} from "@/components/common/icon";
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+} from "@/components/common/form/form";
+import { Input } from "@/components/common/input/input";
 
-// form完成後付けたし
+const formSchema = z.object({
+  message: z.string().min(1),
+});
+
+type FormSchema = z.infer<typeof formSchema>;
 
 const RoomForm = () => {
-  const navigate = useNavigate();
-  const [isCreateOogiriOpen, setCreateOogiriOpen] = useState<boolean>(false);
-  const toggleCreateOogiri = () => {
-    setCreateOogiriOpen((prev) => !prev);
-  };
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      message: "",
+    },
+  });
+
+  function onSubmit(values: FormSchema) {
+    console.log(values);
+  }
 
   return (
-    <div className="flex flex-col w-full h-auto items-center bg-[#FFF]">
-      <div className="flex w-full h-[48px] px-3 py-1 items-center gap-3 flex-shrink-0">
-        {isCreateOogiriOpen ? (
-          <Clear width="24px" height="24px" onClick={toggleCreateOogiri} />
-        ) : (
-          <Add
-            width="24px"
-            height="24px"
-            className="cursor-pointer"
-            onClick={toggleCreateOogiri}
-          />
-        )}
-        <PhotoCamera
-          width="24px"
-          height="24px"
-          className="cursor-pointer"
-          onClick={() => {
-            navigate({ to: "/home" });
-          }}
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full flex items-center space-x-2"
+      >
+        <FormField
+          control={form.control}
+          name="message"
+          render={({
+            field,
+          }: {
+            field: ControllerRenderProps<FormSchema, "message">;
+          }) => (
+            <FormItem className="w-full">
+              <FormControl>
+                <Input placeholder="Aa" {...field} className="w-full" />
+              </FormControl>
+            </FormItem>
+          )}
         />
-        <Album
-          width="24px"
-          height="24px"
-          className="cursor-pointer"
-          onClick={() => {
-            navigate({ to: "/home" });
-          }}
-        />
-        <form />
-      </div>
-      {isCreateOogiriOpen && (
-        <div className="flex flex-col w-full px-[78px] py-[18px] items-center bg-[#FFF7E4]">
-          <CreateOogiri
-            width="237px"
-            height="113.8px"
-            className="cursor-pointer"
-            onClick={() => {
-              navigate({ to: "/home" });
-            }}
-          />
-        </div>
-      )}
-    </div>
+        <Button type="submit">送信</Button>
+      </form>
+    </Form>
   );
 };
 
