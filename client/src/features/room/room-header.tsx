@@ -5,12 +5,13 @@ interface RoomHeaderProps {
 const RoomHeader = ({ title }: RoomHeaderProps) => {
   return (
     <div className="flex flex-col items-center w-full">
-      <div className="text-[#743E3E] text-base font-normal leading-7 bg-[#FFF]">
+      <span className="w-full h-[54px] text-[#743E3E] text-base leading-7 bg-[#FFF] flex items-center justify-center">
         {title}
-      </div>
-      <span className="w-[108px] border-t-2 border-[#743E3E]" />
+      </span>
+      <hr className="w-[108px] border-t-2 border-[#743E3E]" />
     </div>
   );
 };
 
 export default RoomHeader;
+

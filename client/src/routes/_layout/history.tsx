@@ -4,7 +4,10 @@ import RoomHeader from "@/features/room/room-header";
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
 
-export const Route = createFileRoute("/_layout/$roomId/history")({
+export const Route = createFileRoute("/_layout/history")({
+  parseParams: (rawParams: Record<string, string>) => ({
+    roomId: decodeURIComponent(rawParams.roomId).replace(/[^a-zA-Z0-9_-]/g, ""), // `/` を除外
+  }),
   component: RouteComponent,
 });
 
@@ -264,7 +267,9 @@ function RouteComponent() {
 
   return (
     <div className="h-[calc(100vh_-_56px)] flex flex-col justify-between bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
-      <RoomHeader title="過去の大喜利" />
+      <div className="w-full">
+        <RoomHeader title="過去の大喜利" />
+      </div>
       <div className="flex flex-col gap-4 p-5 overflow-y-auto">
         {messages.map(
           (message) =>
