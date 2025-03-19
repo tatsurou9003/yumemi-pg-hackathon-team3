@@ -30,11 +30,18 @@ const RoomForm = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex items-center space-x-2">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="w-full flex items-center space-x-2"
+      >
         <FormField
           control={form.control}
           name="message"
-          render={({ field }: { field: ControllerRenderProps<FormSchema, "message"> }) => (
+          render={({
+            field,
+          }: {
+            field: ControllerRenderProps<FormSchema, "message">;
+          }) => (
             <FormItem className="w-full">
               <FormControl>
                 <Input placeholder="Aa" {...field} className="w-full" />

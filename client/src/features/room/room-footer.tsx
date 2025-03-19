@@ -9,8 +9,6 @@ import {
   PhotoCamera,
 } from "@/components/common/icon";
 
-// form完成後付けたし
-
 const RoomFooter = () => {
   const navigate = useNavigate();
   const [isCreateOogiriOpen, setCreateOogiriOpen] = useState<boolean>(false);
