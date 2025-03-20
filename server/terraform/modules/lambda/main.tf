@@ -67,26 +67,33 @@ resource "aws_iam_role_policy_attachment" "lambda_dynamodb" {
 }
 
 # Lambda関数のzipファイル/パスを定義
-data "archive_file" "lambda_handler_zip" {
+data "archive_file" "update_profile_zip" {
   type        = "zip"
-  source_file = "${path.module}/functions/lambda_handler.py"
-  output_path = "${path.module}/lambda_handler.zip"
+  source_file = "${path.module}/functions/update_profile.py"
+  output_path = "${path.module}/functions/zip/lambda_handler.zip"
 }
 
 data "archive_file" "post_confirmation_zip" {
   type        = "zip"
   source_file = "${path.module}/functions/post_confirmation.py"
-  output_path = "${path.module}/post_confirmation.zip"
+  output_path = "${path.module}/functions/zip/post_confirmation.zip"
+}
+
+data "archive_file" "first_login_check_zip" {
+  type        = "zip"
+  source_file  = "${path.module}/functions/first_login_check.py"
+  output_path = "${path.module}/functions/zip/first_login_check.zip"
 }
 
 # Lambda関数の作成
-resource "aws_lambda_function" "lambda_function" {
-  filename         = data.archive_file.lambda_handler_zip.output_path
-  function_name    = var.lambda_function_name
+# UpdateProfileトリガーを追加
+resource "aws_lambda_function" "update_profile" {
+  filename         = data.archive_file.update_profile_zip.output_path
+  function_name    = "update_profile"
   role            = aws_iam_role.lambda_exec.arn
-  handler        = "lambda_handler.lambda_handler"
+  handler        = "update_profile.lambda_handler"
   runtime        = "python3.10"
-  source_code_hash = data.archive_file.lambda_handler_zip.output_base64sha256
+  source_code_hash = data.archive_file.update_profile_zip.output_base64sha256
 }
 
 # PostConfirmationトリガーを追加
@@ -94,20 +101,30 @@ resource "aws_lambda_function" "post_confirmation" {
   filename = data.archive_file.post_confirmation_zip.output_path
   function_name = "post_confirmation"
   role = aws_iam_role.lambda_exec.arn
-  handler = "post_confirmation.post_confirmation"
+  handler = "post_confirmation.lambda_handler"
   runtime = "python3.10"
   source_code_hash = data.archive_file.post_confirmation_zip.output_base64sha256
 }
 
-# lambda関数のarnを出力
-output "lambda_function_arn" {
-  value = aws_lambda_function.lambda_function.arn
+# FirstLoginCheckトリガーを追加
+resource "aws_lambda_function" "first_login_check" {
+  filename = data.archive_file.first_login_check_zip.output_path
+  function_name = "first_login_check"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "first_login_check.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.first_login_check_zip.output_base64sha256
 }
 
-output "post_confirmation_lambda_arn" {
+# lambda関数のarnを出力
+output "lambda_update_profile_arn" {
+  value = aws_lambda_function.update_profile.arn
+}
+
+output "lambda_post_confirmation_arn" {
   value = aws_lambda_function.post_confirmation.arn
 }
 
-output "lambda_function_name" {
-  value = aws_lambda_function.lambda_function.function_name
+output "lambda_first_login_check_arn" {
+  value = aws_lambda_function.first_login_check.arn
 }

@@ -26,15 +26,14 @@ module "amplify" {
 
 module "lambda" {
   source               = "./modules/lambda"
-  lambda_function_name = "my_lambda"
 }
 
 module "api_gateway" {
   source              = "./modules/api_gateway"
   aws_region          = var.aws_region
-  api_gateway_name    = "MyAPIGateway"
-  lambda_function_arn = module.lambda.lambda_function_arn
-  lambda_function_name = module.lambda.lambda_function_name
+  api_gateway_name    = "wa-life-api"
+  lambda_update_profile_arn = module.lambda.lambda_update_profile_arn
+  lambda_first_login_check_arn = module.lambda.lambda_first_login_check_arn
   cognito_user_pool_arn = module.cognito.user_pool_arn
 }
 
@@ -46,7 +45,7 @@ module "dynamodb" {
 module "cognito" {
   source = "./modules/cognito"
   cognito_user_pool_name = var.cognito_user_pool_name
-  post_confirmation_lambda_arn = module.lambda.post_confirmation_lambda_arn
+  post_confirmation_lambda_arn = module.lambda.lambda_post_confirmation_arn
 }
 
 output "api_gateway_url" {
