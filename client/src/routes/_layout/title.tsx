@@ -6,7 +6,7 @@ export const Route = createFileRoute("/_layout/title")({
 function RouteComponent() {
   return (
     <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
-      <div className="relative w-[393px] h-[852px] left-[75px] top-[102px] bg-[#FF9350]"></div>
+      <div className="relative w-[393px] h-[852px] left-[75px] top-[102px] bg-bg-[url(/src/assets/icons/title.svg)]"></div>
     </div>
   );
 }
