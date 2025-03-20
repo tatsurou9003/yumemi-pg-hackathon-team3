@@ -11,7 +11,10 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-4 border rounded-lg shadow-md">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="p-4 border rounded-lg shadow-md"
+    >
       <div className="mb-4">
         <input
           type="email"
@@ -27,7 +30,7 @@ const LoginForm = () => {
           id="password"
           {...register("password", { required: "パスワード" })}
           placeholder="パスワード"
-          className="w-full p-2 border border-gray-300 rounded"
+          className="position: absolute;width:310px height: 48px;left: 41px;top: 74px;background: #FFFFFF;"
         />
       </div>
       <LoginButton />
