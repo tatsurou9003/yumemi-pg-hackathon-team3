@@ -8,7 +8,9 @@ const GoogleButton = () => {
                  bg-white rounded-[4px]  
                  text-black text-sm font-medium flex items-center justify-center 
                  "
-    >google認証</button>
+    >
+      google認証
+    </button>
   );
 };
 
