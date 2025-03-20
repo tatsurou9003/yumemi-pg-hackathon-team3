@@ -39,6 +39,7 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
   # 明示的認証フローのみを有効化（OAuth 関連のフローは無効）
   explicit_auth_flows = [
     "ALLOW_USER_PASSWORD_AUTH",
+    "ALLOW_ADMIN_USER_PASSWORD_AUTH",
     "ALLOW_USER_SRP_AUTH",
     "ALLOW_REFRESH_TOKEN_AUTH",
   ]

@@ -38,6 +38,11 @@ module "api_gateway" {
   cognito_user_pool_arn = module.cognito.user_pool_arn
 }
 
+module "dynamodb" {
+  aws_region = var.aws_region
+  source = "./modules/dynamodb"
+}
+
 module "cognito" {
   source = "./modules/cognito"
   cognito_user_pool_name = var.cognito_user_pool_name
