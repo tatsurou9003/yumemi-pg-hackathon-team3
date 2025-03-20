@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.16"
     }
+    archive = {
+      source  = "hashicorp/archive"
+      version = ">= 2.0.0"
+    }
   }
 
   required_version = ">= 1.2.0"
@@ -31,6 +35,13 @@ module "api_gateway" {
   api_gateway_name    = "MyAPIGateway"
   lambda_function_arn = module.lambda.lambda_function_arn
   lambda_function_name = module.lambda.lambda_function_name
+  cognito_user_pool_arn = module.cognito.user_pool_arn
+}
+
+module "cognito" {
+  source = "./modules/cognito"
+  cognito_user_pool_name = var.cognito_user_pool_name
+  post_confirmation_lambda_arn = module.lambda.post_confirmation_lambda_arn
 }
 
 output "api_gateway_url" {
