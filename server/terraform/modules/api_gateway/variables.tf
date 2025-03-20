@@ -17,3 +17,9 @@ variable "lambda_function_name" {
   type        = string
   description = "Lambda function name"
 }
+
+variable "cognito_user_pool_arn" {
+  description = "ARN of the Cognito User Pool to use for authentication"
+  type        = string
+}
+
