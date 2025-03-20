@@ -1,5 +1,3 @@
-
-
 const LoginButton = () => {
   return (
     <button
