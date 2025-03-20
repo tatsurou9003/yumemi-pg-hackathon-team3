@@ -11,6 +11,7 @@ info:
 
 servers:
   - url: https://api.amazon.com/dev/
+
 tags:
   - name: Users
     description: ユーザー登録、ログイン、プロフィール更新に関するエンドポイント
@@ -36,12 +37,12 @@ paths:
             schema:
               $ref: "#/components/schemas/UserRegistration"
       responses:
-        "201":
+        "200":
           description: ユーザー登録成功
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/AuthResponse"
   /login:
     post:
       tags:
@@ -61,34 +62,38 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: "JWT認証トークン"
-                  userId:
-                    type: string
-                    description: "ユーザーID"
-                  isFirstLogin:
-                    type: boolean
-                    description: "初回ログインかどうかを示すフラグ"
-                required:
-                  - token
-                  - userId
-                  - isFirstLogin
-  /users/{userId}/profile:
+                $ref: "#/components/schemas/AuthResponse"
+  /first_login_check:
+    post:
+      tags:
+        - Users
+      summary: 初回ログインチェック
+      description: ログイン時に初回ログインかどうかをチェックします。
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
+      responses:
+        "200":
+          description: 初回ログイン
+        "404":
+          description: 初回ログインではない
+  /users/profile:
     put:
       tags:
         - Users
       summary: ユーザーのプロフィール登録（初回ログイン時）および更新
       description: 初回ログイン時に追加情報（ユーザー名、プロフィール画像、背景色）を登録・更新。
       parameters:
-        - in: path
-          name: userId
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
-          description: 更新対象のユーザーID
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: プロフィール更新情報
         required: true
@@ -99,26 +104,20 @@ paths:
       responses:
         "200":
           description: プロフィール登録成功。
-  /users/{userId}:
+  /users/home:
     get:
       tags:
         - Users
       summary: ユーザー情報取得
       description: ホーム画面でのユーザーの情報（プロフィール、参加・招待されているグループ）を取得します。
       parameters:
-        - in: path
-          name: userId
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
-          description: 取得対象のユーザーID
-      requestBody:
-        description: ユーザーID
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserIdRequest"
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
+
       responses:
         "200":
           description: ユーザー情報と参加・招待されているグループ情報
@@ -134,12 +133,12 @@ paths:
       summary: ユーザー検索
       description: 招待画面でユーザーIDを指定してユーザー情報を検索します。
       parameters:
-        - in: query
-          name: userId
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
-          description: 検索対象のユーザーID
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: ユーザーID
         required: true
@@ -384,6 +383,23 @@ components:
       required:
         - email
         - password
+
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: アクセストークン (JWT形式)
+        idToken:
+          type: string
+          description: IDトークン (JWT形式)
+        refreshToken:
+          type: string
+          description: リフレッシュトークン
+      required:
+        - accessToken
+        - idToken
+        - refreshToken
 
     UserProfileUpdate:
       type: object

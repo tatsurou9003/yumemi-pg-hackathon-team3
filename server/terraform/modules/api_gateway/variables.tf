@@ -8,14 +8,14 @@ variable "api_gateway_name" {
   description = "Name of the API Gateway"
 }
 
-variable "lambda_function_arn" {
+variable "lambda_update_profile_arn" {
   type        = string
   description = "Lambda function ARN"
 }
 
-variable "lambda_function_name" {
+variable "lambda_first_login_check_arn" {
   type        = string
-  description = "Lambda function name"
+  description = "Lambda function ARN"
 }
 
 variable "cognito_user_pool_arn" {
