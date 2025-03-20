@@ -9,12 +9,10 @@ function RouteComponent() {
   return (
     <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
       <LoginForm />
-      <section className="w-40 text-black">
-        <p>新規登録</p>
-      </section>
-      <section className="absolute w-[152px] h-[27px] left-[120px] top-[301px] bg-white rounded-[4px]">
+      <div className="text-black font-inter font-normal flex flex-col justify-center items-center top-[109px] relative">
+        <p className="top-[109px]">新規登録</p>
+      </div>
         <GoogleButton />
-      </section>
     </div>
   );
 }
