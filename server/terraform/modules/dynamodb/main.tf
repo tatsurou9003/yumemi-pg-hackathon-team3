@@ -60,6 +60,14 @@ resource "aws_dynamodb_table" "messages" {
         name = "groupId"
         type = "S"
     }
+    attribute {
+        name = "messageTypeCreatedAt"
+        type = "S"
+    }
+    attribute {
+        name = "createdAt"
+        type = "S"
+    }
     global_secondary_index {
         name = "GetAllChatIndex"
         hash_key = "groupId"
@@ -91,6 +99,10 @@ resource "aws_dynamodb_table" "answers" {
         name = "answerId"
         type = "S"
     }
+    attribute {
+        name = "goodCount"
+        type = "N"
+    }
     global_secondary_index {
         name = "RankingIndex"
         hash_key = "parentId"
@@ -106,7 +118,7 @@ resource "aws_dynamodb_table" "answers" {
 resource "aws_dynamodb_table" "likes" {
     name = "likes"
     billing_mode = "PAY_PER_REQUEST"
-    hash_key = likeId
+    hash_key = "likeId"
     attribute {
         name = "likeId"
         type = "S"
