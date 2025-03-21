@@ -8,3 +8,6 @@ export { default as HamburgerButton } from "./hamburger-button";
 export { default as InfoIcon } from "./info-icon";
 export { default as Plus } from "./plus";
 export { default as SettingsIcon } from "./settings-icon";
+export { default as Smile } from "./smile";
+export { default as TitlePage } from "./title-page";
+export { default as Title } from "./title";
