@@ -54,7 +54,7 @@ const LayoutLoginRoute = LayoutLoginImport.update({
 const LayoutHomeRoute = LayoutHomeImport.update({
   id: "/home",
   path: "/home",
-
+} as any);
 const LayoutHomeIndexRoute = LayoutHomeIndexImport.update({
   id: "/home/",
   path: "/home/",
@@ -142,9 +142,9 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutLoginRoute: LayoutLoginRoute,
   LayoutProfileRoute: LayoutProfileRoute,
   LayoutTitleRoute: LayoutTitleRoute,
-  LayoutProfileRoute: typeof LayoutProfileRoute;
-  LayoutHomeRoomIdRoute: typeof LayoutHomeRoomIdRoute;
-  LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute;
+  LayoutProfileRoute: typeof LayoutProfileRoute,
+  LayoutHomeRoomIdRoute: typeof LayoutHomeRoomIdRoute,
+  LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute,
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
@@ -209,7 +209,7 @@ export interface FileRouteTypes {
     | "/_layout/home"
     | "/_layout/login"
     | "/_layout/profile"
-    | "/_layout/title";
+    | "/_layout/title"
     | "/_layout/profile"
     | "/_layout/home/$roomId"
     | "/_layout/home/";
@@ -282,3 +282,4 @@ export const routeTree = rootRoute
   }
 }
 ROUTE_MANIFEST_END */
+}

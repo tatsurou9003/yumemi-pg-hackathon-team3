@@ -13,10 +13,8 @@ export { default as InfoIcon } from "./info-icon";
 export { default as PhotoCamera } from "./photo-camera";
 export { default as Plus } from "./plus";
 export { default as SettingsIcon } from "./settings-icon";
-<<<<<<< HEAD
 export { default as Smile } from "./smile";
 export { default as TitlePage } from "./title-page";
 export { default as Title } from "./title";
-=======
 export { default as StickyNote } from "./sticky-note";
->>>>>>> 68fc00fc96051c1b128b5151adb499e0bf1d58e7
+
