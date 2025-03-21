@@ -4,7 +4,7 @@ import RoomHeader from "@/features/room/room-header";
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
 
-export const Route = createFileRoute("/_layout/history")({
+export const Route = createFileRoute("/_layout/home/$roomId/history")({
   parseParams: (rawParams: Record<string, string>) => ({
     roomId: decodeURIComponent(rawParams.roomId).replace(/[^a-zA-Z0-9_-]/g, ""), // `/` を除外
   }),
