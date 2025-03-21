@@ -13,6 +13,7 @@
 import { Route as rootRoute } from "./routes/__root";
 import { Route as LayoutImport } from "./routes/_layout";
 import { Route as IndexImport } from "./routes/index";
+import { Route as LayoutTitleImport } from "./routes/_layout/title";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutLoginImport } from "./routes/_layout/login";
 import { Route as LayoutHomeImport } from "./routes/_layout/home";
@@ -30,6 +31,12 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
+const LayoutTitleRoute = LayoutTitleImport.update({
+  id: "/title",
+  path: "/title",
+  getParentRoute: () => LayoutRoute,
+} as any);
+
 const LayoutProfileRoute = LayoutProfileImport.update({
   id: "/profile",
   path: "/profile",
@@ -45,12 +52,6 @@ const LayoutLoginRoute = LayoutLoginImport.update({
 const LayoutHomeRoute = LayoutHomeImport.update({
   id: "/home",
   path: "/home",
-  getParentRoute: () => LayoutRoute,
-} as any);
-
-const LayoutTitleRoute = LayoutTitleImport.update({
-  id: "/title",
-  path: "/title",
   getParentRoute: () => LayoutRoute,
 } as any);
 
@@ -109,12 +110,14 @@ interface LayoutRouteChildren {
   LayoutHomeRoute: typeof LayoutHomeRoute;
   LayoutLoginRoute: typeof LayoutLoginRoute;
   LayoutProfileRoute: typeof LayoutProfileRoute;
+  LayoutTitleRoute: typeof LayoutTitleRoute;
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutHomeRoute: LayoutHomeRoute,
   LayoutLoginRoute: LayoutLoginRoute,
   LayoutProfileRoute: LayoutProfileRoute,
+  LayoutTitleRoute: LayoutTitleRoute,
 };
 
 const LayoutRouteWithChildren =
@@ -126,6 +129,7 @@ export interface FileRoutesByFullPath {
   "/home": typeof LayoutHomeRoute;
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
+  "/title": typeof LayoutTitleRoute;
 }
 
 export interface FileRoutesByTo {
@@ -134,6 +138,7 @@ export interface FileRoutesByTo {
   "/home": typeof LayoutHomeRoute;
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
+  "/title": typeof LayoutTitleRoute;
 }
 
 export interface FileRoutesById {
@@ -143,20 +148,22 @@ export interface FileRoutesById {
   "/_layout/home": typeof LayoutHomeRoute;
   "/_layout/login": typeof LayoutLoginRoute;
   "/_layout/profile": typeof LayoutProfileRoute;
+  "/_layout/title": typeof LayoutTitleRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: "/" | "" | "/home" | "/login" | "/profile";
+  fullPaths: "/" | "" | "/home" | "/login" | "/profile" | "/title";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "" | "/home" | "/login" | "/profile";
+  to: "/" | "" | "/home" | "/login" | "/profile" | "/title";
   id:
     | "__root__"
     | "/"
     | "/_layout"
     | "/_layout/home"
     | "/_layout/login"
-    | "/_layout/profile";
+    | "/_layout/profile"
+    | "/_layout/title";
   fileRoutesById: FileRoutesById;
 }
 
@@ -192,7 +199,8 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/home",
         "/_layout/login",
-        "/_layout/profile"
+        "/_layout/profile",
+        "/_layout/title"
       ]
     },
     "/_layout/home": {
@@ -205,6 +213,10 @@ export const routeTree = rootRoute
     },
     "/_layout/profile": {
       "filePath": "_layout/profile.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/title": {
+      "filePath": "_layout/title.tsx",
       "parent": "/_layout"
     }
   }

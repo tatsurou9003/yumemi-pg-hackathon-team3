@@ -5,8 +5,6 @@ export const Route = createFileRoute("/_layout/title")({
 
 function RouteComponent() {
   return (
-    <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
-      <div className="relative w-[393px] h-[852px] left-[75px] top-[102px] bg-bg-[url(/src/assets/icons/title.svg)]"></div>
-    </div>
+    <div className="relative flex flex-col justify-center items-center min-h-screen bg-[url('/src/assets/icons/title-page.svg')] bg-no-repeat bg-cover bg-center"></div>
   );
 }
