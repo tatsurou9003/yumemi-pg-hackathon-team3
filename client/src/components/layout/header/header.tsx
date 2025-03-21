@@ -45,7 +45,10 @@ export const Header = ({ to, title, avatar, onSidebar }: HeaderProps) => {
             height="18px"
             className="cursor-pointer"
             onClick={() => {
-              navigate({ to: "/room" });
+              navigate({
+                to: "/home/$roomId/history",
+                params: { roomId: "someRoomId" },
+              });
             }}
           />
         )}
