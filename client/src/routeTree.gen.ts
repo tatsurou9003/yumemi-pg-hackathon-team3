@@ -15,6 +15,7 @@ import { Route as LayoutImport } from "./routes/_layout";
 import { Route as IndexImport } from "./routes/index";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutHomeIndexImport } from "./routes/_layout/home/index";
+import { Route as LayoutHomePostImport } from "./routes/_layout/home/post";
 import { Route as LayoutHomeRoomIdImport } from "./routes/_layout/home/$roomId";
 import { Route as LayoutHomeRoomIdHistoryImport } from "./routes/_layout/home/$roomId.history";
 
@@ -40,6 +41,12 @@ const LayoutProfileRoute = LayoutProfileImport.update({
 const LayoutHomeIndexRoute = LayoutHomeIndexImport.update({
   id: "/home/",
   path: "/home/",
+  getParentRoute: () => LayoutRoute,
+} as any);
+
+const LayoutHomePostRoute = LayoutHomePostImport.update({
+  id: "/home/post",
+  path: "/home/post",
   getParentRoute: () => LayoutRoute,
 } as any);
 
@@ -87,6 +94,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutHomeRoomIdImport;
       parentRoute: typeof LayoutImport;
     };
+    "/_layout/home/post": {
+      id: "/_layout/home/post";
+      path: "/home/post";
+      fullPath: "/home/post";
+      preLoaderRoute: typeof LayoutHomePostImport;
+      parentRoute: typeof LayoutImport;
+    };
     "/_layout/home/": {
       id: "/_layout/home/";
       path: "/home";
@@ -120,12 +134,14 @@ const LayoutHomeRoomIdRouteWithChildren =
 interface LayoutRouteChildren {
   LayoutProfileRoute: typeof LayoutProfileRoute;
   LayoutHomeRoomIdRoute: typeof LayoutHomeRoomIdRouteWithChildren;
+  LayoutHomePostRoute: typeof LayoutHomePostRoute;
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute;
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutProfileRoute: LayoutProfileRoute,
   LayoutHomeRoomIdRoute: LayoutHomeRoomIdRouteWithChildren,
+  LayoutHomePostRoute: LayoutHomePostRoute,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
 };
 
@@ -137,6 +153,7 @@ export interface FileRoutesByFullPath {
   "": typeof LayoutRouteWithChildren;
   "/profile": typeof LayoutProfileRoute;
   "/home/$roomId": typeof LayoutHomeRoomIdRouteWithChildren;
+  "/home/post": typeof LayoutHomePostRoute;
   "/home": typeof LayoutHomeIndexRoute;
   "/home/$roomId/history": typeof LayoutHomeRoomIdHistoryRoute;
 }
@@ -146,6 +163,7 @@ export interface FileRoutesByTo {
   "": typeof LayoutRouteWithChildren;
   "/profile": typeof LayoutProfileRoute;
   "/home/$roomId": typeof LayoutHomeRoomIdRouteWithChildren;
+  "/home/post": typeof LayoutHomePostRoute;
   "/home": typeof LayoutHomeIndexRoute;
   "/home/$roomId/history": typeof LayoutHomeRoomIdHistoryRoute;
 }
@@ -156,6 +174,7 @@ export interface FileRoutesById {
   "/_layout": typeof LayoutRouteWithChildren;
   "/_layout/profile": typeof LayoutProfileRoute;
   "/_layout/home/$roomId": typeof LayoutHomeRoomIdRouteWithChildren;
+  "/_layout/home/post": typeof LayoutHomePostRoute;
   "/_layout/home/": typeof LayoutHomeIndexRoute;
   "/_layout/home/$roomId/history": typeof LayoutHomeRoomIdHistoryRoute;
 }
@@ -167,6 +186,7 @@ export interface FileRouteTypes {
     | ""
     | "/profile"
     | "/home/$roomId"
+    | "/home/post"
     | "/home"
     | "/home/$roomId/history";
   fileRoutesByTo: FileRoutesByTo;
@@ -175,6 +195,7 @@ export interface FileRouteTypes {
     | ""
     | "/profile"
     | "/home/$roomId"
+    | "/home/post"
     | "/home"
     | "/home/$roomId/history";
   id:
@@ -183,6 +204,7 @@ export interface FileRouteTypes {
     | "/_layout"
     | "/_layout/profile"
     | "/_layout/home/$roomId"
+    | "/_layout/home/post"
     | "/_layout/home/"
     | "/_layout/home/$roomId/history";
   fileRoutesById: FileRoutesById;
@@ -220,6 +242,7 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/profile",
         "/_layout/home/$roomId",
+        "/_layout/home/post",
         "/_layout/home/"
       ]
     },
@@ -233,6 +256,10 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/home/$roomId/history"
       ]
+    },
+    "/_layout/home/post": {
+      "filePath": "_layout/home/post.tsx",
+      "parent": "/_layout"
     },
     "/_layout/home/": {
       "filePath": "_layout/home/index.tsx",
