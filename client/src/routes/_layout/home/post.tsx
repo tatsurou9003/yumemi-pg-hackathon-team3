@@ -42,7 +42,7 @@ function RouteComponent() {
     console.log(values);
   }
 
-  const [image, setImage] = useState<string>("/src/assets/character-room.webp");
+  const [image] = useState<string>("/src/assets/character-room.webp");
 
   return (
     <div className="h-[calc(100vh_-_56px)] flex flex-col bg-[#FFBC92] text-xs bg-[url(/src/assets/character-room.webp)]">
