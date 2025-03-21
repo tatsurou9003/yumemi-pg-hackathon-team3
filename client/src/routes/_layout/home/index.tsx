@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import CreateGroup from "@/features/home/create-group";
 import HeaderCarousel from "@/features/home/header-carousel";
 
-export const Route = createFileRoute("/_layout/home")({
+export const Route = createFileRoute("/_layout/home/")({
   component: RouteComponent,
 });
 
