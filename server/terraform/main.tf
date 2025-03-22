@@ -34,6 +34,8 @@ module "api_gateway" {
   api_gateway_name    = "wa-life-api"
   lambda_update_profile_arn = module.lambda.lambda_update_profile_arn
   lambda_first_login_check_arn = module.lambda.lambda_first_login_check_arn
+  lambda_get_home_data_arn = module.lambda.lambda_get_home_data_arn
+  lambda_search_users_arn = module.lambda.lambda_search_users_arn
   cognito_user_pool_arn = module.cognito.user_pool_arn
 }
 

@@ -10,9 +10,18 @@ def lambda_handler(event, context):
     # API GatewayのリクエストコンテキストからCognitoのclaimsを取得し、subを抽出
     claims = event.get("requestContext", {}).get("authorizer", {}).get("claims", {})
     user_sub = claims.get("sub")
+    
+    headers = {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Headers" : "*",
+                    "Access-Control-Allow-Origin": "*", #　とりあえずWildCardで許可
+                    "Access-Control-Allow-Methods": "PUT"
+            }
+
     if not user_sub:
         return {
             "statusCode": 400,
+            "headers": headers,
             "body": json.dumps({"error": "User sub not found in token"})
         }
     
@@ -22,6 +31,7 @@ def lambda_handler(event, context):
     except Exception as e:
         return {
             "statusCode": 400,
+            "headers": headers,
             "body": json.dumps({"error": "Invalid JSON body", "details": str(e)})
         }
     
@@ -49,11 +59,13 @@ def lambda_handler(event, context):
     except Exception as e:
         return {
             "statusCode": 500,
+            "headers": headers,
             "body": json.dumps({"error": "Error updating DynamoDB", "details": str(e)})
         }
     
     return {
         "statusCode": 200,
+        "headers": headers,
         "body": json.dumps({
             "message": "User profile updated successfully",
             "updatedAttributes": response.get("Attributes")
