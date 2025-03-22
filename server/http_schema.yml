@@ -153,7 +153,7 @@ paths:
         "404":
           description: 指定されたユーザーが見つからない場合
 
-  /groups:
+  /groups/create:
     post:
       tags:
         - Groups
@@ -165,11 +165,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Group"
+              $ref: "#/components/schemas/GroupCreate"
       responses:
         "201":
           description: グループ作成成功
-  /groups/{groupId}/invite:
+  /groups/invite:
     post:
       tags:
         - Groups
@@ -193,7 +193,7 @@ paths:
         "200":
           description: 招待成功
 
-  /groups/{groupId}/{userId}:
+  /groups/update_member:
     patch:
       tags:
         - Groups
@@ -221,7 +221,7 @@ paths:
         "200":
           description: 更新成功
 
-  /groups/{groupId}/chat:
+  /groups/chat:
     get:
       tags:
         - Chat
@@ -253,7 +253,7 @@ paths:
         "404":
           description: 指定されたグループが存在しない場合
 
-  /groups/{groupId}/themes:
+  /groups/themes:
     get:
       tags:
         - Groups
@@ -453,7 +453,7 @@ components:
       required:
         - userId
 
-    Group:
+    GroupCreate:
       type: object
       properties:
         groupName:
@@ -461,9 +461,11 @@ components:
         groupImage:
           type: string
           description: グループ画像のURL
-        createdBy:
-          type: string
-          description: グループ作成者のユーザーID
+        userIds:
+          type: array
+          description: 招待されるユーザーIDリスト
+          items:
+            type: string
       required:
         - groupName
         - createdBy
