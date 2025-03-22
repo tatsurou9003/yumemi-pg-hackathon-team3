@@ -2,6 +2,8 @@ import GroupList from "@/components/common/group-list/group-list";
 import { createFileRoute } from "@tanstack/react-router";
 import CreateGroup from "@/features/home/create-group";
 import HeaderCarousel from "@/features/home/header-carousel";
+import { useGroup } from "@/hooks/useGroup";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/_layout/home/")({
   component: RouteComponent,
@@ -32,6 +34,13 @@ const headerImages = [
 ];
 
 function RouteComponent() {
+  const { setGroups } = useGroup();
+
+  // コンポーネントマウント時にグループデータをコンテキストに設定
+  useEffect(() => {
+    setGroups(groupData);
+  }, [setGroups]);
+
   return (
     <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
       <HeaderCarousel images={headerImages} />
