@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import LoginForm from "@/components/common/form/loginform";
-import SignUpButton from "@/components/common/button/sign-up-button";
 import SignBackButton from "@/components/common/button/login-back-button";
+import SignUpSettingButton from "@/components/common/button/sign-up-setting";
 export const Route = createFileRoute("/_layout/sigunp")({
   component: RouteComponent,
 });
@@ -12,8 +12,8 @@ function RouteComponent() {
       <div className="absolute mb-4 top-[40px] ">
         <LoginForm />
       </div>
-      <div className="absolute mb-4  top-[260px] w-[152px] h-[27px] bg-white rounded-[4px] ">
-        <SignUpButton />
+      <div className="absolute mb-4  top-[160px] w-[152px] h-[27px]  ">
+        <SignUpSettingButton />
       </div>
       <div className="absolute mb-4  top-[285px] w-[152px] h-[27px]  ">
         <SignBackButton />
