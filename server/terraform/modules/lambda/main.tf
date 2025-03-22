@@ -69,20 +69,32 @@ resource "aws_iam_role_policy_attachment" "lambda_dynamodb" {
 # Lambda関数のzipファイル/パスを定義
 data "archive_file" "update_profile_zip" {
   type        = "zip"
-  source_file = "${path.module}/functions/update_profile.py"
+  source_file = "${path.module}/functions/users/update_profile.py"
   output_path = "${path.module}/functions/zip/lambda_handler.zip"
 }
 
 data "archive_file" "post_confirmation_zip" {
   type        = "zip"
-  source_file = "${path.module}/functions/post_confirmation.py"
+  source_file = "${path.module}/functions/users/post_confirmation.py"
   output_path = "${path.module}/functions/zip/post_confirmation.zip"
 }
 
 data "archive_file" "first_login_check_zip" {
   type        = "zip"
-  source_file  = "${path.module}/functions/first_login_check.py"
+  source_file  = "${path.module}/functions/users/first_login_check.py"
   output_path = "${path.module}/functions/zip/first_login_check.zip"
+}
+
+data "archive_file" "get_home_data_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/users/get_home_data.py"
+  output_path = "${path.module}/functions/zip/get_home_data.zip"
+}
+
+data "archive_file" "search_users_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/users/search_users.py"
+  output_path = "${path.module}/functions/zip/search_users.zip"
 }
 
 # Lambda関数の作成
@@ -116,6 +128,26 @@ resource "aws_lambda_function" "first_login_check" {
   source_code_hash = data.archive_file.first_login_check_zip.output_base64sha256
 }
 
+# GetHomeDataトリガーを追加
+resource "aws_lambda_function" "get_home_data" {
+  filename = data.archive_file.get_home_data_zip.output_path
+  function_name = "get_home_data"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "get_home_data.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.get_home_data_zip.output_base64sha256
+}
+
+# SearchUsersトリガーを追加
+resource "aws_lambda_function" "search_users" {
+  filename = data.archive_file.search_users_zip.output_path
+  function_name = "search_users"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "search_users.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.search_users_zip.output_base64sha256
+}
+
 # lambda関数のarnを出力
 output "lambda_update_profile_arn" {
   value = aws_lambda_function.update_profile.arn
@@ -127,4 +159,12 @@ output "lambda_post_confirmation_arn" {
 
 output "lambda_first_login_check_arn" {
   value = aws_lambda_function.first_login_check.arn
+}
+
+output "lambda_get_home_data_arn" {
+  value = aws_lambda_function.get_home_data.arn
+}
+
+output "lambda_search_users_arn" {
+  value = aws_lambda_function.search_users.arn
 }

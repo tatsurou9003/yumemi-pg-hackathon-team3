@@ -40,6 +40,12 @@ resource "aws_dynamodb_table" "group_members" {
         name = "userId"
         type = "S"
     }
+    global_secondary_index {
+        name = "UserGroupIndex"
+        hash_key = "userId"
+        range_key = "groupId"
+        projection_type = "ALL"
+        }
     tags = {
         Project = "Wa-Life"
     }

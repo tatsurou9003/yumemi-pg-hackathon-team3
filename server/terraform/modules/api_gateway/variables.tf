@@ -18,6 +18,16 @@ variable "lambda_first_login_check_arn" {
   description = "Lambda function ARN"
 }
 
+variable "lambda_get_home_data_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+variable "lambda_search_users_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
 variable "cognito_user_pool_arn" {
   description = "ARN of the Cognito User Pool to use for authentication"
   type        = string
