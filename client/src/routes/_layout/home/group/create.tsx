@@ -13,7 +13,7 @@ function RouteComponent() {
 
   const onSubmit = (data: Group) => {
     //TODO: APIでグループ作成を叩いて、ホーム画面に戻す
-    if (!data) {
+    if (data) {
       console.log("フォームデータ: ", data);
       navigate({ to: "/home" });
     }
