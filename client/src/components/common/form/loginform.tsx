@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import LoginButton from "../button/login-button";
 import { loginData } from "../../../types/loginData";
 
 const LoginForm = () => {
@@ -28,7 +27,6 @@ const LoginForm = () => {
           className="w-[310px] h-[48px] relative top-[84px] bg-white border border-gray-300 rounded px-4 text-gray-500 cursor-pointer"
         />
       </div>
-      <LoginButton />
     </form>
   );
 };
