@@ -3,11 +3,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import CreateGroup from "@/features/home/create-group";
 import HeaderCarousel from "@/features/home/header-carousel";
 
-export const Route = createFileRoute("/_layout/home")({
+export const Route = createFileRoute("/_layout/home/")({
   component: RouteComponent,
 });
 
-// TODO: APIでグループ取得
+// TODO: APIで招待されている&参加しているグループ取得
 const groupData = [
   {
     groupName: "大喜利三昧",

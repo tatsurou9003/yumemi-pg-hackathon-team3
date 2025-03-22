@@ -23,14 +23,16 @@ export const Layout: React.FC<LayoutProps> = ({
     // "/home/[roomID]": "グループ名",
     // "/home/[roomId]/post": "グループ名",
     // "/home/[roomId]/[threadId]": "グループ名",
-    "/home/group": "グループ作成",
+    "/home/group/create": "グループ作成",
+    "/home/group/edit": "/グループ編集",
   };
   const toMap: Record<string, string> = {
     "/profile": "/home",
     // "/home/[roomID]": "/home",
     // "/home/[roomId]/post": "/home/[roomID]",
     // "/home/[roomId]/[threadId]": "/home/[roomID]",
-    "/home/group": "/home",
+    "/home/group/create": "/home/group",
+    "/home/group/edit": "/home/group",
   };
   const getTitle = () => {
     return titleMap[path] || "エラー";
