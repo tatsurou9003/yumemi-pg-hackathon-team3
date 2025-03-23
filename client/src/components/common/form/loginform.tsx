@@ -17,19 +17,15 @@ const LoginForm = () => {
           id="email"
           {...register("email", { required: "メールアドレス" })}
           placeholder="メールアドレス"
-          className="position: absolute;width:310px height: 48px;left: 41px;top: 74px;background: #FFFFFF;"
+          className="w-[310px] h-[48px] relative top-[74px] bg-white border border-gray-300 rounded px-4 text-gray-500 mb-4 cursor-pointer"
         />
-      </div>
-      <div className="mb-4">
         <input
           type="password"
           id="password"
           {...register("password", { required: "パスワード" })}
           placeholder="パスワード"
-          className="position: absolute;width:310px height: 48px;left: 41px;top: 74px;background: #FFFFFF;"
+          className="w-[310px] h-[48px] relative top-[84px] bg-white border border-gray-300 rounded px-4 text-gray-500 cursor-pointer"
         />
-      </div>
-      <div>
       </div>
     </form>
   );
