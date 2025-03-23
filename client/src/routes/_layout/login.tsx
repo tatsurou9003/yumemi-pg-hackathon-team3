@@ -21,8 +21,11 @@ function RouteComponent() {
     return () => clearTimeout(timer);
   }, []);
   return (
-
-    <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)] bg-no-repeat bg-contain bg-center ">
+    <div
+      className={`min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)] transition-opacity duration-1000 ease-in-out ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
       <LoginForm />
       <LoginButton />
       <div className="text-black font-inter font-normal flex flex-col justify-center items-center top-[109px] relative">
