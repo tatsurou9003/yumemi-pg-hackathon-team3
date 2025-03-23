@@ -10,5 +10,4 @@ const SignUpButton = () => {
     </div>
   );
 };
-
 export default SignUpButton;
