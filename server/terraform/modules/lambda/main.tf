@@ -67,6 +67,7 @@ resource "aws_iam_role_policy_attachment" "lambda_dynamodb" {
 }
 
 # Lambda関数のzipファイル/パスを定義
+# Users
 data "archive_file" "update_profile_zip" {
   type        = "zip"
   source_file = "${path.module}/functions/users/update_profile.py"
@@ -95,6 +96,31 @@ data "archive_file" "search_users_zip" {
   type        = "zip"
   source_file = "${path.module}/functions/users/search_users.py"
   output_path = "${path.module}/functions/zip/search_users.zip"
+}
+
+#Groups
+data "archive_file" "create_group_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/groups/create_group.py"
+  output_path = "${path.module}/functions/zip/create_group.zip"
+}
+
+data "archive_file" "get_themes_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/groups/get_themes.py"
+  output_path = "${path.module}/functions/zip/get_themes.zip"
+}
+
+data "archive_file" "invite_group_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/groups/invite_group.py"
+  output_path = "${path.module}/functions/zip/invite_group.zip"
+}
+
+data "archive_file" "update_member_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/groups/update_member.py"
+  output_path = "${path.module}/functions/zip/update_member.zip"
 }
 
 # Lambda関数の作成
@@ -148,7 +174,48 @@ resource "aws_lambda_function" "search_users" {
   source_code_hash = data.archive_file.search_users_zip.output_base64sha256
 }
 
+# CreateGroupトリガーを追加
+resource "aws_lambda_function" "create_group" {
+  filename = data.archive_file.create_group_zip.output_path
+  function_name = "create_group"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "create_group.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.create_group_zip.output_base64sha256
+}
+
+# GetThemesトリガーを追加
+resource "aws_lambda_function" "get_themes" {
+  filename = data.archive_file.get_themes_zip.output_path
+  function_name = "get_themes"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "get_themes.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.get_themes_zip.output_base64sha256
+}
+
+# InviteGroupトリガーを追加
+resource "aws_lambda_function" "invite_group" {
+  filename = data.archive_file.invite_group_zip.output_path
+  function_name = "invite_group"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "invite_group.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.invite_group_zip.output_base64sha256
+}
+
+# UpdateMemberトリガーを追加
+resource "aws_lambda_function" "update_member" {
+  filename = data.archive_file.update_member_zip.output_path
+  function_name = "update_member"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "update_member.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.update_member_zip.output_base64sha256
+}
+
 # lambda関数のarnを出力
+# Users
 output "lambda_update_profile_arn" {
   value = aws_lambda_function.update_profile.arn
 }
@@ -167,4 +234,21 @@ output "lambda_get_home_data_arn" {
 
 output "lambda_search_users_arn" {
   value = aws_lambda_function.search_users.arn
+}
+
+# Groups
+output "lambda_create_group_arn" {
+  value = aws_lambda_function.create_group.arn
+}
+
+output "lambda_get_themes_arn" {
+  value = aws_lambda_function.get_themes.arn
+}
+
+output "lambda_invite_group_arn" {
+  value = aws_lambda_function.invite_group.arn
+}
+
+output "lambda_update_member_arn" {
+  value = aws_lambda_function.update_member.arn
 }

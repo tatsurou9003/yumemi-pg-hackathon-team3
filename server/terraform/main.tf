@@ -36,6 +36,10 @@ module "api_gateway" {
   lambda_first_login_check_arn = module.lambda.lambda_first_login_check_arn
   lambda_get_home_data_arn = module.lambda.lambda_get_home_data_arn
   lambda_search_users_arn = module.lambda.lambda_search_users_arn
+  lambda_create_group_arn = module.lambda.lambda_create_group_arn
+  lambda_get_themes_arn = module.lambda.lambda_get_themes_arn
+  lambda_invite_group_arn = module.lambda.lambda_invite_group_arn
+  lambda_update_member_arn = module.lambda.lambda_update_member_arn
   cognito_user_pool_arn = module.cognito.user_pool_arn
 }
 
