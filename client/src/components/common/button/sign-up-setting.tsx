@@ -5,7 +5,7 @@ const SignUpSettingButton = () => {
     <div className="flex flex-col justify-center items-center">
       <button
         onClick={() => {
-          navigate({ to: "/mail" });
+          navigate({ to: "/complete" });
         }}
         type="submit"
         className="relative w-[152px] h-[27px]  top-[104px] rounded
