@@ -8,7 +8,7 @@ const SignUpSettingButton = () => {
           navigate({ to: "/mail" });
         }}
         type="submit"
-        className="relative w-[152px] h-[27px]  top-[120px] rounded
+        className="relative w-[152px] h-[27px]  top-[104px] rounded
                    bg-white text-black text-sm font-medium cursor-pointer  "
       >
         新規登録
