@@ -210,6 +210,9 @@ export interface FileRouteTypes {
     | "/sigunp"
     | "/home/$roomId"
     | "/home";
+  fullPaths: "/" | "" | "/login" | "/profile" | "/home/$roomId" | "/home";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/" | "" | "/login" | "/profile" | "/home/$roomId" | "/home";
   id:
     | "__root__"
     | "/"
@@ -257,6 +260,7 @@ export const routeTree = rootRoute
         "/_layout/mail",
         "/_layout/profile",
         "/_layout/sigunp",
+        "/_layout/profile",
         "/_layout/home/$roomId",
         "/_layout/home/"
       ]
