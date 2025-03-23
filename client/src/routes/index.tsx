@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import SvgSmile from "@/components/common/icon/smile";
 import SvgTitle from "@/components/common/icon/title";
 export const Route = createFileRoute("/")({
