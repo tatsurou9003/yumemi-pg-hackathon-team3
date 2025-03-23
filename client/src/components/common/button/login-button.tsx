@@ -1,14 +1,19 @@
+import { useNavigate } from "@tanstack/react-router";
 const LoginButton = () => {
+  const navigate = useNavigate();
   return (
-    <button
-      type="submit"
-      className="absolute w-[152px] h-[27px] left-[120px] top-[210px] 
-                 bg-white rounded-[4px] border border-gray-300 
-                 text-black text-sm font-medium flex items-center justify-center 
-                 hover:bg-gray-100 transition"
-    >
-      ログイン
-    </button>
+    <div className="flex flex-col justify-center items-center">
+      <button
+        onClick={() => {
+          navigate({ to: "/home" });
+        }}
+        type="submit"
+        className="relative w-[152px] h-[27px]  top-[104px] border-radius
+                 bg-white text-black text-sm font-medium cursor-pointer  "
+      >
+        ログイン
+      </button>
+    </div>
   );
 };
 

@@ -1,14 +1,16 @@
 const GoogleButton = () => {
   return (
-    <button
-      type="submit"
-      className="absolute w-[152px] h-[27px] left-[120px] top-[301px] 
-                 bg-white rounded-[4px]  
-                 text-black text-sm font-medium flex items-center justify-center 
+    <div className="flex flex-col justify-center items-center">
+      <button
+        className="relative w-[152px] h-[27px]  top-[140px] 
+                 bg-white rounded-[4px] cursor-pointer 
+                 text-black text-sm font-medium 
                  "
-    >
-      google認証
-    </button>
+      >
+        認証スキップボタン
+      </button>
+    </div>
+
   );
 };
 
