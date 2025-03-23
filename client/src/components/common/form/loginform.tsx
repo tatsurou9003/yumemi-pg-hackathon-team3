@@ -30,7 +30,6 @@ const LoginForm = () => {
         />
       </div>
       <div>
-        <LoginButton />
       </div>
     </form>
   );

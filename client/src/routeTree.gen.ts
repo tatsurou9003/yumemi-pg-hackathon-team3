@@ -13,7 +13,7 @@
 import { Route as rootRoute } from "./routes/__root";
 import { Route as LayoutImport } from "./routes/_layout";
 import { Route as IndexImport } from "./routes/index";
-import { Route as LayoutSigunpImport } from "./routes/_layout/sigunp";
+import { Route as LayoutSigunpImport } from "./routes/_layout/signup";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutLoginImport } from "./routes/_layout/login";
 import { Route as LayoutHomeIndexImport } from "./routes/_layout/home/index";
@@ -33,7 +33,7 @@ const IndexRoute = IndexImport.update({
 } as any);
 
 const LayoutSigunpRoute = LayoutSigunpImport.update({
-  id: "/sigunp",
+  id: "/signp",
   path: "/sigunp",
   getParentRoute: () => LayoutRoute,
 } as any);
@@ -94,10 +94,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutProfileImport;
       parentRoute: typeof LayoutImport;
     };
-    "/_layout/sigunp": {
-      id: "/_layout/sigunp";
-      path: "/sigunp";
-      fullPath: "/sigunp";
+    "/_layout/signup": {
+      id: "/_layout/signup";
+      path: "/signup";
+      fullPath: "/signup";
       preLoaderRoute: typeof LayoutSigunpImport;
       parentRoute: typeof LayoutImport;
     };
