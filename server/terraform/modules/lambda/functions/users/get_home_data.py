@@ -69,6 +69,7 @@ def lambda_handler(event, context):
                     "groupName": group.get("groupName", ""),
                     "groupImage": group.get("groupImage", ""),
                     "role": membership.get("role", ""),
+                    "memberCount": group.get("memberCount", 0),
                     "status": membership.get("status", ""),
                     "invitedBy": membership.get("invitedBy", "")
                 }
