@@ -10,7 +10,6 @@ const GoogleButton = () => {
         認証スキップボタン
       </button>
     </div>
-
   );
 };
 
