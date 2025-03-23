@@ -38,6 +38,12 @@ const LayoutSignupRoute = LayoutSignupImport.update({
   getParentRoute: () => LayoutRoute,
 } as any);
 
+const LayoutSignupRoute = LayoutSignupImport.update({
+  id: "/mail",
+  path: "/mail",
+  getParentRoute: () => LayoutRoute,
+} as any);
+
 const LayoutProfileRoute = LayoutProfileImport.update({
   id: "/profile",
   path: "/profile",
@@ -99,6 +105,13 @@ declare module "@tanstack/react-router" {
       path: "/signup";
       fullPath: "/signup";
       preLoaderRoute: typeof LayoutSignupImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/_layout/mail": {
+      id: "/_layout/mail";
+      path: "/mail";
+      fullPath: "/mail";
+      preLoaderRoute: typeof LayoutMailImport;
       parentRoute: typeof LayoutImport;
     };
     "/_layout/home/$roomId": {
@@ -179,9 +192,18 @@ export interface FileRouteTypes {
     | "/profile"
     | "/signup"
     | "/home/$roomId"
-    | "/home";
+    | "/home"
+    | "/mail";
   fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "" | "/login" | "/profile" | "/signup" | "/home/$roomId" | "/home";
+  to:
+    | "/"
+    | ""
+    | "/login"
+    | "/profile"
+    | "/signup"
+    | "/home/$roomId"
+    | "/home"
+    | "/mail";
   id:
     | "__root__"
     | "/"
@@ -189,6 +211,7 @@ export interface FileRouteTypes {
     | "/_layout/login"
     | "/_layout/profile"
     | "/_layout/signup"
+    | "/_layout/mail"
     | "/_layout/home/$roomId"
     | "/_layout/home/";
   fileRoutesById: FileRoutesById;
