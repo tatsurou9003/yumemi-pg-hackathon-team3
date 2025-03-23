@@ -73,7 +73,7 @@ function RouteComponent() {
     const results = mockUsers.filter(
       (user) =>
         user.userId.toLowerCase().includes(term) ||
-        user.userName.toLowerCase().includes(term)
+        user.userName.toLowerCase().includes(term),
     );
     setSearchResults(results);
   };
@@ -82,7 +82,7 @@ function RouteComponent() {
     setSelectedUsers((prev) =>
       prev.includes(userId)
         ? prev.filter((id) => id !== userId)
-        : [...prev, userId]
+        : [...prev, userId],
     );
   };
 

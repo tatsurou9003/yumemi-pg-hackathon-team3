@@ -10,139 +10,139 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as LayoutImport } from './routes/_layout'
-import { Route as IndexImport } from './routes/index'
-import { Route as LayoutProfileImport } from './routes/_layout/profile'
-import { Route as LayoutLoginImport } from './routes/_layout/login'
-import { Route as LayoutHomeIndexImport } from './routes/_layout/home/index'
-import { Route as LayoutHomeRoomIdImport } from './routes/_layout/home/$roomId'
-import { Route as LayoutHomeGroupCreateImport } from './routes/_layout/home/group/create'
-import { Route as LayoutHomeGroupGroupIdEditImport } from './routes/_layout/home/group/$groupId/edit'
+import { Route as rootRoute } from "./routes/__root";
+import { Route as LayoutImport } from "./routes/_layout";
+import { Route as IndexImport } from "./routes/index";
+import { Route as LayoutProfileImport } from "./routes/_layout/profile";
+import { Route as LayoutLoginImport } from "./routes/_layout/login";
+import { Route as LayoutHomeIndexImport } from "./routes/_layout/home/index";
+import { Route as LayoutHomeRoomIdImport } from "./routes/_layout/home/$roomId";
+import { Route as LayoutHomeGroupCreateImport } from "./routes/_layout/home/group/create";
+import { Route as LayoutHomeGroupGroupIdEditImport } from "./routes/_layout/home/group/$groupId/edit";
 
 // Create/Update Routes
 
 const LayoutRoute = LayoutImport.update({
-  id: '/_layout',
+  id: "/_layout",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRoute,
-} as any)
+} as any);
 
 const LayoutProfileRoute = LayoutProfileImport.update({
-  id: '/profile',
-  path: '/profile',
+  id: "/profile",
+  path: "/profile",
   getParentRoute: () => LayoutRoute,
-} as any)
+} as any);
 
 const LayoutLoginRoute = LayoutLoginImport.update({
-  id: '/login',
-  path: '/login',
+  id: "/login",
+  path: "/login",
   getParentRoute: () => LayoutRoute,
-} as any)
+} as any);
 
 const LayoutHomeIndexRoute = LayoutHomeIndexImport.update({
-  id: '/home/',
-  path: '/home/',
+  id: "/home/",
+  path: "/home/",
   getParentRoute: () => LayoutRoute,
-} as any)
+} as any);
 
 const LayoutHomeRoomIdRoute = LayoutHomeRoomIdImport.update({
-  id: '/home/$roomId',
-  path: '/home/$roomId',
+  id: "/home/$roomId",
+  path: "/home/$roomId",
   getParentRoute: () => LayoutRoute,
-} as any)
+} as any);
 
 const LayoutHomeGroupCreateRoute = LayoutHomeGroupCreateImport.update({
-  id: '/home/group/create',
-  path: '/home/group/create',
+  id: "/home/group/create",
+  path: "/home/group/create",
   getParentRoute: () => LayoutRoute,
-} as any)
+} as any);
 
 const LayoutHomeGroupGroupIdEditRoute = LayoutHomeGroupGroupIdEditImport.update(
   {
-    id: '/home/group/$groupId/edit',
-    path: '/home/group/$groupId/edit',
+    id: "/home/group/$groupId/edit",
+    path: "/home/group/$groupId/edit",
     getParentRoute: () => LayoutRoute,
   } as any,
-)
+);
 
 // Populate the FileRoutesByPath interface
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/_layout': {
-      id: '/_layout'
-      path: ''
-      fullPath: ''
-      preLoaderRoute: typeof LayoutImport
-      parentRoute: typeof rootRoute
-    }
-    '/_layout/login': {
-      id: '/_layout/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LayoutLoginImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/profile': {
-      id: '/_layout/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof LayoutProfileImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/home/$roomId': {
-      id: '/_layout/home/$roomId'
-      path: '/home/$roomId'
-      fullPath: '/home/$roomId'
-      preLoaderRoute: typeof LayoutHomeRoomIdImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/home/': {
-      id: '/_layout/home/'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof LayoutHomeIndexImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/home/group/create': {
-      id: '/_layout/home/group/create'
-      path: '/home/group/create'
-      fullPath: '/home/group/create'
-      preLoaderRoute: typeof LayoutHomeGroupCreateImport
-      parentRoute: typeof LayoutImport
-    }
-    '/_layout/home/group/$groupId/edit': {
-      id: '/_layout/home/group/$groupId/edit'
-      path: '/home/group/$groupId/edit'
-      fullPath: '/home/group/$groupId/edit'
-      preLoaderRoute: typeof LayoutHomeGroupGroupIdEditImport
-      parentRoute: typeof LayoutImport
-    }
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/_layout": {
+      id: "/_layout";
+      path: "";
+      fullPath: "";
+      preLoaderRoute: typeof LayoutImport;
+      parentRoute: typeof rootRoute;
+    };
+    "/_layout/login": {
+      id: "/_layout/login";
+      path: "/login";
+      fullPath: "/login";
+      preLoaderRoute: typeof LayoutLoginImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/_layout/profile": {
+      id: "/_layout/profile";
+      path: "/profile";
+      fullPath: "/profile";
+      preLoaderRoute: typeof LayoutProfileImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/_layout/home/$roomId": {
+      id: "/_layout/home/$roomId";
+      path: "/home/$roomId";
+      fullPath: "/home/$roomId";
+      preLoaderRoute: typeof LayoutHomeRoomIdImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/_layout/home/": {
+      id: "/_layout/home/";
+      path: "/home";
+      fullPath: "/home";
+      preLoaderRoute: typeof LayoutHomeIndexImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/_layout/home/group/create": {
+      id: "/_layout/home/group/create";
+      path: "/home/group/create";
+      fullPath: "/home/group/create";
+      preLoaderRoute: typeof LayoutHomeGroupCreateImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/_layout/home/group/$groupId/edit": {
+      id: "/_layout/home/group/$groupId/edit";
+      path: "/home/group/$groupId/edit";
+      fullPath: "/home/group/$groupId/edit";
+      preLoaderRoute: typeof LayoutHomeGroupGroupIdEditImport;
+      parentRoute: typeof LayoutImport;
+    };
   }
 }
 
 // Create and export the route tree
 
 interface LayoutRouteChildren {
-  LayoutLoginRoute: typeof LayoutLoginRoute
-  LayoutProfileRoute: typeof LayoutProfileRoute
-  LayoutHomeRoomIdRoute: typeof LayoutHomeRoomIdRoute
-  LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute
-  LayoutHomeGroupCreateRoute: typeof LayoutHomeGroupCreateRoute
-  LayoutHomeGroupGroupIdEditRoute: typeof LayoutHomeGroupGroupIdEditRoute
+  LayoutLoginRoute: typeof LayoutLoginRoute;
+  LayoutProfileRoute: typeof LayoutProfileRoute;
+  LayoutHomeRoomIdRoute: typeof LayoutHomeRoomIdRoute;
+  LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute;
+  LayoutHomeGroupCreateRoute: typeof LayoutHomeGroupCreateRoute;
+  LayoutHomeGroupGroupIdEditRoute: typeof LayoutHomeGroupGroupIdEditRoute;
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
@@ -152,92 +152,92 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
   LayoutHomeGroupCreateRoute: LayoutHomeGroupCreateRoute,
   LayoutHomeGroupGroupIdEditRoute: LayoutHomeGroupGroupIdEditRoute,
-}
+};
 
 const LayoutRouteWithChildren =
-  LayoutRoute._addFileChildren(LayoutRouteChildren)
+  LayoutRoute._addFileChildren(LayoutRouteChildren);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
-  '/login': typeof LayoutLoginRoute
-  '/profile': typeof LayoutProfileRoute
-  '/home/$roomId': typeof LayoutHomeRoomIdRoute
-  '/home': typeof LayoutHomeIndexRoute
-  '/home/group/create': typeof LayoutHomeGroupCreateRoute
-  '/home/group/$groupId/edit': typeof LayoutHomeGroupGroupIdEditRoute
+  "/": typeof IndexRoute;
+  "": typeof LayoutRouteWithChildren;
+  "/login": typeof LayoutLoginRoute;
+  "/profile": typeof LayoutProfileRoute;
+  "/home/$roomId": typeof LayoutHomeRoomIdRoute;
+  "/home": typeof LayoutHomeIndexRoute;
+  "/home/group/create": typeof LayoutHomeGroupCreateRoute;
+  "/home/group/$groupId/edit": typeof LayoutHomeGroupGroupIdEditRoute;
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof LayoutRouteWithChildren
-  '/login': typeof LayoutLoginRoute
-  '/profile': typeof LayoutProfileRoute
-  '/home/$roomId': typeof LayoutHomeRoomIdRoute
-  '/home': typeof LayoutHomeIndexRoute
-  '/home/group/create': typeof LayoutHomeGroupCreateRoute
-  '/home/group/$groupId/edit': typeof LayoutHomeGroupGroupIdEditRoute
+  "/": typeof IndexRoute;
+  "": typeof LayoutRouteWithChildren;
+  "/login": typeof LayoutLoginRoute;
+  "/profile": typeof LayoutProfileRoute;
+  "/home/$roomId": typeof LayoutHomeRoomIdRoute;
+  "/home": typeof LayoutHomeIndexRoute;
+  "/home/group/create": typeof LayoutHomeGroupCreateRoute;
+  "/home/group/$groupId/edit": typeof LayoutHomeGroupGroupIdEditRoute;
 }
 
 export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_layout': typeof LayoutRouteWithChildren
-  '/_layout/login': typeof LayoutLoginRoute
-  '/_layout/profile': typeof LayoutProfileRoute
-  '/_layout/home/$roomId': typeof LayoutHomeRoomIdRoute
-  '/_layout/home/': typeof LayoutHomeIndexRoute
-  '/_layout/home/group/create': typeof LayoutHomeGroupCreateRoute
-  '/_layout/home/group/$groupId/edit': typeof LayoutHomeGroupGroupIdEditRoute
+  __root__: typeof rootRoute;
+  "/": typeof IndexRoute;
+  "/_layout": typeof LayoutRouteWithChildren;
+  "/_layout/login": typeof LayoutLoginRoute;
+  "/_layout/profile": typeof LayoutProfileRoute;
+  "/_layout/home/$roomId": typeof LayoutHomeRoomIdRoute;
+  "/_layout/home/": typeof LayoutHomeIndexRoute;
+  "/_layout/home/group/create": typeof LayoutHomeGroupCreateRoute;
+  "/_layout/home/group/$groupId/edit": typeof LayoutHomeGroupGroupIdEditRoute;
 }
 
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | ''
-    | '/login'
-    | '/profile'
-    | '/home/$roomId'
-    | '/home'
-    | '/home/group/create'
-    | '/home/group/$groupId/edit'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | ""
+    | "/login"
+    | "/profile"
+    | "/home/$roomId"
+    | "/home"
+    | "/home/group/create"
+    | "/home/group/$groupId/edit";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | ''
-    | '/login'
-    | '/profile'
-    | '/home/$roomId'
-    | '/home'
-    | '/home/group/create'
-    | '/home/group/$groupId/edit'
+    | "/"
+    | ""
+    | "/login"
+    | "/profile"
+    | "/home/$roomId"
+    | "/home"
+    | "/home/group/create"
+    | "/home/group/$groupId/edit";
   id:
-    | '__root__'
-    | '/'
-    | '/_layout'
-    | '/_layout/login'
-    | '/_layout/profile'
-    | '/_layout/home/$roomId'
-    | '/_layout/home/'
-    | '/_layout/home/group/create'
-    | '/_layout/home/group/$groupId/edit'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/_layout"
+    | "/_layout/login"
+    | "/_layout/profile"
+    | "/_layout/home/$roomId"
+    | "/_layout/home/"
+    | "/_layout/home/group/create"
+    | "/_layout/home/group/$groupId/edit";
+  fileRoutesById: FileRoutesById;
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  LayoutRoute: typeof LayoutRouteWithChildren
+  IndexRoute: typeof IndexRoute;
+  LayoutRoute: typeof LayoutRouteWithChildren;
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LayoutRoute: LayoutRouteWithChildren,
-}
+};
 
 export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();
 
 /* ROUTE_MANIFEST_START
 {
