@@ -20,7 +20,7 @@ erDiagram
     GROUPS {
         string groupId PK "uuid"
         string groupName "グループ名"
-        string memberCount "グループのメンバー数"
+        number memberCount "グループのメンバー数"
         string groupImage "グループ画像のURL"
         string createdBy "作成したユーザーID"
         string createdAt "作成日時"

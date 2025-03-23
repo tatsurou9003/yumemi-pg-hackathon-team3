@@ -60,7 +60,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AuthResponse"
-  /first_login_check:
+  /users/first_login_check:
     post:
       tags:
         - Users
@@ -159,6 +159,13 @@ paths:
         - Groups
       summary: グループ作成
       description: 新しいグループを作成します。
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: 作成するグループ情報
         required: true
@@ -176,12 +183,12 @@ paths:
       summary: ユーザー招待
       description: 指定グループに対して複数のユーザーを招待します。`status` は "INVITED" となります。
       parameters:
-        - in: path
-          name: groupId
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
-          description: 招待対象のグループID
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: 招待するユーザー情報（複数可）
         required: true
@@ -198,18 +205,14 @@ paths:
       tags:
         - Groups
       summary: グループメンバー更新
-      description: 招待されたユーザーが「参加」または「拒否」するときに status を更新します。
+      description: 招待されたユーザーが「参加」または「拒否」するときに status を更新します。リクエストにstatus（JOINED, REJECTED）
       parameters:
-        - in: path
-          name: groupId
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
-        - in: path
-          name: userId
-          schema:
-            type: string
-          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: グループ更新情報
         required: true
@@ -228,12 +231,12 @@ paths:
       summary: グループチャット履歴取得
       description: 指定グループのチャット履歴を取得します。
       parameters:
-        - in: path
-          name: groupId
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
-          description: チャット履歴を取得するグループのID
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: チャット履歴取得対象のグループID
         required: true
@@ -260,12 +263,12 @@ paths:
       summary: グループ内テーマ全件取得
       description: 指定グループ内のテーマ全件を取得します。
       parameters:
-        - in: path
-          name: groupId
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
-          description: テーマ取得対象のグループID
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: テーマ取得対象のグループID
         required: true
@@ -468,7 +471,6 @@ components:
             type: string
       required:
         - groupName
-        - createdBy
 
     GroupIdRequest:
       type: object
@@ -493,9 +495,6 @@ components:
     GroupInviteRequest:
       type: object
       properties:
-        invitedBy:
-          type: string
-          description: 招待したユーザーのID
         groupId:
           type: string
           description: 招待先のグループID
@@ -505,16 +504,12 @@ components:
           items:
             type: string
       required:
-        - invitedBy
         - groupId
         - userIds
 
     GroupMembershipUpdateRequest:
       type: object
       properties:
-        userId:
-          type: string
-          description: 参加するユーザーのID
         groupId:
           type: string
           description: 招待先のグループID
@@ -522,7 +517,6 @@ components:
           type: string
           description: 更新先のステータス（JOINED or REJECTED）
       required:
-        - userId
         - groupId
         - status
 
@@ -566,6 +560,9 @@ components:
         role:
           type: string
           description: ユーザーのグループ内でのロール
+        memberCount:
+          type: integer
+          description: グループメンバー数
         status:
           type: string
           description: グループへの参加状態（INVITED or JOINEDのみ）
