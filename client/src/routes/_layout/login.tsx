@@ -6,6 +6,17 @@ export const Route = createFileRoute("/_layout/login")({
 });
 
 function RouteComponent() {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // コンポーネントがマウントされた直後は透明
+    // 少し遅延させてからフェードイン開始
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
       <LoginForm />
