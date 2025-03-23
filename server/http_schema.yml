@@ -67,6 +67,12 @@ paths:
       summary: 初回ログインチェック
       description: ログイン時に初回ログインかどうかをチェックします。
       parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ユーザーの一意識別子
         - in: header
           name: Authorization
           schema:
@@ -78,13 +84,19 @@ paths:
           description: 初回ログイン
         "404":
           description: 初回ログインではない
-  /users/profile:
+  /users/profile/{userId}:
     put:
       tags:
         - Users
       summary: ユーザーのプロフィール登録（初回ログイン時）および更新
       description: 初回ログイン時に追加情報（ユーザー名、プロフィール画像、背景色）を登録・更新。
       parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ユーザーの一意識別子
         - in: header
           name: Authorization
           schema:
@@ -176,7 +188,7 @@ paths:
       responses:
         "201":
           description: グループ作成成功
-  /groups/invite:
+  /groups/invite/{groupId}:
     post:
       tags:
         - Groups
@@ -200,7 +212,7 @@ paths:
         "200":
           description: 招待成功
 
-  /groups/update_member:
+  /groups/update_member/{groupId}:
     patch:
       tags:
         - Groups
@@ -224,13 +236,19 @@ paths:
         "200":
           description: 更新成功
 
-  /groups/chat:
+  /groups/chat/{groupId}:
     get:
       tags:
         - Chat
       summary: グループチャット履歴取得
       description: 指定グループのチャット履歴を取得します。
       parameters:
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: チャット履歴取得対象のグループID
         - in: header
           name: Authorization
           schema:
@@ -256,7 +274,7 @@ paths:
         "404":
           description: 指定されたグループが存在しない場合
 
-  /groups/themes:
+  /groups/themes{groupId}:
     get:
       tags:
         - Groups
@@ -288,7 +306,7 @@ paths:
         "404":
           description: 指定されたグループが存在しない場合
 
-  /answers/{messageId}/:
+  /answers/{messageId}:
     post:
       tags:
         - Answers
@@ -301,6 +319,12 @@ paths:
             type: string
           required: true
           description: 回答対象のテーマメッセージID
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: 回答情報
         required: true
@@ -311,6 +335,7 @@ paths:
       responses:
         "201":
           description: 回答投稿成功
+
     get:
       tags:
         - Answers
@@ -323,6 +348,12 @@ paths:
             type: string
           required: true
           description: 回答対象のテーマメッセージID
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: 回答取得対象のテーマメッセージID
         required: true
@@ -355,6 +386,12 @@ paths:
             type: string
           required: true
           description: いいね対象の回答ID
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: いいね対象の回答ID
         required: true
@@ -651,9 +688,6 @@ components:
         groupId:
           type: string
           description: "テーマが投稿されたグループID"
-        createdBy:
-          type: string
-          description: "回答者のユーザーID"
         parentId:
           type: string
           description: "回答対象のテーマメッセージID"
@@ -666,7 +700,6 @@ components:
       required:
         - groupId
         - parentId
-        - createdBy
         - answerText
 
     GetThemeAnswer:
@@ -752,9 +785,5 @@ components:
         answerId:
           type: string
           description: "いいね対象の回答ID"
-        userId:
-          type: string
-          description: "いいねをするユーザーのID"
       required:
         - answerId
-        - userId
