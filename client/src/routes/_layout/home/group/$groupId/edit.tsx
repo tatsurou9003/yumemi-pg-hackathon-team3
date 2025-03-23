@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { User } from "@/types/userData";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { Search, X } from "lucide-react";
+import { useState, useRef } from "react";
+import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/_layout/home/group/$groupId/edit")({
   component: RouteComponent,
@@ -58,6 +58,7 @@ function RouteComponent() {
   const { handleSubmit, register, watch } = useForm<User>();
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const searchTerm = watch("userId") || "";
 
@@ -101,6 +102,20 @@ function RouteComponent() {
     console.log("選択されたユーザー: ", selectedUsers);
   };
 
+  // スクロール処理
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollContainerRef.current) return;
+
+    const scrollAmount = 50; // スクロール量
+    const container = scrollContainerRef.current;
+
+    if (direction === "left") {
+      container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    } else {
+      container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col justify-center items-center">
@@ -123,19 +138,35 @@ function RouteComponent() {
 
         {/* 選択済みユーザーのアイコン表示 */}
         {selectedUsers.length > 0 && (
-          <div className="w-[310px] mb-4">
-            <div className="flex flex-wrap gap-2">
+          <div className="w-[310px] mb-4 relative">
+            {/* スクロールボタン - 左 */}
+            {selectedUsers.length > 5 && (
+              <button
+                type="button"
+                onClick={() => scroll("left")}
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 rounded-full p-1 shadow-md cursor-pointer"
+              >
+                <ChevronLeft size={16} />
+              </button>
+            )}
+
+            {/* スクロール可能なコンテナ */}
+            <div
+              ref={scrollContainerRef}
+              className="flex overflow-x-auto scrollbar-hide gap-2 py-1"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
               {getSelectedUserObjects().map((user) => (
-                <div key={user.userId} className="relative">
+                <div key={user.userId} className="relative flex-shrink-0">
                   {user.profileImage ? (
                     <img
                       src={user.profileImage}
                       alt={user.userName}
-                      className="w-10 h-10 rounded-full"
+                      className="w-13 h-13 rounded-full"
                     />
                   ) : (
                     <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-white text-lg font-medium"
+                      className="w-13 h-13 rounded-full flex items-center justify-center text-white text-lg font-medium"
                       style={{ backgroundColor: user.profileColor }}
                     >
                       {user.userName.charAt(0)}
@@ -151,6 +182,17 @@ function RouteComponent() {
                 </div>
               ))}
             </div>
+
+            {/* スクロールボタン - 右 */}
+            {selectedUsers.length > 5 && (
+              <button
+                type="button"
+                onClick={() => scroll("right")}
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-white/80 rounded-full p-1 shadow-md cursor-pointer"
+              >
+                <ChevronRight size={16} />
+              </button>
+            )}
           </div>
         )}
 
