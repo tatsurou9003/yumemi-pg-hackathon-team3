@@ -19,9 +19,11 @@ function RouteComponent() {
     return () => clearTimeout(timer);
   }, []);
   return (
-    <div className={`min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)] transition-opacity duration-1000 ease-in-out ${
+    <div
+      className={`min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)] transition-opacity duration-1000 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0"
-      }`}>
+      }`}
+    >
       <LoginForm />
       <section className="w-40 text-black">
         <p>新規登録</p>
