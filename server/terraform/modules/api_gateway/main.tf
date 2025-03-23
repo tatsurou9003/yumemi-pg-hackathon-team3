@@ -28,14 +28,14 @@ resource "aws_api_gateway_resource" "first_login_check" {
 # ホーム画面で取得するユーザーデータリソース
 resource "aws_api_gateway_resource" "home" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
+  parent_id   = aws_api_gateway_resource.users.id
   path_part   = "home"
 }
 
 # ユーザー検索リソース
 resource "aws_api_gateway_resource" "search" {
   rest_api_id = aws_api_gateway_rest_api.api.id
-  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
+  parent_id   = aws_api_gateway_resource.users.id
   path_part   = "search"
 }
 
@@ -123,7 +123,7 @@ resource "aws_api_gateway_method" "search" {
 # グループ作成メソッド
 resource "aws_api_gateway_method" "create_group" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.create_group.id
   http_method   = "POST"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = aws_api_gateway_authorizer.cognito.id
@@ -132,7 +132,7 @@ resource "aws_api_gateway_method" "create_group" {
 # テーマ取得メソッド
 resource "aws_api_gateway_method" "get_themes" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.get_themes.id
   http_method   = "GET"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = aws_api_gateway_authorizer.cognito.id
@@ -141,7 +141,7 @@ resource "aws_api_gateway_method" "get_themes" {
 # グループ招待メソッド
 resource "aws_api_gateway_method" "invite_group" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.invite_group.id
   http_method   = "POST"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = aws_api_gateway_authorizer.cognito.id
@@ -150,7 +150,7 @@ resource "aws_api_gateway_method" "invite_group" {
 # メンバー更新メソッド
 resource "aws_api_gateway_method" "update_member" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.update_member.id
   http_method   = "PATCH"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = aws_api_gateway_authorizer.cognito.id
@@ -202,7 +202,7 @@ resource "aws_api_gateway_integration" "search" {
 # グループ作成の統合
 resource "aws_api_gateway_integration" "create_group" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_resource.groups.id
+  resource_id             = aws_api_gateway_resource.create_group.id
   http_method             = aws_api_gateway_method.create_group.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
@@ -212,9 +212,9 @@ resource "aws_api_gateway_integration" "create_group" {
 # テーマ取得の統合
 resource "aws_api_gateway_integration" "get_themes" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_resource.groups.id
+  resource_id             = aws_api_gateway_resource.get_themes.id
   http_method             = aws_api_gateway_method.get_themes.http_method
-  integration_http_method = "GET"
+  integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/${var.lambda_get_themes_arn}/invocations"
 }
@@ -222,7 +222,7 @@ resource "aws_api_gateway_integration" "get_themes" {
 # グループ招待の統合
 resource "aws_api_gateway_integration" "invite_group" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_resource.groups.id
+  resource_id             = aws_api_gateway_resource.invite_group.id
   http_method             = aws_api_gateway_method.invite_group.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
@@ -232,9 +232,9 @@ resource "aws_api_gateway_integration" "invite_group" {
 # メンバー更新の統合
 resource "aws_api_gateway_integration" "update_member" {
   rest_api_id             = aws_api_gateway_rest_api.api.id
-  resource_id             = aws_api_gateway_resource.groups.id
+  resource_id             = aws_api_gateway_resource.update_member.id
   http_method             = aws_api_gateway_method.update_member.http_method
-  integration_http_method = "PATCH"
+  integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/${var.lambda_update_member_arn}/invocations"
 }
@@ -277,7 +277,7 @@ resource "aws_api_gateway_method" "search_options" {
 # グループ作成用
 resource "aws_api_gateway_method" "create_group_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.create_group.id
   http_method   = "OPTIONS"
   authorization = "NONE"
 }
@@ -285,7 +285,7 @@ resource "aws_api_gateway_method" "create_group_options" {
 # テーマ取得用
 resource "aws_api_gateway_method" "get_themes_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.get_themes.id
   http_method   = "OPTIONS"
   authorization = "NONE"
 }
@@ -293,7 +293,7 @@ resource "aws_api_gateway_method" "get_themes_options" {
 # グループ招待用
 resource "aws_api_gateway_method" "invite_group_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.invite_group.id
   http_method   = "OPTIONS"
   authorization = "NONE"
 }
@@ -301,7 +301,7 @@ resource "aws_api_gateway_method" "invite_group_options" {
 # メンバー更新用
 resource "aws_api_gateway_method" "update_member_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.update_member.id
   http_method   = "OPTIONS"
   authorization = "NONE"
 }
@@ -361,7 +361,7 @@ resource "aws_api_gateway_integration" "search_options" {
 # OPTIONSメソッドのモック統合 - グループ作成用
 resource "aws_api_gateway_integration" "create_group_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.create_group.id
   http_method   = aws_api_gateway_method.create_group_options.http_method
   type          = "MOCK"
   request_templates = {
@@ -374,7 +374,7 @@ resource "aws_api_gateway_integration" "create_group_options" {
 # OPTIONSメソッドのモック統合 - テーマ取得用
 resource "aws_api_gateway_integration" "get_themes_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.get_themes.id
   http_method   = aws_api_gateway_method.get_themes_options.http_method
   type          = "MOCK"
   request_templates = {
@@ -387,7 +387,7 @@ resource "aws_api_gateway_integration" "get_themes_options" {
 # OPTIONSメソッドのモック統合 - グループ招待用
 resource "aws_api_gateway_integration" "invite_group_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.invite_group.id
   http_method   = aws_api_gateway_method.invite_group_options.http_method
   type          = "MOCK"
   request_templates = {
@@ -400,7 +400,7 @@ resource "aws_api_gateway_integration" "invite_group_options" {
 # OPTIONSメソッドのモック統合 - メンバー更新用
 resource "aws_api_gateway_integration" "update_member_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.update_member.id
   http_method   = aws_api_gateway_method.update_member_options.http_method
   type          = "MOCK"
   request_templates = {
@@ -469,7 +469,7 @@ resource "aws_api_gateway_method_response" "search_options_200" {
 # メソッドレスポンスの設定 - グループ作成用
 resource "aws_api_gateway_method_response" "create_group_options_200" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.create_group.id
   http_method   = aws_api_gateway_method.create_group_options.http_method
   status_code   = "200"
   
@@ -483,7 +483,7 @@ resource "aws_api_gateway_method_response" "create_group_options_200" {
 # メソッドレスポンスの設定 - テーマ取得用
 resource "aws_api_gateway_method_response" "get_themes_options_200" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.get_themes.id
   http_method   = aws_api_gateway_method.get_themes_options.http_method
   status_code   = "200"
   
@@ -497,7 +497,7 @@ resource "aws_api_gateway_method_response" "get_themes_options_200" {
 # メソッドレスポンスの設定 - グループ招待用
 resource "aws_api_gateway_method_response" "invite_group_options_200" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.invite_group.id
   http_method   = aws_api_gateway_method.invite_group_options.http_method
   status_code   = "200"
   
@@ -511,7 +511,7 @@ resource "aws_api_gateway_method_response" "invite_group_options_200" {
 # メソッドレスポンスの設定 - メンバー更新用
 resource "aws_api_gateway_method_response" "update_member_options_200" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.update_member.id
   http_method   = aws_api_gateway_method.update_member_options.http_method
   status_code   = "200"
   
@@ -589,7 +589,7 @@ resource "aws_api_gateway_integration_response" "search_options_integration_resp
 # 統合レスポンスの設定 - グループ作成用
 resource "aws_api_gateway_integration_response" "create_group_options_integration_response" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.create_group.id
   http_method   = aws_api_gateway_method.create_group_options.http_method
   status_code   = aws_api_gateway_method_response.create_group_options_200.status_code
   
@@ -605,7 +605,7 @@ resource "aws_api_gateway_integration_response" "create_group_options_integratio
 # 統合レスポンスの設定 - テーマ取得用
 resource "aws_api_gateway_integration_response" "get_themes_options_integration_response" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.get_themes.id
   http_method   = aws_api_gateway_method.get_themes_options.http_method
   status_code   = aws_api_gateway_method_response.get_themes_options_200.status_code
   
@@ -621,7 +621,7 @@ resource "aws_api_gateway_integration_response" "get_themes_options_integration_
 # 統合レスポンスの設定 - グループ招待用
 resource "aws_api_gateway_integration_response" "invite_group_options_integration_response" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.invite_group.id
   http_method   = aws_api_gateway_method.invite_group_options.http_method
   status_code   = aws_api_gateway_method_response.invite_group_options_200.status_code
   
@@ -637,7 +637,7 @@ resource "aws_api_gateway_integration_response" "invite_group_options_integratio
 # 統合レスポンスの設定 - メンバー更新用
 resource "aws_api_gateway_integration_response" "update_member_options_integration_response" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
-  resource_id   = aws_api_gateway_resource.groups.id
+  resource_id   = aws_api_gateway_resource.update_member.id
   http_method   = aws_api_gateway_method.update_member_options.http_method
   status_code   = aws_api_gateway_method_response.update_member_options_200.status_code
   
