@@ -182,6 +182,9 @@ export interface FileRouteTypes {
     | "/home";
   fileRoutesByTo: FileRoutesByTo;
   to: "/" | "" | "/login" | "/profile" | "/sigunp" | "/home/$roomId" | "/home";
+  fullPaths: "/" | "" | "/login" | "/profile" | "/home/$roomId" | "/home";
+  fileRoutesByTo: FileRoutesByTo;
+  to: "/" | "" | "/login" | "/profile" | "/home/$roomId" | "/home";
   id:
     | "__root__"
     | "/"
