@@ -3,7 +3,7 @@ const SignUpSettingButton = () => {
     <div className="flex flex-col justify-center items-center">
       <button
         type="submit"
-        className="relative w-[152px] h-[27px]  top-[104px] border-radius
+        className="relative w-[152px] h-[27px]  top-[104px] rounded
                    bg-white text-black text-sm font-medium cursor-pointer  "
       >
         新規登録
