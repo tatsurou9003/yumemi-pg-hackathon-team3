@@ -73,7 +73,7 @@ function RouteComponent() {
     const results = mockUsers.filter(
       (user) =>
         user.userId.toLowerCase().includes(term) ||
-        user.userName.toLowerCase().includes(term),
+        user.userName.toLowerCase().includes(term)
     );
     setSearchResults(results);
   };
@@ -82,7 +82,7 @@ function RouteComponent() {
     setSelectedUsers((prev) =>
       prev.includes(userId)
         ? prev.filter((id) => id !== userId)
-        : [...prev, userId],
+        : [...prev, userId]
     );
   };
 
@@ -117,7 +117,7 @@ function RouteComponent() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="bg-[#FFEADD] h-full">
       <div className="flex flex-col justify-center items-center">
         <div className="relative w-[310px] m-[32px_40px_16px_40px]">
           <input
@@ -125,7 +125,7 @@ function RouteComponent() {
             id="text"
             {...register("userId")}
             placeholder="ユーザーIDを検索"
-            className="w-full h-[48px] bg-[#D9D9D9] rounded px-4 pr-12 text-[#A2A2A2]"
+            className="w-full h-[48px] bg-white rounded px-4 pr-12 text-black border border-black outline-none"
           />
           <button
             type="button"
@@ -174,7 +174,7 @@ function RouteComponent() {
                   )}
                   <button
                     type="button"
-                    className="absolute -top-1 -right-1 bg-gray-200 rounded-full p-0.5 cursor-pointer hover:bg-gray-300"
+                    className="absolute -top-1 -right-1 bg-gray-300 rounded-full p-0.5 cursor-pointer hover:bg-gray-400"
                     onClick={() => removeSelectedUser(user.userId)}
                   >
                     <X size={12} />
