@@ -308,7 +308,7 @@ function RouteComponent() {
             >
               <Message {...message} userId={currentUser.userId} />
             </div>
-          )
+          ),
         )}
         <div ref={messagesEndRef} />
       </div>
