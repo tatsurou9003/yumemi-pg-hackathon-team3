@@ -2,6 +2,7 @@ import { Group } from "@/types/groupData";
 import { createFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "react-toastify";
 
 export const Route = createFileRoute("/_layout/home/group/create")({
   component: RouteComponent,
@@ -16,6 +17,8 @@ function RouteComponent() {
     //TODO: APIでグループ作成を叩いて、ホーム画面に戻す
     if (data) {
       console.log("フォームデータ: ", data);
+      //TODO: エラーだったらエラートーストを表示
+      toast.success("グループを作成しました");
       navigate({ to: "/home" });
     }
   };

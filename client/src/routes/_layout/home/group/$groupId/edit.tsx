@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { User } from "@/types/userData";
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { toast } from "react-toastify";
 
 export const Route = createFileRoute("/_layout/home/group/$groupId/edit")({
   component: RouteComponent,
@@ -59,6 +60,7 @@ function RouteComponent() {
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const searchTerm = watch("userId") || "";
 
@@ -98,8 +100,11 @@ function RouteComponent() {
   };
 
   const onSubmit = () => {
-    //TODO: APIでメンバー招待を叩いて、ルーム画面に戻す
+    //TODO: APIでメンバー招待を叩く
     console.log("選択されたユーザー: ", selectedUsers);
+    //TODO: リクエストが失敗した時はエラートーストを表示
+    toast.success("メンバーを招待しました");
+    navigate({ to: "/home" });
   };
 
   // スクロール処理
