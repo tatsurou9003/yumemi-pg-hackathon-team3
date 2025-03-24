@@ -7,7 +7,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
 import { UserData } from "@/types/userData";
 
-export const Route = createFileRoute("/_layout/home/$roomId")({
+export const Route = createFileRoute("/_layout/home/$roomId/")({
   parseParams: ({ roomId }: { roomId: string }) => ({
     roomId: decodeURIComponent(roomId).replace(/[^a-zA-Z0-9_-]/g, ""), // `/` を除外
   }),

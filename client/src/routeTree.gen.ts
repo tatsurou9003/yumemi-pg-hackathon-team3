@@ -16,8 +16,8 @@ import { Route as IndexImport } from "./routes/index";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutLoginImport } from "./routes/_layout/login";
 import { Route as LayoutHomeIndexImport } from "./routes/_layout/home/index";
-import { Route as LayoutHomeRoomIdImport } from "./routes/_layout/home/$roomId";
-import { Route as LayoutHomeRoomIdHistoryImport } from "./routes/_layout/home/$roomId.history";
+import { Route as LayoutHomeRoomIdIndexImport } from "./routes/_layout/home/$roomId/index";
+import { Route as LayoutHomeRoomIdHistoryImport } from "./routes/_layout/home/$roomId/history";
 
 // Create/Update Routes
 
@@ -50,16 +50,16 @@ const LayoutHomeIndexRoute = LayoutHomeIndexImport.update({
   getParentRoute: () => LayoutRoute,
 } as any);
 
-const LayoutHomeRoomIdRoute = LayoutHomeRoomIdImport.update({
-  id: "/home/$roomId",
-  path: "/home/$roomId",
+const LayoutHomeRoomIdIndexRoute = LayoutHomeRoomIdIndexImport.update({
+  id: "/home/$roomId/",
+  path: "/home/$roomId/",
   getParentRoute: () => LayoutRoute,
 } as any);
 
 const LayoutHomeRoomIdHistoryRoute = LayoutHomeRoomIdHistoryImport.update({
-  id: "/history",
-  path: "/history",
-  getParentRoute: () => LayoutHomeRoomIdRoute,
+  id: "/home/$roomId/history",
+  path: "/home/$roomId/history",
+  getParentRoute: () => LayoutRoute,
 } as any);
 
 // Populate the FileRoutesByPath interface
@@ -94,13 +94,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutProfileImport;
       parentRoute: typeof LayoutImport;
     };
-    "/_layout/home/$roomId": {
-      id: "/_layout/home/$roomId";
-      path: "/home/$roomId";
-      fullPath: "/home/$roomId";
-      preLoaderRoute: typeof LayoutHomeRoomIdImport;
-      parentRoute: typeof LayoutImport;
-    };
     "/_layout/home/": {
       id: "/_layout/home/";
       path: "/home";
@@ -110,39 +103,37 @@ declare module "@tanstack/react-router" {
     };
     "/_layout/home/$roomId/history": {
       id: "/_layout/home/$roomId/history";
-      path: "/history";
+      path: "/home/$roomId/history";
       fullPath: "/home/$roomId/history";
       preLoaderRoute: typeof LayoutHomeRoomIdHistoryImport;
-      parentRoute: typeof LayoutHomeRoomIdImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/_layout/home/$roomId/": {
+      id: "/_layout/home/$roomId/";
+      path: "/home/$roomId";
+      fullPath: "/home/$roomId";
+      preLoaderRoute: typeof LayoutHomeRoomIdIndexImport;
+      parentRoute: typeof LayoutImport;
     };
   }
 }
 
 // Create and export the route tree
 
-interface LayoutHomeRoomIdRouteChildren {
-  LayoutHomeRoomIdHistoryRoute: typeof LayoutHomeRoomIdHistoryRoute;
-}
-
-const LayoutHomeRoomIdRouteChildren: LayoutHomeRoomIdRouteChildren = {
-  LayoutHomeRoomIdHistoryRoute: LayoutHomeRoomIdHistoryRoute,
-};
-
-const LayoutHomeRoomIdRouteWithChildren =
-  LayoutHomeRoomIdRoute._addFileChildren(LayoutHomeRoomIdRouteChildren);
-
 interface LayoutRouteChildren {
   LayoutLoginRoute: typeof LayoutLoginRoute;
   LayoutProfileRoute: typeof LayoutProfileRoute;
-  LayoutHomeRoomIdRoute: typeof LayoutHomeRoomIdRouteWithChildren;
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute;
+  LayoutHomeRoomIdHistoryRoute: typeof LayoutHomeRoomIdHistoryRoute;
+  LayoutHomeRoomIdIndexRoute: typeof LayoutHomeRoomIdIndexRoute;
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutLoginRoute: LayoutLoginRoute,
   LayoutProfileRoute: LayoutProfileRoute,
-  LayoutHomeRoomIdRoute: LayoutHomeRoomIdRouteWithChildren,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
+  LayoutHomeRoomIdHistoryRoute: LayoutHomeRoomIdHistoryRoute,
+  LayoutHomeRoomIdIndexRoute: LayoutHomeRoomIdIndexRoute,
 };
 
 const LayoutRouteWithChildren =
@@ -153,9 +144,9 @@ export interface FileRoutesByFullPath {
   "": typeof LayoutRouteWithChildren;
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
-  "/home/$roomId": typeof LayoutHomeRoomIdRouteWithChildren;
   "/home": typeof LayoutHomeIndexRoute;
   "/home/$roomId/history": typeof LayoutHomeRoomIdHistoryRoute;
+  "/home/$roomId": typeof LayoutHomeRoomIdIndexRoute;
 }
 
 export interface FileRoutesByTo {
@@ -163,9 +154,9 @@ export interface FileRoutesByTo {
   "": typeof LayoutRouteWithChildren;
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
-  "/home/$roomId": typeof LayoutHomeRoomIdRouteWithChildren;
   "/home": typeof LayoutHomeIndexRoute;
   "/home/$roomId/history": typeof LayoutHomeRoomIdHistoryRoute;
+  "/home/$roomId": typeof LayoutHomeRoomIdIndexRoute;
 }
 
 export interface FileRoutesById {
@@ -174,43 +165,39 @@ export interface FileRoutesById {
   "/_layout": typeof LayoutRouteWithChildren;
   "/_layout/login": typeof LayoutLoginRoute;
   "/_layout/profile": typeof LayoutProfileRoute;
-  "/_layout/home/$roomId": typeof LayoutHomeRoomIdRouteWithChildren;
   "/_layout/home/": typeof LayoutHomeIndexRoute;
   "/_layout/home/$roomId/history": typeof LayoutHomeRoomIdHistoryRoute;
+  "/_layout/home/$roomId/": typeof LayoutHomeRoomIdIndexRoute;
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-<<<<<<< HEAD
   fullPaths:
     | "/"
     | ""
+    | "/login"
     | "/profile"
-    | "/home/$roomId"
     | "/home"
-    | "/home/$roomId/history";
+    | "/home/$roomId/history"
+    | "/home/$roomId";
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/"
     | ""
+    | "/login"
     | "/profile"
-    | "/home/$roomId"
     | "/home"
-    | "/home/$roomId/history";
-=======
-  fullPaths: "/" | "" | "/login" | "/profile" | "/home/$roomId" | "/home";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "" | "/login" | "/profile" | "/home/$roomId" | "/home";
->>>>>>> main
+    | "/home/$roomId/history"
+    | "/home/$roomId";
   id:
     | "__root__"
     | "/"
     | "/_layout"
     | "/_layout/login"
     | "/_layout/profile"
-    | "/_layout/home/$roomId"
     | "/_layout/home/"
-    | "/_layout/home/$roomId/history";
+    | "/_layout/home/$roomId/history"
+    | "/_layout/home/$roomId/";
   fileRoutesById: FileRoutesById;
 }
 
@@ -246,8 +233,9 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/login",
         "/_layout/profile",
-        "/_layout/home/$roomId",
-        "/_layout/home/"
+        "/_layout/home/",
+        "/_layout/home/$roomId/history",
+        "/_layout/home/$roomId/"
       ]
     },
     "/_layout/login": {
@@ -258,20 +246,17 @@ export const routeTree = rootRoute
       "filePath": "_layout/profile.tsx",
       "parent": "/_layout"
     },
-    "/_layout/home/$roomId": {
-      "filePath": "_layout/home/$roomId.tsx",
-      "parent": "/_layout",
-      "children": [
-        "/_layout/home/$roomId/history"
-      ]
-    },
     "/_layout/home/": {
       "filePath": "_layout/home/index.tsx",
       "parent": "/_layout"
     },
     "/_layout/home/$roomId/history": {
-      "filePath": "_layout/home/$roomId.history.tsx",
-      "parent": "/_layout/home/$roomId"
+      "filePath": "_layout/home/$roomId/history.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/home/$roomId/": {
+      "filePath": "_layout/home/$roomId/index.tsx",
+      "parent": "/_layout"
     }
   }
 }
