@@ -123,6 +123,12 @@ data "archive_file" "update_member_zip" {
   output_path = "${path.module}/functions/zip/update_member.zip"
 }
 
+data "archive_file" "get_history_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/groups/get_history.py"
+  output_path = "${path.module}/functions/zip/get_history.zip"
+}
+
 # Answers
 data "archive_file" "answer_zip" {
   type        = "zip"
@@ -214,6 +220,16 @@ resource "aws_lambda_function" "get_themes" {
   source_code_hash = data.archive_file.get_themes_zip.output_base64sha256
 }
 
+# GetHistoryトリガーを追加
+resource "aws_lambda_function" "get_history" {
+  filename = data.archive_file.get_history_zip.output_path
+  function_name = "get_history"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "get_history.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.get_history_zip.output_base64sha256
+}
+
 # InviteGroupトリガーを追加
 resource "aws_lambda_function" "invite_group" {
   filename = data.archive_file.invite_group_zip.output_path
@@ -301,6 +317,10 @@ output "lambda_invite_group_arn" {
 
 output "lambda_update_member_arn" {
   value = aws_lambda_function.update_member.arn
+}
+
+output "lambda_get_history_arn" {
+  value = aws_lambda_function.get_history.arn
 }
 
 # Answers

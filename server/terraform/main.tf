@@ -40,6 +40,7 @@ module "api_gateway" {
   lambda_get_themes_arn = module.lambda.lambda_get_themes_arn
   lambda_invite_group_arn = module.lambda.lambda_invite_group_arn
   lambda_update_member_arn = module.lambda.lambda_update_member_arn
+  lambda_get_history_arn = module.lambda.lambda_get_history_arn
   lambda_answer_arn = module.lambda.lambda_answer_arn
   lambda_get_answers_arn = module.lambda.lambda_get_answers_arn
   lambda_like_arn = module.lambda.lambda_like_arn

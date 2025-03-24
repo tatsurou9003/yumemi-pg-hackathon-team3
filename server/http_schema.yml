@@ -13,7 +13,7 @@ tags:
   - name: Users
     description: ユーザー登録、ログイン、プロフィール更新に関するエンドポイント
   - name: Groups
-    description: グループ作成・招待に関するエンドポイント
+    description: グループ作成・招待・履歴取得に関するエンドポイント
   - name: Answers
     description: テーマへの回答、結果確認に関するエンドポイント
   - name: Likes
@@ -251,7 +251,7 @@ paths:
   /groups/chat/{groupId}:
     get:
       tags:
-        - Chat
+        - Groups
       summary: グループチャット履歴取得
       description: 指定グループのチャット履歴を取得します。
       parameters:
@@ -377,7 +377,7 @@ paths:
         "404":
           description: 回答が存在しない場合
 
-  /answers/{answerId}/like:
+  /answers/like/{answerId}:
     put:
       tags:
         - Likes
@@ -685,9 +685,6 @@ components:
     Answer:
       type: object
       properties:
-        parentId:
-          type: string
-          description: "回答対象のテーマメッセージID"
         answerText:
           type: string
           description: "回答本文"
@@ -695,7 +692,6 @@ components:
           type: string
           description: "回答画像のURL（任意）"
       required:
-        - parentId
         - answerText
 
     GetThemeAnswer:
@@ -767,13 +763,3 @@ components:
           description: "テーマのリスト"
           items:
             $ref: "#/components/schemas/Message"
-
-    answerIdRequest:
-      type: object
-      description: "いいね対象の回答ID"
-      properties:
-        answerId:
-          type: string
-          description: "いいね対象の回答ID"
-      required:
-        - answerId
