@@ -44,8 +44,8 @@ const headerImages = [
 function RouteComponent() {
   return (
     <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
+      {/*今後の展望: イベントページを作成し、ジャンプできるようにする*/}
       <HeaderCarousel images={headerImages} />
-
       {invitedGroupData.length > 0 && (
         <section className="w-full text-[#743E3E] bg-[#FFBC92]">
           <div className="flex items-center p-[14px_0_9px_14px]">
@@ -57,7 +57,6 @@ function RouteComponent() {
           <InvitedGroupList groupData={invitedGroupData} />
         </section>
       )}
-
       <section className="w-full text-[#743E3E] bg-[#FFBC92]">
         <p className="p-[14px_0_9px_14px]">グループ一覧</p>
         <GroupList groupData={groupData} />
