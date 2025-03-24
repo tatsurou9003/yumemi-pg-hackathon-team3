@@ -1,21 +1,22 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createFileRoute } from "@tanstack/react-router";
+import RoomHeader from "@/features/room/room-header";
+import Oogiri from "@/features/room/oogiri";
+import Answer from "@/features/room/answer";
+import ThreadFooter from "@/features/room/thread-footer";
+
+import { Input } from "@/components/common/input/input";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormMessage,
 } from "@/components/common/form/form";
-import { Input } from "@/components/common/input/input";
-import Oogiri from "@/features/room/oogiri";
-import RoomHeader from "@/features/room/room-header";
-import { createFileRoute } from "@tanstack/react-router";
+import { SendBrown } from "@/components/common/icon";
 import { MessageData } from "@/types/messageData";
 import { AnswerData } from "@/types/answerData";
-import ThreadFooter from "@/features/room/thread-footer";
-import { SendBrown } from "@/components/common/icon";
 
 const formSchema = z.object({
   answer: z.string().min(2, {
@@ -198,6 +199,8 @@ function RouteComponent() {
     },
   ];
 
+  const isDead = new Date(oogiri.deadline) < new Date();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -212,41 +215,51 @@ function RouteComponent() {
   return (
     <div className="h-[calc(100vh_-_56px)] flex flex-col justify-between bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
       <div className="w-full">
-        <RoomHeader title="大喜利に回答する" />
+        <RoomHeader title={isDead ? "回答を見る" : "大喜利に回答する"} />
       </div>
       <div className="flex flex-col gap-6 p-5 overflow-y-auto flex-grow">
         <Oogiri
           text={oogiri.messageText}
           image={oogiri.messageImage}
-          isDead={true}
+          isDead={isDead}
         />
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="answer"
-              render={({ field }) => (
-                <FormItem className="flex items-center gap-2 border-2 border-white p-1 rounded-lg bg-white space-y-0">
-                  <FormControl>
-                    <Input
-                      placeholder="回答を入力"
-                      className="border-none shadow-none hover:shadow-none focus-visible:outline-none focus-visible:ring-0"
-                      {...field}
+        {isDead ? (
+          <div className="flex flex-col gap-4 overflow-y-auto w-full">
+            {answers.map((answer) => (
+              <div className="flex justify-start" key={answer.answerId}>
+                <Answer {...answer} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="answer"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-2 border-2 border-white p-1 rounded-lg bg-white space-y-0">
+                    <FormControl>
+                      <Input
+                        placeholder="回答を入力"
+                        className="border-none shadow-none hover:shadow-none focus-visible:outline-none focus-visible:ring-0"
+                        {...field}
+                      />
+                    </FormControl>
+                    <SendBrown
+                      type="submit"
+                      width="24px"
+                      height="24px"
+                      className="cursor-pointer"
                     />
-                  </FormControl>
-                  <SendBrown
-                    type="submit"
-                    width="24px"
-                    height="24px"
-                    className="cursor-pointer"
-                  />
-                </FormItem>
-              )}
-            />
-          </form>
-        </Form>
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+        )}
       </div>
-      <ThreadFooter answers={answers} />
+      {!isDead && <ThreadFooter answers={answers} />}
     </div>
   );
 }
