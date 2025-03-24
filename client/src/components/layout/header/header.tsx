@@ -1,5 +1,11 @@
+import { useRef } from "react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
-import { HeaderAvatar } from "./header-avatar";
+import { HomeAvatar } from "./home-avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/common/avatar/avatar";
 import {
   ChevronLeft,
   HamburgerButton,
@@ -17,10 +23,14 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   const location = useLocation();
   const path = location.pathname ?? "";
   const { getGroupNameById, currentGroup } = useGroup();
+  const avatarRef = useRef<HTMLButtonElement | null>(null);
 
   // タイトルを取得する関数
   const getTitle = () => {
     // 静的なルート
+    if (path === "/login") return "ログイン";
+    if (path === "/signup") return "新規登録";
+    if (path === "/complete") return "新規登録";
     if (path === "/home") return "ホーム";
     if (path === "/profile") return "プロフィール";
     if (path === "/home/group/create") return "グループ作成";
@@ -84,21 +94,38 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
       >
         {getTitle()}
       </div>
-      <div className="flex items-center justify-end gap-4">
-        {roomId && (
-          <StickyNote
-            width="18px"
-            height="18px"
-            className="cursor-pointer"
-            onClick={() => {
-              navigate({
-                to: `/home/${roomId}/history`,
-              });
-            }}
-          />
-        )}
-        <HeaderAvatar src={avatar} />
-      </div>
+      {!(path === "/login" || path === "/signup" || path === "/complete") && (
+        <div className="flex items-center justify-end gap-4">
+          {roomId ? (
+            <>
+              <StickyNote
+                width="18px"
+                height="18px"
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate({
+                    to: `/home/${roomId}/history`,
+                  });
+                }}
+              />
+              <button
+                onClick={() => {
+                  navigate({ to: `/home/group/${roomId}/edit` });
+                }}
+                ref={avatarRef}
+                className="border-none bg-transparent cursor-pointer"
+              >
+                <Avatar>
+                  <AvatarImage src={avatar} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </button>
+            </>
+          ) : (
+            <HomeAvatar src={avatar} />
+          )}
+        </div>
+      )}
     </div>
   );
 };
