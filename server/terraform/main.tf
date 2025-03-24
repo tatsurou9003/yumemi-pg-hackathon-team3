@@ -44,7 +44,15 @@ module "api_gateway" {
   lambda_answer_arn = module.lambda.lambda_answer_arn
   lambda_get_answers_arn = module.lambda.lambda_get_answers_arn
   lambda_like_arn = module.lambda.lambda_like_arn
-  cognito_user_pool_arn = module.cognito.user_pool_arn
+  cognito_user_pool_arn = module.cognito.cognito_user_pool_arn
+}
+
+module "websocket_api" {
+  source = "./modules/websocket_api"
+  aws_region = var.aws_region
+  lambda_connect_arn = module.lambda.lambda_connect_arn
+  lambda_disconnect_arn = module.lambda.lambda_disconnect_arn
+  lambda_send_message_arn = module.lambda.lambda_send_message_arn
 }
 
 module "dynamodb" {

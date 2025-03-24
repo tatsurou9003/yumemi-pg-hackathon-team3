@@ -149,6 +149,25 @@ data "archive_file" "like_zip" {
   output_path = "${path.module}/functions/zip/like.zip"
 }
 
+# WebSocket
+data "archive_file" "websocket_connect_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/websocket/connect.py"
+  output_path = "${path.module}/functions/zip/websocket_connect.zip"
+}
+
+data "archive_file" "websocket_disconnect_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/websocket/disconnect.py"
+  output_path = "${path.module}/functions/zip/websocket_disconnect.zip"
+}
+
+data "archive_file" "websocket_send_message_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/websocket/send_message.py"
+  output_path = "${path.module}/functions/zip/websocket_send_message.zip"
+}
+
 # Lambda関数の作成
 # UpdateProfileトリガーを追加
 resource "aws_lambda_function" "update_profile" {
@@ -280,6 +299,34 @@ resource "aws_lambda_function" "like" {
   source_code_hash = data.archive_file.like_zip.output_base64sha256
 }
 
+# WebSocketトリガーを追加
+resource "aws_lambda_function" "websocket_connect" {
+  filename = data.archive_file.websocket_connect_zip.output_path
+  function_name = "connect"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "connect.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.websocket_connect_zip.output_base64sha256
+}
+
+resource "aws_lambda_function" "websocket_disconnect" {
+  filename = data.archive_file.websocket_disconnect_zip.output_path
+  function_name = "disconnect"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "disconnect.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.websocket_disconnect_zip.output_base64sha256
+}
+
+resource "aws_lambda_function" "websocket_send_message" {
+  filename = data.archive_file.websocket_send_message_zip.output_path
+  function_name = "send_message"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "send_message.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.websocket_send_message_zip.output_base64sha256
+}
+
 # lambda関数のarnを出力
 # Users
 output "lambda_update_profile_arn" {
@@ -335,4 +382,17 @@ output "lambda_like_arn" {
 
 output "lambda_get_answers_arn" {
   value = aws_lambda_function.get_answers.arn
+}
+
+# WebSocket
+output "lambda_connect_arn" {
+  value = aws_lambda_function.websocket_connect.arn
+}
+
+output "lambda_disconnect_arn" {
+  value = aws_lambda_function.websocket_disconnect.arn
+}
+
+output "lambda_send_message_arn" {
+  value = aws_lambda_function.websocket_send_message.arn
 }
