@@ -13,7 +13,7 @@ import {
 } from "@/components/common/form/form";
 import { Input } from "@/components/common/input/input";
 import { Textarea } from "@/components/common/textarea/textarea";
-import { SendBrown, PaperClip, XCircle } from "@/components/common/icon";
+import { SendSlantBrown, PaperClip, XCircle } from "@/components/common/icon";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_layout/home/$roomId/post")({
@@ -159,7 +159,7 @@ function RouteComponent() {
               type="submit"
               className="border-radius-[8px] border-[2px] border-[#743E3E] bg-[#FF7C2A] text-[#743E3E] text-[12px] font-bold w-[100px] hover:bg-[#FF7C2A]/90"
             >
-              <SendBrown width="16px" height="16px" /> 投稿する
+              <SendSlantBrown width="16px" height="16px" /> 投稿する
             </Button>
             <Button>
               <XCircle width="16px" height="16px" /> 戻る
