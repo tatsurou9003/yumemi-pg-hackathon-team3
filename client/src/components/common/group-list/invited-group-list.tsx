@@ -25,7 +25,7 @@ const InvitedGroupList = ({ groupData }: GroupData) => {
         <button
           key={group.groupId}
           onClick={() => handleGroupClick(group)}
-          className="float-left p-[12px] flex items-center gap-[21px] font-[Inter] truncate text-left"
+          className="cursor-pointer float-left p-[12px] flex items-center gap-[21px] font-[Inter] truncate text-left"
         >
           <Avatar>
             <AvatarImage src={group.groupImage} />
