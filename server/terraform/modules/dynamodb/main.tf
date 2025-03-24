@@ -124,9 +124,14 @@ resource "aws_dynamodb_table" "answers" {
 resource "aws_dynamodb_table" "likes" {
     name = "likes"
     billing_mode = "PAY_PER_REQUEST"
-    hash_key = "likeId"
+    hash_key = "answerId"
+    range_key = "userId"
     attribute {
-        name = "likeId"
+        name = "answerId"
+        type = "S"
+    }
+    attribute {
+        name = "userId"
         type = "S"
     }
     tags = {

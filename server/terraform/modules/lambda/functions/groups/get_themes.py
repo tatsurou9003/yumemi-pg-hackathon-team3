@@ -20,19 +20,10 @@ def lambda_handler(event, context):
         "Access-Control-Allow-Methods": "GET"
     }
     
-    # リクエストボディのパース
-    try:
-        body = json.loads(event.get("body", "{}"))
-    except json.JSONDecodeError:
-        return {
-            "statusCode": 400,
-            "headers": headers,
-            "body": json.dumps({"message": "Invalid request body"})
-        }
-    
     try:
         # リクエストの検証
-        group_id = body.get("groupId")
+        path_parameters = event.get("pathParameters", {})
+        group_id = path_parameters.get("groupId")
         
         if not group_id:
             return {

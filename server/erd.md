@@ -53,24 +53,22 @@ erDiagram
         string answerId "uuid, SK"
         string parentId PK "親となるテーマのメッセージID, GSI:HK"
         string answerText "回答文"
-        string answerImage "回答画像"
         string createdBy "作成者のユーザーID"
         string createdAt　"作成日時"
         number goodCount　"いいねの数, GSI:RK"
     }
 
-    GOODLOGS {
-        string logId PK "uuid"
-        string answerId "いいねされたメッセージID, GSI:HK"
-        string userId "いいねしたユーザーID"
-        string createdAt "作成・更新日時, GSI:RK"
-    }
+    LIKES {
+    string answerId PK "回答ID"
+    string userId SK "いいねしたユーザーID"
+    string createdAt "いいねした日時"
+}
 
     USERS ||--o{ GROUPS : "作成"
     USERS ||--o{ GROUP_MEMBERS : "参加"
     USERS ||--o{ MESSAGES : "投稿"
     USERS ||--o{ ANSWERS : "回答"
-    USERS ||--o{ GOODLOGS : "いいね"
+    USERS ||--o{ LIKES : "いいね"
 
     GROUPS ||--o{ MESSAGES : "持つ
     GROUPS ||--o{ GROUP_MEMBERS : "参加者"
@@ -79,8 +77,8 @@ erDiagram
     GROUP_MEMBERS }|--|| GROUPS : "所属"
 
     MESSAGES ||--o{ ANSWERS : "回答"
-    MESSAGES ||--o{ GOODLOGS : "いいね"
+    MESSAGES ||--o{ LIKES : "いいね"
 
-    GOODLOGS }|--|| USERS : "いいねした"
+    LIKES }|--|| USERS : "いいねした"
 
 ```

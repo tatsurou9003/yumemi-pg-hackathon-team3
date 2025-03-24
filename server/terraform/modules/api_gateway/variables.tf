@@ -50,6 +50,23 @@ variable "lambda_update_member_arn" {
   description = "Lambda function ARN"
 }
 
+# Answers周りのLambda
+variable "lambda_answer_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+variable "lambda_get_answers_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+# Likes周りのLambda
+variable "lambda_like_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
 # Cognito User Pool
 variable "cognito_user_pool_arn" {
   description = "ARN of the Cognito User Pool to use for authentication"

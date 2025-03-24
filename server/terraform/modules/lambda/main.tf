@@ -123,6 +123,26 @@ data "archive_file" "update_member_zip" {
   output_path = "${path.module}/functions/zip/update_member.zip"
 }
 
+# Answers
+data "archive_file" "answer_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/answers/answer.py"
+  output_path = "${path.module}/functions/zip/answer.zip"
+}
+
+data "archive_file" "get_answers_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/answers/get_answers.py"
+  output_path = "${path.module}/functions/zip/get_answers.zip"
+}
+
+# Likes
+data "archive_file" "like_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/likes/like.py"
+  output_path = "${path.module}/functions/zip/like.zip"
+}
+
 # Lambda関数の作成
 # UpdateProfileトリガーを追加
 resource "aws_lambda_function" "update_profile" {
@@ -214,6 +234,36 @@ resource "aws_lambda_function" "update_member" {
   source_code_hash = data.archive_file.update_member_zip.output_base64sha256
 }
 
+# Answerトリガーを追加
+resource "aws_lambda_function" "answer" {
+  filename = data.archive_file.answer_zip.output_path
+  function_name = "answer"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "answer.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.answer_zip.output_base64sha256
+}
+
+# GetAnswersトリガーを追加
+resource "aws_lambda_function" "get_answers" {
+  filename = data.archive_file.get_answers_zip.output_path
+  function_name = "get_answers"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "get_answers.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.get_answers_zip.output_base64sha256
+}
+
+# Likeトリガーを追加
+resource "aws_lambda_function" "like" {
+  filename = data.archive_file.like_zip.output_path
+  function_name = "like"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "like.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.like_zip.output_base64sha256
+}
+
 # lambda関数のarnを出力
 # Users
 output "lambda_update_profile_arn" {
@@ -251,4 +301,18 @@ output "lambda_invite_group_arn" {
 
 output "lambda_update_member_arn" {
   value = aws_lambda_function.update_member.arn
+}
+
+# Answers
+output "lambda_answer_arn" {
+  value = aws_lambda_function.answer.arn
+}
+
+# Likes
+output "lambda_like_arn" {
+  value = aws_lambda_function.like.arn
+}
+
+output "lambda_get_answers_arn" {
+  value = aws_lambda_function.get_answers.arn
 }
