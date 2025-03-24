@@ -13,6 +13,7 @@
 import { Route as rootRoute } from "./routes/__root";
 import { Route as LayoutImport } from "./routes/_layout";
 import { Route as IndexImport } from "./routes/index";
+import { Route as LayoutSignupImport } from "./routes/_layout/signup";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutLoginImport } from "./routes/_layout/login";
 import { Route as LayoutHomeIndexImport } from "./routes/_layout/home/index";
@@ -31,6 +32,12 @@ const IndexRoute = IndexImport.update({
   id: "/",
   path: "/",
   getParentRoute: () => rootRoute,
+} as any);
+
+const LayoutSignupRoute = LayoutSignupImport.update({
+  id: "/signup",
+  path: "/signup",
+  getParentRoute: () => LayoutRoute,
 } as any);
 
 const LayoutProfileRoute = LayoutProfileImport.update({
@@ -101,6 +108,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutProfileImport;
       parentRoute: typeof LayoutImport;
     };
+    "/_layout/signup": {
+      id: "/_layout/signup";
+      path: "/signup";
+      fullPath: "/signup";
+      preLoaderRoute: typeof LayoutSignupImport;
+      parentRoute: typeof LayoutImport;
+    };
     "/_layout/home/": {
       id: "/_layout/home/";
       path: "/home";
@@ -137,6 +151,7 @@ declare module "@tanstack/react-router" {
 interface LayoutRouteChildren {
   LayoutLoginRoute: typeof LayoutLoginRoute;
   LayoutProfileRoute: typeof LayoutProfileRoute;
+  LayoutSignupRoute: typeof LayoutSignupRoute;
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute;
   LayoutHomeRoomIdHistoryRoute: typeof LayoutHomeRoomIdHistoryRoute;
   LayoutHomeRoomIdPostRoute: typeof LayoutHomeRoomIdPostRoute;
@@ -146,6 +161,7 @@ interface LayoutRouteChildren {
 const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutLoginRoute: LayoutLoginRoute,
   LayoutProfileRoute: LayoutProfileRoute,
+  LayoutSignupRoute: LayoutSignupRoute,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
   LayoutHomeRoomIdHistoryRoute: LayoutHomeRoomIdHistoryRoute,
   LayoutHomeRoomIdPostRoute: LayoutHomeRoomIdPostRoute,
@@ -160,6 +176,7 @@ export interface FileRoutesByFullPath {
   "": typeof LayoutRouteWithChildren;
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
+  "/signup": typeof LayoutSignupRoute;
   "/home": typeof LayoutHomeIndexRoute;
   "/home/$roomId/history": typeof LayoutHomeRoomIdHistoryRoute;
   "/home/$roomId/post": typeof LayoutHomeRoomIdPostRoute;
@@ -171,6 +188,7 @@ export interface FileRoutesByTo {
   "": typeof LayoutRouteWithChildren;
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
+  "/signup": typeof LayoutSignupRoute;
   "/home": typeof LayoutHomeIndexRoute;
   "/home/$roomId/history": typeof LayoutHomeRoomIdHistoryRoute;
   "/home/$roomId/post": typeof LayoutHomeRoomIdPostRoute;
@@ -183,6 +201,7 @@ export interface FileRoutesById {
   "/_layout": typeof LayoutRouteWithChildren;
   "/_layout/login": typeof LayoutLoginRoute;
   "/_layout/profile": typeof LayoutProfileRoute;
+  "/_layout/signup": typeof LayoutSignupRoute;
   "/_layout/home/": typeof LayoutHomeIndexRoute;
   "/_layout/home/$roomId/history": typeof LayoutHomeRoomIdHistoryRoute;
   "/_layout/home/$roomId/post": typeof LayoutHomeRoomIdPostRoute;
@@ -196,6 +215,7 @@ export interface FileRouteTypes {
     | ""
     | "/login"
     | "/profile"
+    | "/signup"
     | "/home"
     | "/home/$roomId/history"
     | "/home/$roomId/post"
@@ -206,6 +226,7 @@ export interface FileRouteTypes {
     | ""
     | "/login"
     | "/profile"
+    | "/signup"
     | "/home"
     | "/home/$roomId/history"
     | "/home/$roomId/post"
@@ -216,6 +237,7 @@ export interface FileRouteTypes {
     | "/_layout"
     | "/_layout/login"
     | "/_layout/profile"
+    | "/_layout/signup"
     | "/_layout/home/"
     | "/_layout/home/$roomId/history"
     | "/_layout/home/$roomId/post"
@@ -255,6 +277,7 @@ export const routeTree = rootRoute
       "children": [
         "/_layout/login",
         "/_layout/profile",
+        "/_layout/signup",
         "/_layout/home/",
         "/_layout/home/$roomId/history",
         "/_layout/home/$roomId/post",
@@ -267,6 +290,10 @@ export const routeTree = rootRoute
     },
     "/_layout/profile": {
       "filePath": "_layout/profile.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/signup": {
+      "filePath": "_layout/signup.tsx",
       "parent": "/_layout"
     },
     "/_layout/home/": {
