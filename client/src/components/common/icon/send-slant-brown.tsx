@@ -1,5 +1,5 @@
 import type { SVGProps } from "react";
-const SvgSendBrown = (props: SVGProps<SVGSVGElement>) => (
+const SvgSendSlantBrown = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="1em"
@@ -8,7 +8,7 @@ const SvgSendBrown = (props: SVGProps<SVGSVGElement>) => (
     viewBox="0 0 16 16"
     {...props}
   >
-    <g clipPath="url(#send-brown_svg__a)">
+    <g clipPath="url(#send-slant-brown_svg__a)">
       <path
         stroke="#743E3E"
         strokeLinecap="round"
@@ -18,10 +18,10 @@ const SvgSendBrown = (props: SVGProps<SVGSVGElement>) => (
       />
     </g>
     <defs>
-      <clipPath id="send-brown_svg__a">
+      <clipPath id="send-slant-brown_svg__a">
         <path fill="#fff" d="M0 0h16v16H0z" />
       </clipPath>
     </defs>
   </svg>
 );
-export default SvgSendBrown;
+export default SvgSendSlantBrown;
