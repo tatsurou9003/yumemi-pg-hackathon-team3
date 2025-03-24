@@ -50,6 +50,11 @@ variable "lambda_update_member_arn" {
   description = "Lambda function ARN"
 }
 
+variable "lambda_get_history_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
 # Answers周りのLambda
 variable "lambda_answer_arn" {
   type        = string
