@@ -5,7 +5,7 @@ import OogiriMessage from "@/features/room/oogiri-message";
 import RoomFooter from "@/features/room/room-footer";
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
-import { UserData } from "@/types/userData";
+import { User } from "@/types/userData";
 
 export const Route = createFileRoute("/_layout/home/$roomId")({
   parseParams: ({ roomId }: { roomId: string }) => ({
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_layout/home/$roomId")({
 });
 
 function RouteComponent() {
-  const currentUser: UserData = {
+  const currentUser: User = {
     userId: "user123",
     userName: "自分",
     profileImage: "/images/me.jpg",
@@ -308,7 +308,7 @@ function RouteComponent() {
             >
               <Message {...message} userId={currentUser.userId} />
             </div>
-          ),
+          )
         )}
         <div ref={messagesEndRef} />
       </div>
