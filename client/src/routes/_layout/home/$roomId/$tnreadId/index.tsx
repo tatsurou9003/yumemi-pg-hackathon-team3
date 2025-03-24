@@ -5,14 +5,13 @@ import { Button } from "@/components/common/button/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/common/form/form";
 import { Input } from "@/components/common/input/input";
-import OogiriMessage from "@/features/room/oogiri-message";
+import Oogiri from "@/features/room/oogiri";
 import RoomHeader from "@/features/room/room-header";
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
@@ -20,15 +19,12 @@ import { AnswerData } from "@/types/answerData";
 import ThreadFooter from "@/features/room/thread-footer";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  answer: z.string().min(2, {
+    message: "必須入力項目です。",
   }),
 });
 
-export const Route = createFileRoute("/_layout/home/$roomId/answer")({
-  parseParams: (rawParams: Record<string, string>) => ({
-    roomId: decodeURIComponent(rawParams.roomId).replace(/[^a-zA-Z0-9_-]/g, ""), // `/` を除外
-  }),
+export const Route = createFileRoute("/_layout/home/$roomId/$tnreadId/")({
   component: RouteComponent,
 });
 
@@ -206,7 +202,7 @@ function RouteComponent() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      answer: "",
     },
   });
 
@@ -219,16 +215,19 @@ function RouteComponent() {
       <div className="w-full">
         <RoomHeader title="大喜利に回答する" />
       </div>
-      <div className="flex flex-col gap-4 p-5 overflow-y-auto">
-        <OogiriMessage {...oogiri} isSameUser={false} />
+      <div className="flex flex-col gap-6 p-5 overflow-y-auto flex-grow">
+        <Oogiri
+          text={oogiri.messageText}
+          image={oogiri.messageImage}
+          isDead={false}
+        />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="username"
+              name="answer"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input placeholder="shadcn" {...field} />
                   </FormControl>
