@@ -2,8 +2,8 @@ import type { SVGProps } from "react";
 const SvgSmile = (props: SVGProps<SVGSVGElement>) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
-    width="393em"
-    height="852em"
+    width="1em"
+    height="1em"
     fill="none"
     viewBox="0 0 297 334"
     {...props}
