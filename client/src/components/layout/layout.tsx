@@ -23,6 +23,7 @@ export const Layout: React.FC<LayoutProps> = ({
   // タイトルを取得する関数
   const getTitle = () => {
     // 静的なルート
+    if (path === "/login") return "ログイン";
     if (path === "/home") return "ホーム";
     if (path === "/profile") return "プロフィール";
     if (path === "/home/group/create") return "グループ作成";
