@@ -78,9 +78,9 @@ src/routes/
 ├── posts.tsx         # `/posts`
 ├── posts/            # `/posts/`
 │   ├── profile.tsx  # `/posts/profile`
-│   ├── index.tsx    # `/posts`
-│   ├── $postId.tsx  # `/posts/:postId`
-│   ├── $postId.edit.tsx  # `/posts/:postId/edit`
+│   ├── $postId/     # `/posts/:postId/`
+│   │   ├── index.tsx  # `/posts/:postId`
+│   │   ├── edit.tsx   # `/posts/:postId/edit`
 ```
 
 その他の設定は[こちら](https://zenn.dev/calloc134/articles/6680b272a2c2c5#%E3%82%B3%E3%83%B3%E3%83%9D%E3%83%BC%E3%83%8D%E3%83%B3%E3%83%88%E3%81%AE%E6%8C%87%E5%AE%9A)を参照。

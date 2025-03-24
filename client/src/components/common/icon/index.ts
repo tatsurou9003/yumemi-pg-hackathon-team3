@@ -15,5 +15,8 @@ export { default as PhotoCamera } from "./photo-camera";
 export { default as Plus } from "./plus";
 export { default as SendBrown } from "./send-brown";
 export { default as SettingsIcon } from "./settings-icon";
+export { default as Smile } from "./smile";
+export { default as TitlePage } from "./title-page";
+export { default as Title } from "./title";
 export { default as StickyNote } from "./sticky-note";
 export { default as XCircle } from "./x-circle";
