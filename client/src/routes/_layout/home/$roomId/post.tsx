@@ -16,14 +16,14 @@ import { Textarea } from "@/components/common/textarea/textarea";
 import { SendBrown, PaperClip, XCircle } from "@/components/common/icon";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_layout/home/post")({
+export const Route = createFileRoute("/_layout/home/$roomId/post")({
   component: RouteComponent,
 });
 
 const formSchema = z.object({
-  text: z.string().min(1),
+  text: z.string().min(1, { message: "必須入力項目です。" }),
   prize: z.string().optional(),
-  deadline: z.string().min(1),
+  deadline: z.string().min(1, { message: "必須入力項目です。" }),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
