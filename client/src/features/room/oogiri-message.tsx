@@ -17,8 +17,8 @@ const OogiriMessage = ({
   createdBy,
   isSameUser,
 }: OogiriMessageProps) => {
-  const isDead = new Date(deadline) < new Date()
-  const location = useLocation()
+  const isDead = new Date(deadline) < new Date();
+  const location = useLocation();
 
   return (
     <div className="inline-flex items-start gap-6">
