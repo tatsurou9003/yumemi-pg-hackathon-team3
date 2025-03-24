@@ -3,12 +3,14 @@ import InvitedGroupList from "@/components/common/group-list/invited-group-list"
 import { createFileRoute } from "@tanstack/react-router";
 import CreateGroup from "@/features/home/create-group";
 import HeaderCarousel from "@/features/home/header-carousel";
+import { useGroup } from "@/hooks/useGroup";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/_layout/home/")({
   component: RouteComponent,
 });
 
-// TODO: APIでグループ取得
+// TODO: APIで招待されている&参加しているグループ取得
 const groupData = [
   {
     groupName: "大喜利三昧",
@@ -42,8 +44,15 @@ const headerImages = [
 ];
 
 function RouteComponent() {
+  const { setGroups } = useGroup();
+
+  // コンポーネントマウント時にグループデータをコンテキストに設定
+  useEffect(() => {
+    setGroups(groupData);
+  }, [setGroups]);
+
   return (
-    <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
+    <div className="h-full bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
       {/*今後の展望: イベントページを作成し、ジャンプできるようにする*/}
       <HeaderCarousel images={headerImages} />
       {invitedGroupData.length > 0 && (
