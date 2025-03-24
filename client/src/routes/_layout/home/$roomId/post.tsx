@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, ControllerRenderProps } from "react-hook-form";
 import { z } from "zod";
@@ -24,6 +24,7 @@ const formSchema = z.object({
   text: z.string().min(1, { message: "必須入力項目です。" }),
   prize: z.string().optional(),
   deadline: z.string().min(1, { message: "必須入力項目です。" }),
+  image: z.instanceof(File).optional(),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -33,16 +34,16 @@ function RouteComponent() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
-      prize: "",
       deadline: "",
     },
   });
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
   function onSubmit(values: FormSchema) {
     console.log(values);
   }
-
-  const [image] = useState<string>("/src/assets/character-room.webp");
 
   return (
     <div className="h-[calc(100vh_-_56px)] flex flex-col bg-[#FFBC92] text-xs bg-[url(/src/assets/character-room.webp)]">
@@ -56,16 +57,43 @@ function RouteComponent() {
         >
           <div className="flex flex-col gap-[40px]">
             <div className="flex flex-col gap-[10px]">
-              <Button className="border-radius-[12px] bg-[#96BB00] text-[#F5F5F5] text-[12px] font-bold w-[104px] hover:bg-[#96BB00]/90">
-                <PaperClip width="16px" height="16px" /> 写真を添付
-              </Button>
-              {image && (
+              {previewImage && (
                 <img
-                  src={image}
-                  alt="Message image"
-                  className="rounded w-[168px] h-auto"
+                  src={previewImage}
+                  alt="Uploaded preview"
+                  className="rounded w-[248px] h-auto"
                 />
               )}
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        className="hidden"
+                        onChange={(event) => {
+                          const file = event.target.files?.[0];
+                          if (file) {
+                            field.onChange(file);
+                            setPreviewImage(URL.createObjectURL(file));
+                          }
+                        }}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="button"
+                className="border-radius-[12px] bg-[#96BB00] text-[#F5F5F5] text-[12px] font-bold w-[104px] hover:bg-[#96BB00]/90"
+                onClick={() => fileInputRef.current?.click()}
+              >
+                <PaperClip width="16px" height="16px" /> 写真を添付
+              </Button>
               <FormField
                 control={form.control}
                 name="text"
