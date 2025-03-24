@@ -46,12 +46,32 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
         "arn:aws:dynamodb:*:*:table/messages",
         "arn:aws:dynamodb:*:*:table/answers",
         "arn:aws:dynamodb:*:*:table/likes",
+        "arn:aws:dynamodb:*:*:table/ws-connections",
         "arn:aws:dynamodb:*:*:table/*/index/*"
       ]
     }
   ]
 }
 EOF
+}
+
+# Lambda実行ロールにAPI Gatewayへのアクセス権限を追加
+resource "aws_iam_policy" "lambda_api_gateway_policy" {
+  name   = "lambda-apigateway-policy"
+  description = "IAM policy for Lambda to access Management API Gateway"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "execute-api:ManageConnections"
+        ]
+        Effect   = "Allow"
+        Resource = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*"
+      }
+    ]
+  })
 }
 
 # Lambdaロールにポリシーをアタッチ
@@ -64,6 +84,11 @@ resource "aws_iam_policy_attachment" "lambda_logs" {
 resource "aws_iam_role_policy_attachment" "lambda_dynamodb" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_management_api_gateway" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.lambda_api_gateway_policy.arn
 }
 
 # Lambda関数のzipファイル/パスを定義
