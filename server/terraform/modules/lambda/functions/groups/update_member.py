@@ -32,7 +32,8 @@ def lambda_handler(event, context):
         }
     
     # リクエストの検証
-    group_id = body.get("groupId")
+    path_parameters = event.get("pathParameters", {})
+    group_id = path_parameters.get("groupId")
     status = body.get("status")
     
     if not group_id or not status:
