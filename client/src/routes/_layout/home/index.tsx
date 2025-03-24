@@ -52,7 +52,7 @@ function RouteComponent() {
   }, [setGroups]);
 
   return (
-    <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
+    <div className="h-full bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
       {/*今後の展望: イベントページを作成し、ジャンプできるようにする*/}
       <HeaderCarousel images={headerImages} />
       {invitedGroupData.length > 0 && (
