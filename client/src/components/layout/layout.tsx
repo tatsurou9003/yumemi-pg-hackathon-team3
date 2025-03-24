@@ -64,7 +64,7 @@ export const Layout: React.FC<LayoutProps> = ({
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col h-screen">
       <Header
         to={getTo()}
         title={getTitle()}
@@ -84,9 +84,7 @@ export const Layout: React.FC<LayoutProps> = ({
       >
         <Sidebar version={version} onLogout={onLogout} />
       </div>
-      <div className="flex flex-row">
-        <main className="flex-1 bg-white">{children}</main>
-      </div>
+      <main className="flex-1 bg-white">{children}</main>
     </div>
   );
 };
