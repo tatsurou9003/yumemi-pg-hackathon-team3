@@ -8,12 +8,73 @@ variable "api_gateway_name" {
   description = "Name of the API Gateway"
 }
 
-variable "lambda_function_arn" {
+# Users周りのLambda
+variable "lambda_update_profile_arn" {
   type        = string
   description = "Lambda function ARN"
 }
 
-variable "lambda_function_name" {
+variable "lambda_first_login_check_arn" {
   type        = string
-  description = "Lambda function name"
+  description = "Lambda function ARN"
 }
+
+variable "lambda_get_home_data_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+variable "lambda_search_users_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+# Groups周りのLambda
+variable "lambda_create_group_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+variable "lambda_get_themes_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+variable "lambda_invite_group_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+variable "lambda_update_member_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+variable "lambda_get_history_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+# Answers周りのLambda
+variable "lambda_answer_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+variable "lambda_get_answers_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+# Likes周りのLambda
+variable "lambda_like_arn" {
+  type        = string
+  description = "Lambda function ARN"
+}
+
+# Cognito User Pool
+variable "cognito_user_pool_arn" {
+  description = "ARN of the Cognito User Pool to use for authentication"
+  type        = string
+}
+
