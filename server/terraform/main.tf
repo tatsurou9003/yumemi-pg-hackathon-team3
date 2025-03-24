@@ -4,6 +4,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4.16"
     }
+    archive = {
+      source  = "hashicorp/archive"
+      version = ">= 2.0.0"
+    }
   }
 
   required_version = ">= 1.2.0"
@@ -22,15 +26,36 @@ module "amplify" {
 
 module "lambda" {
   source               = "./modules/lambda"
-  lambda_function_name = "my_lambda"
 }
 
 module "api_gateway" {
   source              = "./modules/api_gateway"
   aws_region          = var.aws_region
-  api_gateway_name    = "MyAPIGateway"
-  lambda_function_arn = module.lambda.lambda_function_arn
-  lambda_function_name = module.lambda.lambda_function_name
+  api_gateway_name    = "wa-life-api"
+  lambda_update_profile_arn = module.lambda.lambda_update_profile_arn
+  lambda_first_login_check_arn = module.lambda.lambda_first_login_check_arn
+  lambda_get_home_data_arn = module.lambda.lambda_get_home_data_arn
+  lambda_search_users_arn = module.lambda.lambda_search_users_arn
+  lambda_create_group_arn = module.lambda.lambda_create_group_arn
+  lambda_get_themes_arn = module.lambda.lambda_get_themes_arn
+  lambda_invite_group_arn = module.lambda.lambda_invite_group_arn
+  lambda_update_member_arn = module.lambda.lambda_update_member_arn
+  lambda_get_history_arn = module.lambda.lambda_get_history_arn
+  lambda_answer_arn = module.lambda.lambda_answer_arn
+  lambda_get_answers_arn = module.lambda.lambda_get_answers_arn
+  lambda_like_arn = module.lambda.lambda_like_arn
+  cognito_user_pool_arn = module.cognito.user_pool_arn
+}
+
+module "dynamodb" {
+  aws_region = var.aws_region
+  source = "./modules/dynamodb"
+}
+
+module "cognito" {
+  source = "./modules/cognito"
+  cognito_user_pool_name = var.cognito_user_pool_name
+  post_confirmation_lambda_arn = module.lambda.lambda_post_confirmation_arn
 }
 
 output "api_gateway_url" {

@@ -6,16 +6,14 @@ info:
     チャットでのテーマ・メッセージ投稿以外のAPIエンドポイントを提供します。
     ユーザー登録、ログイン、プロフィール更新、グループ作成、招待、回答、いいね、の機能を提供します。
 
-
-    # いいね、回答は通常のREST APIで行う。→ いいねのエンドポイント追加
-
 servers:
   - url: https://api.amazon.com/dev/
+
 tags:
   - name: Users
     description: ユーザー登録、ログイン、プロフィール更新に関するエンドポイント
   - name: Groups
-    description: グループ作成・招待に関するエンドポイント
+    description: グループ作成・招待・履歴取得に関するエンドポイント
   - name: Answers
     description: テーマへの回答、結果確認に関するエンドポイント
   - name: Likes
@@ -36,12 +34,12 @@ paths:
             schema:
               $ref: "#/components/schemas/UserRegistration"
       responses:
-        "201":
+        "200":
           description: ユーザー登録成功
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/AuthResponse"
   /login:
     post:
       tags:
@@ -61,22 +59,32 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: "JWT認証トークン"
-                  userId:
-                    type: string
-                    description: "ユーザーID"
-                  isFirstLogin:
-                    type: boolean
-                    description: "初回ログインかどうかを示すフラグ"
-                required:
-                  - token
-                  - userId
-                  - isFirstLogin
-  /users/{userId}/profile:
+                $ref: "#/components/schemas/AuthResponse"
+  /users/first_login_check:
+    post:
+      tags:
+        - Users
+      summary: 初回ログインチェック
+      description: ログイン時に初回ログインかどうかをチェックします。
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ユーザーの一意識別子
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
+      responses:
+        "200":
+          description: 初回ログイン
+        "404":
+          description: 初回ログインではない
+  /users/profile/{userId}:
     put:
       tags:
         - Users
@@ -88,7 +96,13 @@ paths:
           schema:
             type: string
           required: true
-          description: 更新対象のユーザーID
+          description: ユーザーの一意識別子
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: プロフィール更新情報
         required: true
@@ -99,26 +113,20 @@ paths:
       responses:
         "200":
           description: プロフィール登録成功。
-  /users/{userId}:
+  /users/home:
     get:
       tags:
         - Users
       summary: ユーザー情報取得
       description: ホーム画面でのユーザーの情報（プロフィール、参加・招待されているグループ）を取得します。
       parameters:
-        - in: path
-          name: userId
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
-          description: 取得対象のユーザーID
-      requestBody:
-        description: ユーザーID
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserIdRequest"
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
+
       responses:
         "200":
           description: ユーザー情報と参加・招待されているグループ情報
@@ -134,12 +142,12 @@ paths:
       summary: ユーザー検索
       description: 招待画面でユーザーIDを指定してユーザー情報を検索します。
       parameters:
-        - in: query
-          name: userId
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
-          description: 検索対象のユーザーID
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: ユーザーID
         required: true
@@ -157,23 +165,30 @@ paths:
         "404":
           description: 指定されたユーザーが見つからない場合
 
-  /groups:
+  /groups/create:
     post:
       tags:
         - Groups
       summary: グループ作成
       description: 新しいグループを作成します。
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: 作成するグループ情報
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Group"
+              $ref: "#/components/schemas/GroupCreate"
       responses:
         "201":
           description: グループ作成成功
-  /groups/{groupId}/invite:
+  /groups/invite/{groupId}:
     post:
       tags:
         - Groups
@@ -185,7 +200,13 @@ paths:
           schema:
             type: string
           required: true
-          description: 招待対象のグループID
+          description: グループの一意識別子
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: 招待するユーザー情報（複数可）
         required: true
@@ -197,23 +218,25 @@ paths:
         "200":
           description: 招待成功
 
-  /groups/{groupId}/{userId}:
+  /groups/update_member/{groupId}:
     patch:
       tags:
         - Groups
       summary: グループメンバー更新
-      description: 招待されたユーザーが「参加」または「拒否」するときに status を更新します。
+      description: 招待されたユーザーが「参加」または「拒否」するときに status を更新します。リクエストにstatus（JOINED, REJECTED）
       parameters:
         - in: path
           name: groupId
           schema:
             type: string
           required: true
-        - in: path
-          name: userId
+          description: グループの一意識別子
+        - in: header
+          name: Authorization
           schema:
             type: string
           required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: グループ更新情報
         required: true
@@ -225,10 +248,10 @@ paths:
         "200":
           description: 更新成功
 
-  /groups/{groupId}/chat:
+  /groups/chat/{groupId}:
     get:
       tags:
-        - Chat
+        - Groups
       summary: グループチャット履歴取得
       description: 指定グループのチャット履歴を取得します。
       parameters:
@@ -237,14 +260,13 @@ paths:
           schema:
             type: string
           required: true
-          description: チャット履歴を取得するグループのID
-      requestBody:
-        description: チャット履歴取得対象のグループID
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GroupIdRequest"
+          description: チャット履歴取得対象のグループID
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       responses:
         "200":
           description: チャット履歴取得成功
@@ -257,7 +279,7 @@ paths:
         "404":
           description: 指定されたグループが存在しない場合
 
-  /groups/{groupId}/themes:
+  /groups/themes/{groupId}:
     get:
       tags:
         - Groups
@@ -269,14 +291,13 @@ paths:
           schema:
             type: string
           required: true
-          description: テーマ取得対象のグループID
-      requestBody:
-        description: テーマ取得対象のグループID
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/GroupIdRequest"
+          description: グループの一意識別子
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       responses:
         "200":
           description: テーマ取得成功
@@ -289,7 +310,7 @@ paths:
         "404":
           description: 指定されたグループが存在しない場合
 
-  /answers/{messageId}/:
+  /answers/{messageId}:
     post:
       tags:
         - Answers
@@ -302,6 +323,12 @@ paths:
             type: string
           required: true
           description: 回答対象のテーマメッセージID
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: 回答情報
         required: true
@@ -312,6 +339,7 @@ paths:
       responses:
         "201":
           description: 回答投稿成功
+
     get:
       tags:
         - Answers
@@ -324,6 +352,12 @@ paths:
             type: string
           required: true
           description: 回答対象のテーマメッセージID
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       requestBody:
         description: 回答取得対象のテーマメッセージID
         required: true
@@ -343,12 +377,12 @@ paths:
         "404":
           description: 回答が存在しない場合
 
-  /answers/{answerId}/like:
+  /answers/like/{answerId}:
     put:
       tags:
         - Likes
       summary: いいね
-      description: 回答に対していいね/いいねの取り消しをします。
+      description: 回答に対していいねをします。
       parameters:
         - in: path
           name: answerId
@@ -356,16 +390,39 @@ paths:
             type: string
           required: true
           description: いいね対象の回答ID
-      requestBody:
-        description: いいね対象の回答ID
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/answerIdRequest"
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
       responses:
         "200":
           description: いいねの状態更新成功
+        "404":
+          description: 回答が存在しない場合
+
+    delete:
+      tags:
+        - Likes
+      summary: いいね解除
+      description: 回答に対していいねを解除します。
+      parameters:
+        - in: path
+          name: answerId
+          schema:
+            type: string
+          required: true
+          description: いいね対象の回答ID
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+          required: true
+          description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
+      responses:
+        "200":
+          description: いいね解除成功
         "404":
           description: 回答が存在しない場合
 
@@ -385,12 +442,26 @@ components:
         - email
         - password
 
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: アクセストークン (JWT形式)
+        idToken:
+          type: string
+          description: IDトークン (JWT形式)
+        refreshToken:
+          type: string
+          description: リフレッシュトークン
+      required:
+        - accessToken
+        - idToken
+        - refreshToken
+
     UserProfileUpdate:
       type: object
       properties:
-        userId:
-          type: string
-          description: ユーザーの一意識別子
         userName:
           type: string
           description: ユーザーの表示名
@@ -440,7 +511,7 @@ components:
       required:
         - userId
 
-    Group:
+    GroupCreate:
       type: object
       properties:
         groupName:
@@ -448,22 +519,13 @@ components:
         groupImage:
           type: string
           description: グループ画像のURL
-        createdBy:
-          type: string
-          description: グループ作成者のユーザーID
+        userIds:
+          type: array
+          description: 招待されるユーザーIDリスト
+          items:
+            type: string
       required:
         - groupName
-        - createdBy
-
-    GroupIdRequest:
-      type: object
-      description: "グループIDを指定するリクエスト"
-      properties:
-        groupId:
-          type: string
-          description: "グループの一意識別子"
-      required:
-        - groupId
 
     GroupMembershipUpdate:
       type: object
@@ -478,37 +540,21 @@ components:
     GroupInviteRequest:
       type: object
       properties:
-        invitedBy:
-          type: string
-          description: 招待したユーザーのID
-        groupId:
-          type: string
-          description: 招待先のグループID
         userIds:
           type: array
           description: 招待されるユーザーIDリスト
           items:
             type: string
       required:
-        - invitedBy
-        - groupId
         - userIds
 
     GroupMembershipUpdateRequest:
       type: object
       properties:
-        userId:
-          type: string
-          description: 参加するユーザーのID
-        groupId:
-          type: string
-          description: 招待先のグループID
         status:
           type: string
           description: 更新先のステータス（JOINED or REJECTED）
       required:
-        - userId
-        - groupId
         - status
 
     UserWithGroupsResponse:
@@ -551,6 +597,9 @@ components:
         role:
           type: string
           description: ユーザーのグループ内でのロール
+        memberCount:
+          type: integer
+          description: グループメンバー数
         status:
           type: string
           description: グループへの参加状態（INVITED or JOINEDのみ）
@@ -636,15 +685,6 @@ components:
     Answer:
       type: object
       properties:
-        groupId:
-          type: string
-          description: "テーマが投稿されたグループID"
-        createdBy:
-          type: string
-          description: "回答者のユーザーID"
-        parentId:
-          type: string
-          description: "回答対象のテーマメッセージID"
         answerText:
           type: string
           description: "回答本文"
@@ -652,9 +692,6 @@ components:
           type: string
           description: "回答画像のURL（任意）"
       required:
-        - groupId
-        - parentId
-        - createdBy
         - answerText
 
     GetThemeAnswer:
@@ -663,9 +700,6 @@ components:
         answerId:
           type: string
           description: "回答の一意識別子"
-        groupId:
-          type: string
-          description: "回答が投稿されたグループID"
         createdBy:
           type: object
           description: "回答者の詳細情報"
@@ -688,9 +722,6 @@ components:
         answerText:
           type: string
           description: "回答本文"
-        answerImage:
-          type: string
-          description: "回答画像のURL（任意）"
         createdAt:
           type: string
           format: date-time
@@ -732,17 +763,3 @@ components:
           description: "テーマのリスト"
           items:
             $ref: "#/components/schemas/Message"
-
-    answerIdRequest:
-      type: object
-      description: "いいね対象の回答ID"
-      properties:
-        answerId:
-          type: string
-          description: "いいね対象の回答ID"
-        userId:
-          type: string
-          description: "いいねをするユーザーのID"
-      required:
-        - answerId
-        - userId
