@@ -1,5 +1,5 @@
 import Oogiri from "./oogiri";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
 import {
   Avatar,
@@ -10,13 +10,15 @@ import {
 type OogiriMessageProps = MessageData & { isSameUser: boolean };
 
 const OogiriMessage = ({
+  messageId,
   messageText,
   messageImage,
   deadline,
   createdBy,
   isSameUser,
 }: OogiriMessageProps) => {
-  const isDead = new Date(deadline) < new Date();
+  const isDead = new Date(deadline) < new Date()
+  const location = useLocation()
 
   return (
     <div className="inline-flex items-start gap-6">
@@ -31,7 +33,7 @@ const OogiriMessage = ({
       <div className="flex flex-col items-center">
         <Oogiri text={messageText} image={messageImage} isDead={isDead} />
         <Link
-          to={isDead ? "/home" : "/home"}
+          to={`${location.pathname}/${messageId}` as string}
           className={`flex justify-end w-full text-xs font-bold cursor-pointer ${isDead ? "text-[#743E3E]" : "text-[#E73E3E]"}`}
         >
           {isDead ? "回答を見る" : "回答する"}
