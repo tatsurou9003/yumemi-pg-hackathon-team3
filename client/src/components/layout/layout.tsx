@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header } from "./header/header";
 import { Sidebar } from "./sidebar/sidebar";
+import { useGroup } from "@/hooks/useGroup";
 
 interface LayoutProps {
   path: string;
@@ -17,26 +18,43 @@ export const Layout: React.FC<LayoutProps> = ({
   children,
   onLogout,
 }) => {
-  const titleMap: Record<string, string> = {
-    "/home": "ホーム",
-    "/profile": "プロフィール",
-    // "/home/[roomID]": "グループ名",
-    // "/home/[roomId]/post": "グループ名",
-    // "/home/[roomId]/[threadId]": "グループ名",
-    "/home/group": "グループ作成",
-  };
-  const toMap: Record<string, string> = {
-    "/profile": "/home",
-    // "/home/[roomID]": "/home",
-    // "/home/[roomId]/post": "/home/[roomID]",
-    // "/home/[roomId]/[threadId]": "/home/[roomID]",
-    "/home/group": "/home",
-  };
+  const { getGroupNameById, currentGroup } = useGroup();
+
+  // タイトルを取得する関数
   const getTitle = () => {
-    return titleMap[path] || "エラー";
+    // 静的なルート
+    if (path === "/home") return "ホーム";
+    if (path === "/profile") return "プロフィール";
+    if (path === "/home/group/create") return "グループ作成";
+    // 動的なルート
+    if (path.match(/^\/home\/group\/\w+\/edit$/)) {
+      return "メンバー編集";
+    }
+    if (path.match(/^\/home\/\w+$/)) {
+      // roomIdに基づいてグループ名を取得
+      const roomId = path.split("/").pop() || "";
+      // コンテキストからグループ名を取得
+      return currentGroup?.groupName || getGroupNameById(roomId);
+    }
+    return "エラー";
   };
+
   const getTo = () => {
-    return toMap[path] || "/";
+    // 静的なルート
+    if (path === "/profile") return "/home";
+    if (path === "/home/group/create") return "/home";
+    // 動的なルート
+    if (path.match(/^\/home\/group\/\w+\/edit$/)) {
+      return "/home";
+    }
+    if (path.match(/^\/home\/\w+$/)) {
+      return "/home";
+    }
+    if (path.match(/^\/home\/\w+\/post$/)) {
+      const roomId = path.split("/")[2]; // "/home/roomId/post" から "roomId" を取得
+      return `/home/${roomId}`;
+    }
+    return "/";
   };
 
   const [isSidebarOpen, setSidebarOpen] = useState(false);
