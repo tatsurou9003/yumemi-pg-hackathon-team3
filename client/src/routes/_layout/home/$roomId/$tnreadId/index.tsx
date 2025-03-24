@@ -1,13 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "@/components/common/button/button";
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/common/form/form";
 import { Input } from "@/components/common/input/input";
@@ -17,6 +15,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
 import { AnswerData } from "@/types/answerData";
 import ThreadFooter from "@/features/room/thread-footer";
+import { SendBrown } from "@/components/common/icon";
 
 const formSchema = z.object({
   answer: z.string().min(2, {
@@ -219,7 +218,7 @@ function RouteComponent() {
         <Oogiri
           text={oogiri.messageText}
           image={oogiri.messageImage}
-          isDead={false}
+          isDead={true}
         />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -227,15 +226,23 @@ function RouteComponent() {
               control={form.control}
               name="answer"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex items-center gap-2 border-2 border-white p-1 rounded-lg bg-white space-y-0">
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input
+                      placeholder="回答を入力"
+                      className="border-none shadow-none hover:shadow-none focus-visible:outline-none focus-visible:ring-0"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormMessage />
+                  <SendBrown
+                    type="submit"
+                    width="24px"
+                    height="24px"
+                    className="cursor-pointer"
+                  />
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
           </form>
         </Form>
       </div>
