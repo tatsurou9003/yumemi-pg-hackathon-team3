@@ -16,7 +16,9 @@ const instance: AxiosInstance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     // ローカルストレージからアクセストークンを取得
-    const userId = `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.LastAuthUser`;
+    const userId = localStorage.getItem(
+      `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.LastAuthUser`
+    );
     const idToken = localStorage.getItem(
       `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.${userId}.idToken`
     );
