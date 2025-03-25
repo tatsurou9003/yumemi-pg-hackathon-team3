@@ -6,34 +6,39 @@
 
  * OpenAPI spec version: 1.0.0
  */
-import * as axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
-
 import type { Answer, GetThemeAnswer } from "../oogiriAppAPI.schemas";
+
+import { customInstance } from "../../../lib/custom-instance";
 
 export const getAnswers = () => {
   /**
    * テーマに対する回答を投稿します。{messageId} == parentId
    * @summary テーマへの回答
    */
-  const postAnswersMessageId = <TData = AxiosResponse<void>>(
-    messageId: string,
-    answer: Answer,
-    options?: AxiosRequestConfig,
-  ): Promise<TData> => {
-    return axios.default.post(`/answers/${messageId}`, answer, options);
+  const postAnswersMessageId = (messageId: string, answer: Answer) => {
+    return customInstance<void>({
+      url: `/answers/${messageId}`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: answer,
+    });
   };
   /**
    * テーマに対する回答を取得します。{messageId} == parentId
    * @summary 回答取得
    */
-  const getAnswersMessageId = <TData = AxiosResponse<GetThemeAnswer[]>>(
-    messageId: string,
-    options?: AxiosRequestConfig,
-  ): Promise<TData> => {
-    return axios.default.get(`/answers/${messageId}`, options);
+  const getAnswersMessageId = (messageId: string) => {
+    return customInstance<GetThemeAnswer[]>({
+      url: `/answers/${messageId}`,
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
   };
   return { postAnswersMessageId, getAnswersMessageId };
 };
-export type PostAnswersMessageIdResult = AxiosResponse<void>;
-export type GetAnswersMessageIdResult = AxiosResponse<GetThemeAnswer[]>;
+export type PostAnswersMessageIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAnswers>["postAnswersMessageId"]>>
+>;
+export type GetAnswersMessageIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAnswers>["getAnswersMessageId"]>>
+>;
