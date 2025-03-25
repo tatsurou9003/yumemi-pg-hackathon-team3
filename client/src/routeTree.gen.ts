@@ -326,7 +326,7 @@ export interface FileRouteTypes {
     | "/login"
     | "/profile"
     | "/home/$roomId"
-    | "/home";
+    | "/home"
     | "/signup"
     | "/home"
     | "/home/$roomId/history"
@@ -460,3 +460,4 @@ export const routeTree = rootRoute
   }
 }
 ROUTE_MANIFEST_END */
+}
