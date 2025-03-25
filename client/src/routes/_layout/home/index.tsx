@@ -4,37 +4,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import CreateGroup from "@/features/home/create-group";
 import HeaderCarousel from "@/features/home/header-carousel";
 import { useGroup } from "@/hooks/useGroup";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getUsers } from "@/hooks/orval/users/users";
+import { toast } from "react-toastify";
+import { Group } from "@/types/groupData";
 
 export const Route = createFileRoute("/_layout/home/")({
   component: RouteComponent,
 });
-
-// TODO: APIで招待されている&参加しているグループ取得
-const groupData = [
-  {
-    groupName: "大喜利三昧",
-    count: 5,
-    groupImage: "",
-    groupId: "1",
-  },
-  {
-    groupName: "エンジニア大喜利大会",
-    count: 123,
-    groupImage: "",
-    groupId: "2",
-  },
-];
-
-// TODO: APIで招待されているグループ取得
-const invitedGroupData = [
-  {
-    groupName: "招待された大喜利",
-    count: 8,
-    groupImage: "",
-    groupId: "3",
-  },
-];
 
 // ヘッダー画像の配列
 const headerImages = [
@@ -45,23 +22,70 @@ const headerImages = [
 
 function RouteComponent() {
   const { setGroups } = useGroup();
+  const [joinedGroups, setJoinedGroups] = useState<Group[]>([]);
+  const [invitedGroups, setInvitedGroups] = useState<Group[]>();
+  const [isLoading, setIsLoading] = useState(true);
 
-  // コンポーネントマウント時にグループデータをコンテキストに設定
   useEffect(() => {
-    console.log(
-      localStorage.getItem(
-        "CognitoIdentityServiceProvider.62p2moq06chrr2116tnph73rjl.d784ca58-f091-70d3-b596-8769de44ff30.userData",
-      ),
-    );
+    const fetchUserData = async () => {
+      try {
+        setIsLoading(true);
+        // APIからユーザーホーム情報を取得
+        const { data } = await getUsers().getUsersHome();
 
-    setGroups(groupData);
+        if (data.groups) {
+          // グループを参加中と招待中で分類
+          const joined: Group[] = [];
+          const invited: Group[] = [];
+
+          data.groups.forEach((group) => {
+            // statusが"invited"なら招待中グループ、それ以外なら参加中グループ
+            const groupItem = {
+              groupId: group.groupId || "",
+              groupName: group.groupName || "",
+              groupImage: group.groupImage || "",
+              memberCount: group.memberCount || 0,
+            };
+
+            if (group.status === "invited") {
+              invited.push(groupItem);
+            } else {
+              joined.push(groupItem);
+            }
+          });
+
+          // 状態を更新
+          setJoinedGroups(joined);
+          setInvitedGroups(invited);
+
+          // コンテキストにも参加中グループを設定
+          setGroups(joined);
+        }
+      } catch (error) {
+        console.error("ユーザーデータの取得に失敗しました:", error);
+        toast.error("グループ情報の読み込みに失敗しました");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserData();
   }, [setGroups]);
+
+  if (isLoading) {
+    return (
+      <div className="h-full flex items-center justify-center bg-[#FFBC92]">
+        読み込み中...
+      </div>
+    );
+  }
 
   return (
     <div className="h-full bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
       {/*今後の展望: イベントページを作成し、ジャンプできるようにする*/}
       <HeaderCarousel images={headerImages} />
-      {invitedGroupData.length > 0 && (
+
+      {invitedGroups && invitedGroups.length > 0 && (
         <section className="w-full text-[#743E3E] bg-[#FFBC92]">
           <div className="flex items-center p-[14px_0_9px_14px]">
             <div className="w-4 h-4 bg-red-500 rounded-full mr-2 flex items-center justify-center text-white text-[10px]">
@@ -69,13 +93,21 @@ function RouteComponent() {
             </div>
             <p>招待されているグループ一覧</p>
           </div>
-          <InvitedGroupList groupData={invitedGroupData} />
+          <InvitedGroupList groupData={invitedGroups} />
         </section>
       )}
+
       <section className="w-full text-[#743E3E] bg-[#FFBC92]">
         <p className="p-[14px_0_9px_14px]">グループ一覧</p>
-        <GroupList groupData={groupData} />
+        {joinedGroups.length > 0 ? (
+          <GroupList groupData={joinedGroups} />
+        ) : (
+          <p className="p-[14px_0_9px_14px]">
+            参加しているグループはありません
+          </p>
+        )}
       </section>
+
       <section className="m-[20px_12px]">
         <CreateGroup />
       </section>
