@@ -290,9 +290,6 @@ export interface FileRouteTypes {
     | "/profile"
     | "/signup"
     | "/home/$roomId"
-    | "/home";
-  fileRoutesByTo: FileRoutesByTo;
-  to: "/" | "" | "/login" | "/profile" | "/signup" | "/home/$roomId" | "/home";
     | "/home"
     | "/home/$roomId/history"
     | "/home/$roomId/post"
@@ -322,14 +319,13 @@ export interface FileRouteTypes {
     | "/_layout/profile"
     | "/_layout/signup"
     | "/_layout/home/$roomId"
-    | "/_layout/home/";
-    | "/_layout/home/"
+    | "/_layout/home"
     | "/_layout/home/$roomId/history"
     | "/_layout/home/$roomId/post"
     | "/_layout/home/group/create"
     | "/_layout/home/$roomId/"
     | "/_layout/home/group/$groupId/edit"
-    | "/_layout/home/$roomId/$tnreadId/";
+    | "/_layout/home/$roomId/$tnreadId";
   fileRoutesById: FileRoutesById;
 }
 
