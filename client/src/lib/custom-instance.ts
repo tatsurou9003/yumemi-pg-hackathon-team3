@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { env } from "../env";
 
-const { API_URL } = env;
+const { API_URL, USER_POOL_CLIENT_ID } = env;
 
 // Axiosインスタンスの作成
 const instance: AxiosInstance = axios.create({
@@ -16,7 +16,10 @@ const instance: AxiosInstance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     // ローカルストレージからアクセストークンを取得
-    const idToken = localStorage.getItem("idToken");
+    const userId = `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.LastAuthUser`;
+    const idToken = localStorage.getItem(
+      `CognitoIdentityServiceProvider.62p2moq06chrr2116tnph73rjl.${userId}.idToken`
+    );
 
     // トークンが存在する場合、認証ヘッダーに追加
     if (idToken && config.headers) {
@@ -27,7 +30,7 @@ instance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 // レスポンスインターセプター - エラーハンドリング
@@ -42,12 +45,12 @@ instance.interceptors.response.use(
       window.location.href = "/login";
     }
     return Promise.reject(error);
-  },
+  }
 );
 
 // Orval用のエクスポート関数
 export const customInstance = <T>(
-  config: AxiosRequestConfig,
+  config: AxiosRequestConfig
 ): Promise<AxiosResponse<T>> => {
   return instance.request<T>(config);
 };

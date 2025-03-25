@@ -117,7 +117,7 @@ import { getUsers } from "@/hooks/orval/users/users";
       try {
 	...
         // ローカルストレージからユーザーIDを取得
-        const userId = localStorage.getItem('userId');
+        const userId = `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.LastAuthUser`;
 
         if (!userId) {
 	  //userIdが取得できなかった場合の処理

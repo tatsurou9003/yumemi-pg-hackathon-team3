@@ -3,14 +3,14 @@ import * as z from "zod";
 const initEnv = () => {
   const envSchema = z.object({
     API_URL: z.string(),
-    API_CLIENT_ID: z.string(),
-    API_CLIENT_SECRET: z.string(),
+    USER_POOL_ID: z.string(),
+    USER_POOL_CLIENT_ID: z.string(),
   });
 
   const envVars = {
     API_URL: process.env.VITE_API_URL,
-    API_CLIENT_ID: process.env.VITE_API_CLIENT_ID,
-    API_CLIENT_SECRET: process.env.VITE_API_CLIENT_SECRET,
+    USER_POOL_ID: process.env.VITE_USER_POOL_ID,
+    USER_POOL_CLIENT_ID: process.env.VITE_USER_POOL_CLIENT_ID,
   };
 
   // スキーマでバリデーションしながらパース
