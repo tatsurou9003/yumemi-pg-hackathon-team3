@@ -1,6 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
-const SignUpButton = () => {
+
+const ToSignUpButton = () => {
   const navigate = useNavigate();
+
   return (
     <div className="flex flex-col justify-center items-center">
       <button
@@ -15,4 +17,4 @@ const SignUpButton = () => {
     </div>
   );
 };
-export default SignUpButton;
+export default ToSignUpButton;

@@ -46,12 +46,32 @@ resource "aws_iam_policy" "lambda_dynamodb_policy" {
         "arn:aws:dynamodb:*:*:table/messages",
         "arn:aws:dynamodb:*:*:table/answers",
         "arn:aws:dynamodb:*:*:table/likes",
+        "arn:aws:dynamodb:*:*:table/ws-connections",
         "arn:aws:dynamodb:*:*:table/*/index/*"
       ]
     }
   ]
 }
 EOF
+}
+
+# Lambda実行ロールにAPI Gatewayへのアクセス権限を追加
+resource "aws_iam_policy" "lambda_api_gateway_policy" {
+  name   = "lambda-apigateway-policy"
+  description = "IAM policy for Lambda to access Management API Gateway"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "execute-api:ManageConnections"
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:execute-api:*:*:*/*"
+      }
+    ]
+  })
 }
 
 # Lambdaロールにポリシーをアタッチ
@@ -64,6 +84,11 @@ resource "aws_iam_policy_attachment" "lambda_logs" {
 resource "aws_iam_role_policy_attachment" "lambda_dynamodb" {
   role       = aws_iam_role.lambda_exec.name
   policy_arn = aws_iam_policy.lambda_dynamodb_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_management_api_gateway" {
+  role       = aws_iam_role.lambda_exec.name
+  policy_arn = aws_iam_policy.lambda_api_gateway_policy.arn
 }
 
 # Lambda関数のzipファイル/パスを定義
@@ -147,6 +172,32 @@ data "archive_file" "like_zip" {
   type        = "zip"
   source_file = "${path.module}/functions/likes/like.py"
   output_path = "${path.module}/functions/zip/like.zip"
+}
+
+# WebSocket
+data "archive_file" "websocket_connect_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/websocket/connect.py"
+  output_path = "${path.module}/functions/zip/websocket_connect.zip"
+}
+
+data "archive_file" "websocket_disconnect_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/websocket/disconnect.py"
+  output_path = "${path.module}/functions/zip/websocket_disconnect.zip"
+}
+
+data "archive_file" "websocket_send_message_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/websocket/send_message.py"
+  output_path = "${path.module}/functions/zip/websocket_send_message.zip"
+}
+
+# Winner
+data "archive_file" "decide_winner_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/winner/decide_winner.py"
+  output_path = "${path.module}/functions/zip/decide_winner.zip"
 }
 
 # Lambda関数の作成
@@ -280,6 +331,44 @@ resource "aws_lambda_function" "like" {
   source_code_hash = data.archive_file.like_zip.output_base64sha256
 }
 
+# WebSocketトリガーを追加
+resource "aws_lambda_function" "websocket_connect" {
+  filename = data.archive_file.websocket_connect_zip.output_path
+  function_name = "connect"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "connect.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.websocket_connect_zip.output_base64sha256
+}
+
+resource "aws_lambda_function" "websocket_disconnect" {
+  filename = data.archive_file.websocket_disconnect_zip.output_path
+  function_name = "disconnect"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "disconnect.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.websocket_disconnect_zip.output_base64sha256
+}
+
+resource "aws_lambda_function" "websocket_send_message" {
+  filename = data.archive_file.websocket_send_message_zip.output_path
+  function_name = "send_message"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "send_message.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.websocket_send_message_zip.output_base64sha256
+}
+
+# Winnerトリガーを追加
+resource "aws_lambda_function" "decide_winner" {
+  filename = data.archive_file.decide_winner_zip.output_path
+  function_name = "decide_winner"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "decide_winner.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.decide_winner_zip.output_base64sha256
+}
+
 # lambda関数のarnを出力
 # Users
 output "lambda_update_profile_arn" {
@@ -335,4 +424,22 @@ output "lambda_like_arn" {
 
 output "lambda_get_answers_arn" {
   value = aws_lambda_function.get_answers.arn
+}
+
+# WebSocket
+output "lambda_connect_arn" {
+  value = aws_lambda_function.websocket_connect.arn
+}
+
+output "lambda_disconnect_arn" {
+  value = aws_lambda_function.websocket_disconnect.arn
+}
+
+output "lambda_send_message_arn" {
+  value = aws_lambda_function.websocket_send_message.arn
+}
+
+# Winner
+output "lambda_decide_winner_arn" {
+  value = aws_lambda_function.decide_winner.arn
 }

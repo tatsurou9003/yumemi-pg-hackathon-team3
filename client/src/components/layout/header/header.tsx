@@ -30,12 +30,13 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     // 静的なルート
     if (path === "/login") return "ログイン";
     if (path === "/signup") return "新規登録";
-    if (path === "/complete") return "新規登録";
+    if (path === "/verify") return "新規登録";
     if (path === "/home") return "ホーム";
+    if (path === "/home/policy") return "ホーム";
+    if (path === "/home/group") return "グループ作成";
     if (path === "/profile") return "プロフィール";
-    if (path === "/home/group/create") return "グループ作成";
     // 動的なルート
-    if (path.match(/^\/home\/group\/\w+\/edit$/)) {
+    if (path.match(/^\/home\/\w+\/\w+\/edit$/)) {
       return "メンバー編集";
     }
     if (path.match(/^\/home\/\w+(\/\w+)?$/)) {
@@ -50,9 +51,9 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   const getTo = () => {
     // 静的なルート
     if (path === "/profile") return "/home";
-    if (path === "/home/group/create") return "/home";
+    if (path === "/home/group") return "/home";
     // 動的なルート
-    if (path.match(/^\/home\/group\/\w+\/edit$/)) {
+    if (path.match(/^\/home\/\w+\/\w+\/edit$/)) {
       return "/home";
     }
     if (path.match(/^\/home\/\w+$/)) {
@@ -66,7 +67,10 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   };
 
   const isRoomPath = path.match(/^\/home\/\w+(\/\w+)?$/);
-  const groupId = isRoomPath ? path.split("/")[2] : null;
+  let groupId = isRoomPath ? path.split("/")[2] : null;
+  if (groupId === "policy" || groupId === "group") {
+    groupId = null;
+  }
 
   return (
     <div className="flex w-full h-[56px] p-2 items-center gap-1.5 bg-[#FF7C2A]">
@@ -110,7 +114,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
               />
               <button
                 onClick={() => {
-                  navigate({ to: `/home/group/${groupId}/edit` });
+                  navigate({ to: `/home/${groupId}/edit` });
                 }}
                 ref={avatarRef}
                 className="border-none bg-transparent cursor-pointer"

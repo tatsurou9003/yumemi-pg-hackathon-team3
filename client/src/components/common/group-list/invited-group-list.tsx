@@ -33,7 +33,7 @@ const InvitedGroupList = ({ groupData }: GroupData) => {
               {group.groupName.charAt(0)}
             </AvatarFallback>
           </Avatar>
-          {group.groupName}({group.count})
+          {group.groupName}({group.memberCount})
         </button>
       ))}
       {isModalOpen && selectedGroup && (

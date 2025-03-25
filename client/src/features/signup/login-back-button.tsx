@@ -1,14 +1,16 @@
 import { useNavigate } from "@tanstack/react-router";
-const LoginButton = () => {
+
+const LoginBackButton = () => {
   const navigate = useNavigate();
+
   return (
     <div className="flex flex-col justify-center items-center">
       <button
         onClick={() => {
-          navigate({ to: "/home" });
+          navigate({ to: "/login" });
         }}
         type="submit"
-        className="relative w-[152px] h-[27px]  top-[104px] rounded-[4px] bg-white text-black text-sm font-medium cursor-pointer  "
+        className="relative w-[152px] h-[27px]  top-[104px] rounded-[4px] text-black text-sm font-medium cursor-pointer"
       >
         ログイン
       </button>
@@ -16,4 +18,4 @@ const LoginButton = () => {
   );
 };
 
-export default LoginButton;
+export default LoginBackButton;

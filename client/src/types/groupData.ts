@@ -1,6 +1,6 @@
 export type Group = {
   groupName: string;
-  count: number;
+  memberCount: number;
   groupImage: string;
   groupId: string;
 };
