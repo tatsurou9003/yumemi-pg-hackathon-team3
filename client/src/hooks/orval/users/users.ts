@@ -9,6 +9,7 @@
 import type {
   AuthResponse,
   UserBasicInfo,
+  UserIdRequest,
   UserProfileUpdate,
   UserRegistration,
   UserWithGroupsResponse,
@@ -57,7 +58,7 @@ export const getUsers = () => {
    */
   const putUsersProfileUserId = (
     userId: string,
-    userProfileUpdate: UserProfileUpdate,
+    userProfileUpdate: UserProfileUpdate
   ) => {
     return customInstance<void>({
       url: `/users/profile/${userId}`,
@@ -80,11 +81,14 @@ export const getUsers = () => {
    * 招待画面でユーザーIDを指定してユーザー情報を検索します。
    * @summary ユーザー検索
    */
-  const getUsersSearch = () => {
+  const getUsersSearch = (userIdRequest: UserIdRequest) => {
     return customInstance<UserBasicInfo>({
       url: `/users/search`,
       method: "GET",
       headers: { "Content-Type": "application/json" },
+      params: {
+        userId: userIdRequest.userId,
+      },
     });
   };
   return {
