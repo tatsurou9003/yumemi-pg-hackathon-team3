@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import LoginForm from "@/components/common/form/loginform";
-import SignBackButton from "@/components/common/button/login-back-button";
-import SignUpSettingButton from "@/components/common/button/sign-up-setting";
+import SignBackButton from "@/features/signup/login-back-button";
+import SignUpSettingButton from "@/features/signup/sign-up-setting";
 export const Route = createFileRoute("/_layout/sigunp")({
   component: RouteComponent,
 });

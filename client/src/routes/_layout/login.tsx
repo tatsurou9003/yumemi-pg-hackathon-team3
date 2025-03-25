@@ -1,6 +1,6 @@
 import LoginForm from "@/components/common/form/loginform";
-import GoogleButton from "@/components/common/button/google-login-button";
-import SignUpButton from "@/components/common/button/sign-up-button";
+import GoogleButton from "@/features/login/google-login-button";
+import SignUpButton from "@/features/login/sign-up-button";
 import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/_layout/login")({
   component: RouteComponent,
