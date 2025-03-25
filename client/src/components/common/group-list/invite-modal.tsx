@@ -1,12 +1,5 @@
-import { Group } from "@/types/groupData";
+import { InviteModalProps } from "@/types/common";
 import { useEffect, useState } from "react";
-
-interface InviteModalProps {
-  group: Group;
-  onClose: () => void;
-  onAccept: () => void;
-  onDecline: () => void;
-}
 
 const InviteModal = ({
   group,
