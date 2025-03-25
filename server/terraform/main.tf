@@ -22,6 +22,8 @@ module "amplify" {
   amplify_app_name  = var.amplify_app_name
   repository_url = var.repository_url
   access_token   = var.access_token
+  user_pool_id   = module.cognito.user_pool_id
+  user_pool_client_id = module.cognito.user_pool_client_id
 }
 
 module "lambda" {
@@ -64,6 +66,11 @@ module "cognito" {
   source = "./modules/cognito"
   cognito_user_pool_name = var.cognito_user_pool_name
   post_confirmation_lambda_arn = module.lambda.lambda_post_confirmation_arn
+}
+
+module "cloudwatch_event" {
+  source = "./modules/cloudwatch_event"
+  lambda_decide_winner_arn = module.lambda.lambda_decide_winner_arn
 }
 
 output "api_gateway_url" {

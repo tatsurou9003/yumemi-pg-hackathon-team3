@@ -13,7 +13,10 @@ frontend:
         - nvm install 20.18.3
         - nvm use 20.18.3
         - npm install
-    build:
+        - rm -f .env
+        - echo "VITE_USER_POOL_ID=$VITE_USER_POOL_ID" > .env
+        - echo "VITE_USER_POOL_CLIENT_ID=$VITE_USER_POOL_CLIENT_ID" > .env
+        build:
       commands:
         - npm run build
   artifacts:
@@ -38,5 +41,7 @@ resource "aws_amplify_branch" "main_branch" {
 
   environment_variables = {
     "DUMMY_VAR" = "unused"
+    "VITE_USER_POOL_ID"        = var.user_pool_id
+    "VITE_USER_POOL_CLIENT_ID" = var.user_pool_client_id
   }
 }

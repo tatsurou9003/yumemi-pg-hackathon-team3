@@ -193,6 +193,13 @@ data "archive_file" "websocket_send_message_zip" {
   output_path = "${path.module}/functions/zip/websocket_send_message.zip"
 }
 
+# Winner
+data "archive_file" "decide_winner_zip" {
+  type        = "zip"
+  source_file = "${path.module}/functions/winner/decide_winner.py"
+  output_path = "${path.module}/functions/zip/decide_winner.zip"
+}
+
 # Lambda関数の作成
 # UpdateProfileトリガーを追加
 resource "aws_lambda_function" "update_profile" {
@@ -352,6 +359,16 @@ resource "aws_lambda_function" "websocket_send_message" {
   source_code_hash = data.archive_file.websocket_send_message_zip.output_base64sha256
 }
 
+# Winnerトリガーを追加
+resource "aws_lambda_function" "decide_winner" {
+  filename = data.archive_file.decide_winner_zip.output_path
+  function_name = "decide_winner"
+  role = aws_iam_role.lambda_exec.arn
+  handler = "decide_winner.lambda_handler"
+  runtime = "python3.10"
+  source_code_hash = data.archive_file.decide_winner_zip.output_base64sha256
+}
+
 # lambda関数のarnを出力
 # Users
 output "lambda_update_profile_arn" {
@@ -420,4 +437,9 @@ output "lambda_disconnect_arn" {
 
 output "lambda_send_message_arn" {
   value = aws_lambda_function.websocket_send_message.arn
+}
+
+# Winner
+output "lambda_decide_winner_arn" {
+  value = aws_lambda_function.decide_winner.arn
 }
