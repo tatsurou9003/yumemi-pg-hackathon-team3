@@ -13,11 +13,11 @@
 import { Route as rootRoute } from "./routes/__root";
 import { Route as LayoutImport } from "./routes/_layout";
 import { Route as IndexImport } from "./routes/index";
-import { Route as LayoutSigunpImport } from "./routes/_layout/signup";
 import { Route as LayoutSettingImport } from "./routes/_layout/setting";
+import { Route as LayoutVerifyImport } from "./routes/_layout/verify";
+import { Route as LayoutSignupImport } from "./routes/_layout/signup";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutLoginImport } from "./routes/_layout/login";
-import { Route as LayoutCompleteImport } from "./routes/_layout/complete";
 import { Route as LayoutHomeIndexImport } from "./routes/_layout/home/index";
 import { Route as LayoutHomePolicyImport } from "./routes/_layout/home/policy";
 import { Route as LayoutHomeGroupImport } from "./routes/_layout/home/group";
@@ -40,9 +40,14 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
-const LayoutSigunpRoute = LayoutSigunpImport.update({
+const LayoutSignupRoute = LayoutSigunpImport.update({
   id: "/signup",
   path: "/signup",
+} as any);
+
+const LayoutVerifyRoute = LayoutVerifyImport.update({
+  id: "/verify",
+  path: "/verify",
   getParentRoute: () => LayoutRoute,
 } as any);
 
@@ -61,12 +66,6 @@ const LayoutProfileRoute = LayoutProfileImport.update({
 const LayoutLoginRoute = LayoutLoginImport.update({
   id: "/login",
   path: "/login",
-  getParentRoute: () => LayoutRoute,
-} as any);
-
-const LayoutCompleteRoute = LayoutCompleteImport.update({
-  id: "/complete",
-  path: "/complete",
   getParentRoute: () => LayoutRoute,
 } as any);
 
@@ -137,13 +136,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutImport;
       parentRoute: typeof rootRoute;
     };
-    "/_layout/complete": {
-      id: "/_layout/complete";
-      path: "/complete";
-      fullPath: "/complete";
-      preLoaderRoute: typeof LayoutCompleteImport;
-      parentRoute: typeof LayoutImport;
-    };
     "/_layout/login": {
       id: "/_layout/login";
       path: "/login";
@@ -169,7 +161,14 @@ declare module "@tanstack/react-router" {
       id: "/_layout/signup";
       path: "/signup";
       fullPath: "/signup";
-      preLoaderRoute: typeof LayoutSigunpImport;
+      preLoaderRoute: typeof LayoutSignupImport;
+      parentRoute: typeof LayoutImport;
+    };
+    "/_layout/verify": {
+      id: "/_layout/verify";
+      path: "/verify";
+      fullPath: "/verify";
+      preLoaderRoute: typeof LayoutVerifyImport;
       parentRoute: typeof LayoutImport;
     };
     "/_layout/home/group": {
@@ -234,11 +233,11 @@ declare module "@tanstack/react-router" {
 // Create and export the route tree
 
 interface LayoutRouteChildren {
-  LayoutCompleteRoute: typeof LayoutCompleteRoute;
   LayoutLoginRoute: typeof LayoutLoginRoute;
   LayoutProfileRoute: typeof LayoutProfileRoute;
   LayoutSettingRoute: typeof LayoutSettingRoute;
   LayoutSignupRoute: typeof LayoutSignupRoute;
+  LayoutVerifyRoute: typeof LayoutVerifyRoute;
   LayoutHomeGroupRoute: typeof LayoutHomeGroupRoute;
   LayoutHomePolicyRoute: typeof LayoutHomePolicyRoute;
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute;
@@ -250,11 +249,11 @@ interface LayoutRouteChildren {
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
-  LayoutCompleteRoute: LayoutCompleteRoute,
   LayoutLoginRoute: LayoutLoginRoute,
   LayoutProfileRoute: LayoutProfileRoute,
   LayoutSettingRoute: LayoutSettingRoute,
   LayoutSignupRoute: LayoutSignupRoute,
+  LayoutVerifyRoute: LayoutVerifyRoute,
   LayoutHomeGroupRoute: LayoutHomeGroupRoute,
   LayoutHomePolicyRoute: LayoutHomePolicyRoute,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
@@ -271,11 +270,11 @@ const LayoutRouteWithChildren =
 export interface FileRoutesByFullPath {
   "/": typeof IndexRoute;
   "": typeof LayoutRouteWithChildren;
-  "/complete": typeof LayoutCompleteRoute;
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
   "/setting": typeof LayoutSettingRoute;
   "/signup": typeof LayoutSignupRoute;
+  "/verify": typeof LayoutVerifyRoute;
   "/home/group": typeof LayoutHomeGroupRoute;
   "/home/policy": typeof LayoutHomePolicyRoute;
   "/home": typeof LayoutHomeIndexRoute;
@@ -289,11 +288,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   "/": typeof IndexRoute;
   "": typeof LayoutRouteWithChildren;
-  "/complete": typeof LayoutCompleteRoute;
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
   "/setting": typeof LayoutSettingRoute;
   "/signup": typeof LayoutSignupRoute;
+  "/verify": typeof LayoutVerifyRoute;
   "/home/group": typeof LayoutHomeGroupRoute;
   "/home/policy": typeof LayoutHomePolicyRoute;
   "/home": typeof LayoutHomeIndexRoute;
@@ -308,11 +307,11 @@ export interface FileRoutesById {
   __root__: typeof rootRoute;
   "/": typeof IndexRoute;
   "/_layout": typeof LayoutRouteWithChildren;
-  "/_layout/complete": typeof LayoutCompleteRoute;
   "/_layout/login": typeof LayoutLoginRoute;
   "/_layout/profile": typeof LayoutProfileRoute;
   "/_layout/setting": typeof LayoutSettingRoute;
   "/_layout/signup": typeof LayoutSignupRoute;
+  "/_layout/verify": typeof LayoutVerifyRoute;
   "/_layout/home/group": typeof LayoutHomeGroupRoute;
   "/_layout/home/policy": typeof LayoutHomePolicyRoute;
   "/_layout/home/": typeof LayoutHomeIndexRoute;
@@ -328,11 +327,11 @@ export interface FileRouteTypes {
   fullPaths:
     | "/"
     | ""
-    | "/complete"
     | "/login"
     | "/profile"
     | "/setting"
     | "/signup"
+    | "/verify"
     | "/home/group"
     | "/home/policy"
     | "/home"
@@ -345,11 +344,11 @@ export interface FileRouteTypes {
   to:
     | "/"
     | ""
-    | "/complete"
     | "/login"
     | "/profile"
     | "/setting"
     | "/signup"
+    | "/verify"
     | "/home/group"
     | "/home/policy"
     | "/home"
@@ -362,11 +361,11 @@ export interface FileRouteTypes {
     | "__root__"
     | "/"
     | "/_layout"
-    | "/_layout/complete"
     | "/_layout/login"
     | "/_layout/profile"
     | "/_layout/setting"
     | "/_layout/signup"
+    | "/_layout/verify"
     | "/_layout/home/group"
     | "/_layout/home/policy"
     | "/_layout/home/"
@@ -408,11 +407,11 @@ export const routeTree = rootRoute
     "/_layout": {
       "filePath": "_layout.tsx",
       "children": [
-        "/_layout/complete",
         "/_layout/login",
         "/_layout/profile",
         "/_layout/setting",
-        "/_layout/sigunp",
+        "/_layout/signup",
+        "/_layout/verify",
         "/_layout/home/group",
         "/_layout/home/policy",
         "/_layout/home/",
@@ -422,10 +421,6 @@ export const routeTree = rootRoute
         "/_layout/home/$groupId/",
         "/_layout/home/$groupId/$tnreadId/"
       ]
-    },
-    "/_layout/complete": {
-      "filePath": "_layout/complete.tsx",
-      "parent": "/_layout"
     },
     "/_layout/login": {
       "filePath": "_layout/login.tsx",
@@ -439,8 +434,8 @@ export const routeTree = rootRoute
       "filePath": "_layout/setting.tsx",
       "parent": "/_layout"
     },
-    "/_layout/sigunp": {
-      "filePath": "_layout/sigunp.tsx",
+    "/_layout/verify": {
+      "filePath": "_layout/verify.tsx",
       "parent": "/_layout"
     },
     "/_layout/home/group": {

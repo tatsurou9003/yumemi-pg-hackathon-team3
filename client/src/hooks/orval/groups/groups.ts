@@ -6,9 +6,6 @@
 
  * OpenAPI spec version: 1.0.0
  */
-import * as axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
-
 import type {
   ChatHistoryResponse,
   GroupCreate,
@@ -17,66 +14,70 @@ import type {
   Themes,
 } from "../oogiriAppAPI.schemas";
 
+import { customInstance } from "../../../lib/custom-instance";
+
 export const getGroups = () => {
   /**
    * 新しいグループを作成します。
    * @summary グループ作成
    */
-  const postGroupsCreate = <TData = AxiosResponse<void>>(
-    groupCreate: GroupCreate,
-    options?: AxiosRequestConfig,
-  ): Promise<TData> => {
-    return axios.default.post(`/groups/create`, groupCreate, options);
+  const postGroupsCreate = (groupCreate: GroupCreate) => {
+    return customInstance<void>({
+      url: `/groups/create`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: groupCreate,
+    });
   };
   /**
    * 指定グループに対して複数のユーザーを招待します。`status` は "INVITED" となります。
    * @summary ユーザー招待
    */
-  const postGroupsInviteGroupId = <TData = AxiosResponse<void>>(
+  const postGroupsInviteGroupId = (
     groupId: string,
     groupInviteRequest: GroupInviteRequest,
-    options?: AxiosRequestConfig,
-  ): Promise<TData> => {
-    return axios.default.post(
-      `/groups/invite/${groupId}`,
-      groupInviteRequest,
-      options,
-    );
+  ) => {
+    return customInstance<void>({
+      url: `/groups/invite/${groupId}`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: groupInviteRequest,
+    });
   };
   /**
    * 招待されたユーザーが「参加」または「拒否」するときに status を更新します。リクエストにstatus（JOINED, REJECTED）
    * @summary グループメンバー更新
    */
-  const patchGroupsUpdateMemberGroupId = <TData = AxiosResponse<void>>(
+  const patchGroupsUpdateMemberGroupId = (
     groupId: string,
     groupMembershipUpdateRequest: GroupMembershipUpdateRequest,
-    options?: AxiosRequestConfig,
-  ): Promise<TData> => {
-    return axios.default.patch(
-      `/groups/update_member/${groupId}`,
-      groupMembershipUpdateRequest,
-      options,
-    );
+  ) => {
+    return customInstance<void>({
+      url: `/groups/update_member/${groupId}`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: groupMembershipUpdateRequest,
+    });
   };
   /**
    * 指定グループのチャット履歴を取得します。
    * @summary グループチャット履歴取得
    */
-  const getGroupsChatGroupId = <TData = AxiosResponse<ChatHistoryResponse[]>>(
-    groupId: string,
-    options?: AxiosRequestConfig,
-  ): Promise<TData> => {
-    return axios.default.get(`/groups/chat/${groupId}`, options);
+  const getGroupsChatGroupId = (groupId: string) => {
+    return customInstance<ChatHistoryResponse[]>({
+      url: `/groups/chat/${groupId}`,
+      method: "GET",
+    });
   };
   /**
    * 指定グループ内のテーマ全件を取得します。
    * @summary グループ内テーマ全件取得
    */
-  const getGroupsThemesGroupId = <TData = AxiosResponse<Themes[]>>(
-    groupId: string,
-    options?: AxiosRequestConfig,
-  ): Promise<TData> => {
-    return axios.default.get(`/groups/themes/${groupId}`, options);
+  const getGroupsThemesGroupId = (groupId: string) => {
+    return customInstance<Themes[]>({
+      url: `/groups/themes/${groupId}`,
+      method: "GET",
+    });
   };
   return {
     postGroupsCreate,
@@ -86,8 +87,20 @@ export const getGroups = () => {
     getGroupsThemesGroupId,
   };
 };
-export type PostGroupsCreateResult = AxiosResponse<void>;
-export type PostGroupsInviteGroupIdResult = AxiosResponse<void>;
-export type PatchGroupsUpdateMemberGroupIdResult = AxiosResponse<void>;
-export type GetGroupsChatGroupIdResult = AxiosResponse<ChatHistoryResponse[]>;
-export type GetGroupsThemesGroupIdResult = AxiosResponse<Themes[]>;
+export type PostGroupsCreateResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getGroups>["postGroupsCreate"]>>
+>;
+export type PostGroupsInviteGroupIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getGroups>["postGroupsInviteGroupId"]>>
+>;
+export type PatchGroupsUpdateMemberGroupIdResult = NonNullable<
+  Awaited<
+    ReturnType<ReturnType<typeof getGroups>["patchGroupsUpdateMemberGroupId"]>
+  >
+>;
+export type GetGroupsChatGroupIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getGroups>["getGroupsChatGroupId"]>>
+>;
+export type GetGroupsThemesGroupIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getGroups>["getGroupsThemesGroupId"]>>
+>;
