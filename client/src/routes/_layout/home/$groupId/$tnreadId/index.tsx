@@ -24,7 +24,7 @@ const formSchema = z.object({
   }),
 });
 
-export const Route = createFileRoute("/_layout/home/$roomId/$tnreadId/")({
+export const Route = createFileRoute("/_layout/home/$groupId/$tnreadId/")({
   component: RouteComponent,
 });
 

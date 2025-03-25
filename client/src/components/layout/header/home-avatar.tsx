@@ -6,11 +6,11 @@ import {
 } from "@/components/common/avatar/avatar";
 import { UserCard } from "@/components/common/user-card/user-card";
 
-interface AvatarProps {
+interface HomeAvatarProps {
   src: string;
 }
 
-const HeaderAvatar = ({ src }: AvatarProps) => {
+const HomeAvatar = ({ src }: HomeAvatarProps) => {
   const [isUserCardOpen, setIsUserCardOpen] = useState(false);
   const userCardRef = useRef<HTMLDivElement | null>(null);
   const avatarRef = useRef<HTMLButtonElement | null>(null);
@@ -67,4 +67,4 @@ const HeaderAvatar = ({ src }: AvatarProps) => {
   );
 };
 
-export { HeaderAvatar };
+export { HomeAvatar };

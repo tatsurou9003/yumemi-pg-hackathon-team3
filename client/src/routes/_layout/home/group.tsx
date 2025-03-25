@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 
-export const Route = createFileRoute("/_layout/home/group/create")({
+export const Route = createFileRoute("/_layout/home/group")({
   component: RouteComponent,
 });
 

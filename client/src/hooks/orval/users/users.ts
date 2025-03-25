@@ -12,7 +12,6 @@ import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import type {
   AuthResponse,
   UserBasicInfo,
-  UserIdRequest,
   UserProfileUpdate,
   UserRegistration,
   UserWithGroupsResponse,
@@ -77,7 +76,6 @@ export const getUsers = () => {
    * @summary ユーザー検索
    */
   const getUsersSearch = <TData = AxiosResponse<UserBasicInfo>>(
-    userIdRequest: UserIdRequest,
     options?: AxiosRequestConfig,
   ): Promise<TData> => {
     return axios.default.get(`/users/search`, options);
