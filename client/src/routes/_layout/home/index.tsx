@@ -48,6 +48,8 @@ function RouteComponent() {
 
   // コンポーネントマウント時にグループデータをコンテキストに設定
   useEffect(() => {
+    console.log(localStorage.getItem("CognitoIdentityServiceProvider.62p2moq06chrr2116tnph73rjl.d784ca58-f091-70d3-b596-8769de44ff30.userData"))
+
     setGroups(groupData);
   }, [setGroups]);
 
