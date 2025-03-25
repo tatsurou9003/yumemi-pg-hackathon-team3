@@ -1,27 +1,17 @@
 import { useEffect, useRef } from "react";
-import CloseOogiri from "@/features/room/close-oogiri";
-import Message from "@/features/room/message";
-import OogiriMessage from "@/features/room/oogiri-message";
-import RoomFooter from "@/features/room/room-footer";
+import OogiriHistoryMessage from "@/features/room/oogiri-history-message";
+import RoomHeader from "@/features/room/room-header";
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
-import { UserData } from "@/types/userData";
 
-export const Route = createFileRoute("/_layout/home/$roomId")({
-  parseParams: ({ roomId }: { roomId: string }) => ({
-    roomId: decodeURIComponent(roomId).replace(/[^a-zA-Z0-9_-]/g, ""), // `/` を除外
+export const Route = createFileRoute("/_layout/home/$roomId/history")({
+  parseParams: (rawParams: Record<string, string>) => ({
+    roomId: decodeURIComponent(rawParams.roomId).replace(/[^a-zA-Z0-9_-]/g, ""), // `/` を除外
   }),
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const currentUser: UserData = {
-    userId: "user123",
-    userName: "自分",
-    profileImage: "/images/me.jpg",
-    profileColor: "#ffcc00",
-  };
-
   const messages: MessageData[] = [
     {
       messageId: "msg001",
@@ -276,43 +266,20 @@ function RouteComponent() {
   }, [messages]);
 
   return (
-    <div className="h-[calc(100vh_-_56px)] flex flex-col justify-between bg-[#FFBC92] text-xs bg-[url(/src/assets/character-room.webp)]">
+    <div className="h-[calc(100vh_-_56px)] flex flex-col justify-between bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
+      <div className="w-full">
+        <RoomHeader title="過去の大喜利" />
+      </div>
       <div className="flex flex-col gap-4 p-5 overflow-y-auto">
-        <div className="justify-items-center">
-          <CloseOogiri theme="ゆめみハッカソンから飛んだエンジニア。何があった？" />
-        </div>
-        {messages.map((message) =>
-          message.messageType === "oogiri" ? (
-            <div
-              className={`flex ${
-                message.createdBy.userId === currentUser.userId
-                  ? "justify-end"
-                  : "justify-start"
-              }`}
-              key={message.messageId}
-            >
-              <OogiriMessage
-                {...message}
-                isSameUser={message.createdBy.userId === currentUser.userId}
-              />
-            </div>
-          ) : (
-            <div
-              className={`flex ${
-                message.createdBy.userId === currentUser.userId
-                  ? "justify-end"
-                  : "justify-start"
-              }`}
-              key={message.messageId}
-            >
-              <Message {...message} userId={currentUser.userId} />
-            </div>
-          ),
+        {messages.map(
+          (message) =>
+            message.messageType === "oogiri" && (
+              <div className="flex justify-start" key={message.messageId}>
+                <OogiriHistoryMessage {...message} />
+              </div>
+            ),
         )}
         <div ref={messagesEndRef} />
-      </div>
-      <div>
-        <RoomFooter />
       </div>
     </div>
   );
