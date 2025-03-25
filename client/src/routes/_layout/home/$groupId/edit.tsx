@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { User } from "@/types/userData";
+import { UserData } from "@/types/userData";
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
@@ -10,7 +10,7 @@ export const Route = createFileRoute("/_layout/home/$groupId/edit")({
 });
 // TODO: ルーム画面のアイコンからここに飛べるようにする
 
-const mockUsers: User[] = [
+const mockUsers: UserData[] = [
   {
     userId: "u001",
     userName: "田中太郎",

@@ -5,14 +5,14 @@ import OogiriMessage from "@/features/room/oogiri-message";
 import RoomFooter from "@/features/room/room-footer";
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
-import { User } from "@/types/userData";
+import { UserData } from "@/types/userData";
 
 export const Route = createFileRoute("/_layout/home/$groupId/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const currentUser: User = {
+  const currentUser: UserData = {
     userId: "user123",
     userName: "自分",
     profileImage: "/images/me.jpg",
