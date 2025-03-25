@@ -1,13 +1,6 @@
+import { UserCardProps } from "@/types/common";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
 import { FlipCamera, SettingsIcon } from "../icon";
-
-interface UserCardProps {
-  name: string;
-  src: string;
-  id: string;
-  onSettings: () => void;
-  onCamera: () => void;
-}
 
 const UserCard = ({ name, src, id, onSettings, onCamera }: UserCardProps) => {
   return (

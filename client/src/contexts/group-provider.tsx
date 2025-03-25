@@ -1,6 +1,6 @@
 import { useState, ReactNode } from "react";
-import { Group } from "@/types/groupData";
 import { GroupContext } from "./group-context";
+import { Group } from "@/types/common";
 
 export const GroupProvider = ({ children }: { children: ReactNode }) => {
   const [groups, setGroups] = useState<Group[]>([]);

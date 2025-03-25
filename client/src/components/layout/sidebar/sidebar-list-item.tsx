@@ -1,9 +1,5 @@
 import { ChevronRightBrown } from "@/components/common/icon";
-
-interface SidebarListItemProps {
-  text: string;
-  onClick: () => void;
-}
+import { SidebarListItemProps } from "@/types/layout";
 
 const SidebarListItem = ({ text, onClick }: SidebarListItemProps) => {
   return (

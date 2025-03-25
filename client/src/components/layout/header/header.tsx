@@ -12,11 +12,7 @@ import {
   StickyNote,
 } from "@/components/common/icon";
 import { useGroup } from "@/hooks/useGroup";
-
-interface HeaderProps {
-  avatar: string;
-  onSidebar: () => void;
-}
+import { HeaderProps } from "@/types/layout";
 
 export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   const navigate = useNavigate();
