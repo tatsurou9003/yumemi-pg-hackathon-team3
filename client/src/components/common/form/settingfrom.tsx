@@ -21,7 +21,7 @@ const SettingForm = () => {
         <input
           type="email"
           id="email"
-          {...register("email", { required: "メールアドレス" })}
+          {...register("userId", { required: "メールアドレス" })}
           placeholder="sample@sample.com"
           className="w-[310px] h-[48px] relative top-[74px] bg-white border border-gray-300 rounded px-4 text-gray-500 mb-4 cursor-pointer"
         />

@@ -3,5 +3,4 @@ export interface UserData {
   userName: string;
   profileImage: string;
   profileColor: string;
-  email: string;
 }
