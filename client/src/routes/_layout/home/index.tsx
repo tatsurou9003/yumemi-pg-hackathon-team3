@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { getUsers } from "@/hooks/orval/users/users";
 import { toast } from "react-toastify";
 import { Group } from "@/types/groupData";
+import LoadingIndicator from "@/components/common/loading/loading";
 
 export const Route = createFileRoute("/_layout/home/")({
   component: RouteComponent,
@@ -73,11 +74,7 @@ function RouteComponent() {
   }, [setGroups]);
 
   if (isLoading) {
-    return (
-      <div className="h-full flex items-center justify-center bg-[#FFBC92]">
-        読み込み中...
-      </div>
-    );
+    return <LoadingIndicator />;
   }
 
   return (
