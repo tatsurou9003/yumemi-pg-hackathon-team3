@@ -1,10 +1,11 @@
 import { useForm } from "react-hook-form";
-import { formData } from "@/types/formData";
 import { Amplify, Auth } from "aws-amplify";
 import { env } from "@/env";
-// import { useNavigate } from "@tanstack/react-router";
+import { formData } from "@/types/formData";
+import { getUsers } from "@/hooks/orval/users/users";
+import { useNavigate } from "@tanstack/react-router";
 
-// Amplify の設定（コンポーネント外で実行）
+// Amplify の設定
 Amplify.configure({
   Auth: {
     region: "ap-northeast-1",
@@ -16,13 +17,12 @@ Amplify.configure({
 const LoginForm = () => {
   // useFormフックの呼び出し
   const { handleSubmit, register } = useForm<formData>();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   // 認証状態チェック関数
   const handleLogin = async (email: string, password: string) => {
     try {
       const user = await Auth.signIn(email, password);
-      console.log("認証済みユーザー:", user);
       return user;
     } catch (error) {
       console.log("認証されていません:", error);
@@ -33,9 +33,18 @@ const LoginForm = () => {
   const onSubmit = async (data: formData) => {
     try {
       await handleLogin(data.email, data.password);
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await getUsers().postUsersFirstLoginCheck();
+        navigate({ to: '/home' });  // 初回ログインではない (200 OK) 場合の遷移先
+      } catch (error: any) {
+        console.error(error)
+        if (error.response?.status === 404) {
+          navigate({ to: '/home/policy' });  // 初回ログイン (404 Not Found) の場合の遷移先
+        }
+      }
     } catch (error) {
       console.error("サインアップエラー:", error);
-      // エラーハンドリング（例：エラーメッセージを表示）
     }
   };
 

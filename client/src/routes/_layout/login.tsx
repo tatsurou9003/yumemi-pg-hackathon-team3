@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import LoginForm from "@/features/login/login-form";
-// import LoginButton from "@/features/login/login-button";
-import GoogleButton from "@/features/login/google-login-button";
-import SignUpButton from "@/features/login/sign-up-button";
+import SkipButton from "@/features/login/skip-button";
+import ToSignUpButton from "@/features/login/to-signup-button";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_layout/login")({
@@ -26,9 +25,9 @@ function RouteComponent() {
     >
       <LoginForm />
       <div className="text-black font-inter font-normal flex flex-col justify-center items-center top-[109px] relative">
-        <SignUpButton />
+        <ToSignUpButton />
       </div>
-      <GoogleButton />
+      <SkipButton />
     </div>
   );
 }

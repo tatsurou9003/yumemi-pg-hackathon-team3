@@ -30,7 +30,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     // 静的なルート
     if (path === "/login") return "ログイン";
     if (path === "/signup") return "新規登録";
-    if (path === "/complete") return "新規登録";
+    if (path === "/verify") return "新規登録";
     if (path === "/home") return "ホーム";
     if (path === "/home/policy") return "ホーム";
     if (path === "/home/group") return "グループ作成";
@@ -92,9 +92,8 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
         />
       )}
       <div
-        className={`flex-grow text-white text-[12px] font-semibold leading-[28px] ${
-          groupId ? "text-left" : "text-center"
-        }`}
+        className={`flex-grow text-white text-[12px] font-semibold leading-[28px] ${groupId ? "text-left" : "text-center"
+          }`}
       >
         {getTitle()}
       </div>
