@@ -48,7 +48,7 @@ function RouteComponent() {
               memberCount: group.memberCount || 0,
             };
 
-            if (group.status === "invited") {
+            if (group.status === "INVITED") {
               invited.push(groupItem);
             } else {
               joined.push(groupItem);
