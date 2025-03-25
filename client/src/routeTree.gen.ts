@@ -219,7 +219,7 @@ declare module '@tanstack/react-router' {
   }
 }
 
-// Create and export the route tree
+  // Create and export the route tree
 
 interface LayoutRouteChildren {
   LayoutCompleteRoute: typeof LayoutCompleteRoute
@@ -372,7 +372,7 @@ export const routeTree = rootRoute
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-/* ROUTE_MANIFEST_START
+  /* ROUTE_MANIFEST_START
 {
   "routes": {
     "__root__": {
