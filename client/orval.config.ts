@@ -10,12 +10,12 @@ export default defineConfig({
       clean: true,
       client: "axios",
       target: "src/hooks/orval",
-      /*override: {
+      override: {
         mutator: {
           path: "src/lib/custom-instance.ts",
           name: "customInstance",
         },
-      },*/
+      },
       prettier: true,
     },
   },

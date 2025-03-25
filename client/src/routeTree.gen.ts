@@ -13,7 +13,10 @@
 import { Route as rootRoute } from "./routes/__root";
 import { Route as LayoutImport } from "./routes/_layout";
 import { Route as IndexImport } from "./routes/index";
+<<<<<<< HEAD
 import { Route as LayoutVerifyImport } from "./routes/_layout/verify";
+=======
+>>>>>>> main
 import { Route as LayoutSignupImport } from "./routes/_layout/signup";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutLoginImport } from "./routes/_layout/login";
@@ -39,12 +42,15 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any);
 
+<<<<<<< HEAD
 const LayoutVerifyRoute = LayoutVerifyImport.update({
   id: "/verify",
   path: "/verify",
   getParentRoute: () => LayoutRoute,
 } as any);
 
+=======
+>>>>>>> main
 const LayoutSignupRoute = LayoutSignupImport.update({
   id: "/signup",
   path: "/signup",
@@ -151,6 +157,7 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutSignupImport;
       parentRoute: typeof LayoutImport;
     };
+<<<<<<< HEAD
     "/_layout/verify": {
       id: "/_layout/verify";
       path: "/verify";
@@ -158,6 +165,8 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutVerifyImport;
       parentRoute: typeof LayoutImport;
     };
+=======
+>>>>>>> main
     "/_layout/home/group": {
       id: "/_layout/home/group";
       path: "/home/group";
@@ -223,7 +232,10 @@ interface LayoutRouteChildren {
   LayoutLoginRoute: typeof LayoutLoginRoute;
   LayoutProfileRoute: typeof LayoutProfileRoute;
   LayoutSignupRoute: typeof LayoutSignupRoute;
+<<<<<<< HEAD
   LayoutVerifyRoute: typeof LayoutVerifyRoute;
+=======
+>>>>>>> main
   LayoutHomeGroupRoute: typeof LayoutHomeGroupRoute;
   LayoutHomePolicyRoute: typeof LayoutHomePolicyRoute;
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute;
@@ -238,7 +250,10 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutLoginRoute: LayoutLoginRoute,
   LayoutProfileRoute: LayoutProfileRoute,
   LayoutSignupRoute: LayoutSignupRoute,
+<<<<<<< HEAD
   LayoutVerifyRoute: LayoutVerifyRoute,
+=======
+>>>>>>> main
   LayoutHomeGroupRoute: LayoutHomeGroupRoute,
   LayoutHomePolicyRoute: LayoutHomePolicyRoute,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
@@ -258,7 +273,10 @@ export interface FileRoutesByFullPath {
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
   "/signup": typeof LayoutSignupRoute;
+<<<<<<< HEAD
   "/verify": typeof LayoutVerifyRoute;
+=======
+>>>>>>> main
   "/home/group": typeof LayoutHomeGroupRoute;
   "/home/policy": typeof LayoutHomePolicyRoute;
   "/home": typeof LayoutHomeIndexRoute;
@@ -275,7 +293,10 @@ export interface FileRoutesByTo {
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
   "/signup": typeof LayoutSignupRoute;
+<<<<<<< HEAD
   "/verify": typeof LayoutVerifyRoute;
+=======
+>>>>>>> main
   "/home/group": typeof LayoutHomeGroupRoute;
   "/home/policy": typeof LayoutHomePolicyRoute;
   "/home": typeof LayoutHomeIndexRoute;
@@ -293,7 +314,10 @@ export interface FileRoutesById {
   "/_layout/login": typeof LayoutLoginRoute;
   "/_layout/profile": typeof LayoutProfileRoute;
   "/_layout/signup": typeof LayoutSignupRoute;
+<<<<<<< HEAD
   "/_layout/verify": typeof LayoutVerifyRoute;
+=======
+>>>>>>> main
   "/_layout/home/group": typeof LayoutHomeGroupRoute;
   "/_layout/home/policy": typeof LayoutHomePolicyRoute;
   "/_layout/home/": typeof LayoutHomeIndexRoute;
@@ -312,7 +336,10 @@ export interface FileRouteTypes {
     | "/login"
     | "/profile"
     | "/signup"
+<<<<<<< HEAD
     | "/verify"
+=======
+>>>>>>> main
     | "/home/group"
     | "/home/policy"
     | "/home"
@@ -328,7 +355,10 @@ export interface FileRouteTypes {
     | "/login"
     | "/profile"
     | "/signup"
+<<<<<<< HEAD
     | "/verify"
+=======
+>>>>>>> main
     | "/home/group"
     | "/home/policy"
     | "/home"
@@ -344,7 +374,10 @@ export interface FileRouteTypes {
     | "/_layout/login"
     | "/_layout/profile"
     | "/_layout/signup"
+<<<<<<< HEAD
     | "/_layout/verify"
+=======
+>>>>>>> main
     | "/_layout/home/group"
     | "/_layout/home/policy"
     | "/_layout/home/"
@@ -389,7 +422,10 @@ export const routeTree = rootRoute
         "/_layout/login",
         "/_layout/profile",
         "/_layout/signup",
+<<<<<<< HEAD
         "/_layout/verify",
+=======
+>>>>>>> main
         "/_layout/home/group",
         "/_layout/home/policy",
         "/_layout/home/",
@@ -412,10 +448,13 @@ export const routeTree = rootRoute
       "filePath": "_layout/signup.tsx",
       "parent": "/_layout"
     },
+<<<<<<< HEAD
     "/_layout/verify": {
       "filePath": "_layout/verify.tsx",
       "parent": "/_layout"
     },
+=======
+>>>>>>> main
     "/_layout/home/group": {
       "filePath": "_layout/home/group.tsx",
       "parent": "/_layout"
