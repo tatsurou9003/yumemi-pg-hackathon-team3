@@ -8,8 +8,7 @@ const LoginButton = () => {
           navigate({ to: "/home" });
         }}
         type="submit"
-        className="relative w-[152px] h-[27px]  top-[104px] border-radius
-                 bg-white text-black text-sm font-medium cursor-pointer  "
+        className="relative w-[152px] h-[27px]  top-[104px] rounded-[4px] bg-white text-black text-sm font-medium cursor-pointer  "
       >
         ログイン
       </button>

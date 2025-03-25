@@ -21,3 +21,9 @@ variable "access_token" {
   description = "Personal access token"
   sensitive   = true
 }
+
+variable "cognito_user_pool_name" {
+  type        = string
+  description = "Name of the Cognito User Pool"
+  default     = "wa-life-user-pool"
+}
