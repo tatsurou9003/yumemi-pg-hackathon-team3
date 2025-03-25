@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { formData } from "@/types/formData";
 import { Amplify, Auth } from "aws-amplify";
-import { useNavigate } from "@tanstack/react-router";
+// import { useNavigate } from "@tanstack/react-router";
 
 // Amplify の設定（コンポーネント外で実行）
 Amplify.configure({
@@ -15,7 +15,7 @@ Amplify.configure({
 const LoginForm = () => {
   // useFormフックの呼び出し
   const { handleSubmit, register } = useForm<formData>();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   // 認証状態チェック関数
   const handleLogin = async (email: string, password: string) => {
@@ -24,7 +24,7 @@ const LoginForm = () => {
       console.log("認証済みユーザー:", user);
       return user;
     } catch (error) {
-      console.log("認証されていません");
+      console.log("認証されていません:", error);
       return null;
     }
   };

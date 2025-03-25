@@ -25,7 +25,7 @@ const SignupForm = () => {
       });
       return user;
     } catch (error) {
-      throw error;
+      console.error("サインアップエラー:", error);
     }
   };
 
