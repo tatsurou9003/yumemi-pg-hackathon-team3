@@ -3,7 +3,8 @@ import { Amplify, Auth } from "aws-amplify";
 import { env } from "@/env";
 import { formData } from "@/types/formData";
 import { useNavigate } from "@tanstack/react-router";
-import axios from "axios";
+import axios, { AxiosError } from "axios"; // AxiosErrorをインポート
+import { getUsers } from "@/hooks/orval/users/users";
 
 // Amplify の設定
 Amplify.configure({
@@ -30,35 +31,26 @@ const LoginForm = () => {
     }
   };
 
-  const userId = localStorage.getItem(
-    `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
-  );
-  const idToken = localStorage.getItem(
-    `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.${userId}.idToken`,
-  );
-
   const onSubmit = async (data: formData) => {
     try {
       await handleLogin(data.email, data.password);
       try {
-        await axios.post(
-          `${env.API_URL}/users/first_login_check`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${idToken}`,
-            },
-          },
-        );
+        await getUsers().postUsersFirstLoginCheck();
         // navigate({ to: "/setting" }); // 初回ログイン (200 OK) 場合の遷移先
-      } catch (error: any) {
-        console.error(error);
-        if (error.response?.status === 404) {
-          navigate({ to: "/home" }); // 初回ログインではない (404 Not Found) の場合の遷移先
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError;
+          console.error(axiosError);
+
+          if (axiosError.response?.status === 404) {
+            navigate({ to: "/home" }); // 初回ログインではない (404 Not Found) の場合の遷移先
+          }
+        } else {
+          console.error("予期せぬエラー:", error);
         }
       }
-    } catch (error) {
-      console.error("サインアップエラー:", error);
+    } catch (error: unknown) {
+      console.error("ログインエラー:", error);
     }
   };
 
