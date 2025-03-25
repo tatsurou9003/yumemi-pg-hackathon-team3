@@ -9,10 +9,7 @@
 import * as axios from "axios";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import type {
-  Answer,
-  GetThemeAnswer,
-} from "../oogiriAppAPI.schemas";
+import type { Answer, GetThemeAnswer } from "../oogiriAppAPI.schemas";
 
 export const getAnswers = () => {
   /**
