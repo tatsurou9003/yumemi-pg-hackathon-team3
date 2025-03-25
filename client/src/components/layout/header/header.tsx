@@ -39,7 +39,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     if (path.match(/^\/home\/\w+\/\w+\/edit$/)) {
       return "メンバー編集";
     }
-    if (path.match(/^\/home\/\w+(\/\w+)?$/)) {
+    if (path.match(/^\/home\/[\w-]+(\/[\w-]+)?$/)) {
       // groupIdに基づいてグループ名を取得
       const groupId = path.split("/")[2] || "";
       // コンテキストからグループ名を取得
@@ -56,7 +56,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     if (path.match(/^\/home\/\w+\/\w+\/edit$/)) {
       return "/home";
     }
-    if (path.match(/^\/home\/\w+$/)) {
+    if (path.match(/^\/home\/[\w-]+$/)) {
       return "/home";
     }
     if (path.match(/^\/home\/\w+\/\w+$/)) {
