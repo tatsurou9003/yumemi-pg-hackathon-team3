@@ -1,16 +1,16 @@
+import { useState, useEffect } from "react";
 import LoginForm from "@/components/common/form/loginform";
 import LoginButton from "@/components/common/button/login-button";
 import GoogleButton from "@/components/common/button/google-login-button";
 import SignUpButton from "@/components/common/button/sign-up-button";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+
 export const Route = createFileRoute("/_layout/login")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const [isVisible, setIsVisible] = useState(false);
-
   useEffect(() => {
     // コンポーネントがマウントされた直後は透明
     // 少し遅延させてからフェードイン開始
@@ -20,6 +20,7 @@ function RouteComponent() {
 
     return () => clearTimeout(timer);
   }, []);
+
   return (
     <div
       className={`min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)] bg-no-repeat bg-contain bg-center transition-opacity duration-1000 ease-in-out ${
