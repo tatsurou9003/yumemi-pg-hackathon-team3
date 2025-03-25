@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import SignUpMailButton from "@/components/common/button/sign-up-mail-button";
-export const Route = createFileRoute("/_layout/mail")({
+import SignUpMailButton from "@/features/complete/sign-up-mail-button";
+export const Route = createFileRoute("/_layout/complete")({
   component: RouteComponent,
 });
 
