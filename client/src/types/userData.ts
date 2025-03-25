@@ -4,4 +4,4 @@ export interface User {
   profileImage: string;
   profileColor: string;
   email: string;
-};
+}
