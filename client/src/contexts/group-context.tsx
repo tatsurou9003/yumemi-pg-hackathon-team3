@@ -10,5 +10,5 @@ interface GroupContextType {
 }
 
 export const GroupContext = createContext<GroupContextType | undefined>(
-  undefined
+  undefined,
 );
