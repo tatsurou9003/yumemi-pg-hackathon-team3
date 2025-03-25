@@ -16,6 +16,8 @@ frontend:
         - rm -f .env
         - echo "VITE_USER_POOL_ID=$VITE_USER_POOL_ID" > .env
         - echo "VITE_USER_POOL_CLIENT_ID=$VITE_USER_POOL_CLIENT_ID" >> .env
+        - echo "VITE_API_URL=$VITE_API_URL" >> .env
+        - echo "VITE_WS_API_URL=$VITE_WS_API_URL" >> .env
     build:
       commands:
         - npm run build
@@ -43,5 +45,7 @@ resource "aws_amplify_branch" "main_branch" {
     "DUMMY_VAR"               = "unused"
     "VITE_USER_POOL_ID"       = var.user_pool_id
     "VITE_USER_POOL_CLIENT_ID" = var.user_pool_client_id
+    "VITE_API_URL"            = var.api_url
+    "VITE_WS_API_URL"         = var.ws_api_url
   }
 }
