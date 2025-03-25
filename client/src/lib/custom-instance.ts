@@ -27,7 +27,7 @@ instance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // レスポンスインターセプター - エラーハンドリング
@@ -42,12 +42,12 @@ instance.interceptors.response.use(
       window.location.href = "/login";
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 // Orval用のエクスポート関数
 export const customInstance = <T>(
-  config: AxiosRequestConfig
+  config: AxiosRequestConfig,
 ): Promise<AxiosResponse<T>> => {
   return instance.request<T>(config);
 };
