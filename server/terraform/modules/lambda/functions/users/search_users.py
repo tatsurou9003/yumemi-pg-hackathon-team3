@@ -8,8 +8,8 @@ users_table = dynamodb.Table("users")
 
 def lambda_handler(event, context):
     # requestContextからユーザーのsubを取得
-    claims = event.get("requestContext", {}).get("authorizer", {}).get("claims", {})
-    user_id = claims.get("sub")
+    query_params = event.get("queryStringParameters", {}) or {}
+    user_id = query_params.get("userId", "")
 
     headers = {
                     "Content-Type": "application/json",
