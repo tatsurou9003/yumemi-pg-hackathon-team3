@@ -9,7 +9,6 @@ export const Route = createFileRoute("/")({
 function Index() {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
-
   useEffect(() => {
     // スプラッシュ画面表示後の遅延時間（ミリ秒）
     const delay = 3000;
@@ -31,6 +30,9 @@ function Index() {
       clearTimeout(fadeTimer);
     };
   }, [navigate]);
+  <script>
+  window.global = window;
+  </script>
   return (
     <div
       className={`flex flex-col justify-center items-center min-h-screen bg-[#FF9350] transition-opacity duration-500 ease-in-out ${

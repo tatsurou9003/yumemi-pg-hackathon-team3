@@ -1,4 +1,5 @@
 import React from "react";
+import LoginButton from "../button/login-button";
 import {
   CognitoUserPool,
   CognitoUserAttribute,
@@ -54,13 +55,8 @@ const LoginForm = () => {
         placeholder="パスワード"
         className="w-[310px] h-[48px] mb-4 bg-white border border-gray-300 rounded px-4 text-gray-500"
       />
-      <button
-        onClick={signUp}
-        type="submit"
-        className="relative w-[152px] h-[27px]  top-[104px] rounded-[4px] bg-white text-black text-sm font-medium cursor-pointer  "
-      >
-        ログイン
-      </button>
+      
+      <LoginButton onClick={signUp} />
     </form>
   );
 };
