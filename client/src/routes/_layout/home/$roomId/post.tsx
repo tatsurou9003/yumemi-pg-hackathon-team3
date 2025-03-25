@@ -13,7 +13,7 @@ import {
 } from "@/components/common/form/form";
 import { Input } from "@/components/common/input/input";
 import { Textarea } from "@/components/common/textarea/textarea";
-import { SendSlantBrown, PaperClip, XCircle } from "@/components/common/icon";
+import { SendSlantBrown, PaperClip } from "@/components/common/icon";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_layout/home/$roomId/post")({
@@ -154,15 +154,12 @@ function RouteComponent() {
               />
             </div>
           </div>
-          <div className="flex flex-col items-center gap-1.5">
+          <div className="flex justify-center">
             <Button
               type="submit"
               className="border-radius-[8px] border-[2px] border-[#743E3E] bg-[#FF7C2A] text-[#743E3E] text-[12px] font-bold w-[100px] hover:bg-[#FF7C2A]/90"
             >
               <SendSlantBrown width="16px" height="16px" /> 投稿する
-            </Button>
-            <Button>
-              <XCircle width="16px" height="16px" /> 戻る
             </Button>
           </div>
         </form>

@@ -22,7 +22,7 @@ function RouteComponent() {
     profileColor: "#ffcc00",
   };
 
-  //eslint-disable-next-line
+  // eslint-disable-next-line
   const messages: MessageData[] = [
     {
       messageId: "msg001",

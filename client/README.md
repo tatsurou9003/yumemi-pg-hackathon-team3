@@ -100,4 +100,17 @@ SVG画像をReactコンポーネントとして変換するツール。
 
 `npm run svgr`を実行すると、`src/assets/icons`フォルダ内のsvg画像が一括でReactコンポーネントとして`src/components/common/icons`フォルダに変換される。
 
+### react-toastify
+
+トーストを簡単に表示することができるライブラリ。
+デフォルトスタイルで良ければ、下記のように呼び出すだけで簡単に使える。
+
+```
+toast.success("成功メッセージ")
+toast.warning("警告メッセージ")
+toast.error("エラーメッセージ")
+toast.info("通知メッセージ")
+```
+
+スタイルのカスタムも可能。[こちら](https://saunabouya.com/2022/11/16/react-toastify/#i-2)を参考に
 ...

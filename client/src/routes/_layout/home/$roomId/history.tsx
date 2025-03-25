@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import OogiriMessage from "@/features/room/oogiri-message";
+import OogiriHistoryMessage from "@/features/room/oogiri-history-message";
 import RoomHeader from "@/features/room/room-header";
 import { createFileRoute } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
@@ -275,7 +275,7 @@ function RouteComponent() {
           (message) =>
             message.messageType === "oogiri" && (
               <div className="flex justify-start" key={message.messageId}>
-                <OogiriMessage {...message} isSameUser={false} />
+                <OogiriHistoryMessage {...message} />
               </div>
             ),
         )}

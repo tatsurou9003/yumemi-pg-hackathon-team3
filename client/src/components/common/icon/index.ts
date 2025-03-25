@@ -20,4 +20,3 @@ export { default as Smile } from "./smile";
 export { default as StickyNote } from "./sticky-note";
 export { default as TitlePage } from "./title-page";
 export { default as Title } from "./title";
-export { default as XCircle } from "./x-circle";

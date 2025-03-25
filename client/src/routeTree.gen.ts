@@ -17,7 +17,10 @@ import { Route as LayoutSignupImport } from "./routes/_layout/signup";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutLoginImport } from "./routes/_layout/login";
 import { Route as LayoutHomeIndexImport } from "./routes/_layout/home/index";
+<<<<<<< HEAD
 import { Route as LayoutHomePolicyImport } from "./routes/_layout/home/policy";
+=======
+>>>>>>> main
 import { Route as LayoutHomeRoomIdIndexImport } from "./routes/_layout/home/$roomId/index";
 import { Route as LayoutHomeGroupCreateImport } from "./routes/_layout/home/group/create";
 import { Route as LayoutHomeRoomIdPostImport } from "./routes/_layout/home/$roomId/post";

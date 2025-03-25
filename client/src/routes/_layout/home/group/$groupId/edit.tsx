@@ -1,8 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { User } from "@/types/userData";
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { toast } from "react-toastify";
 
 export const Route = createFileRoute("/_layout/home/group/$groupId/edit")({
   component: RouteComponent,
@@ -59,6 +60,7 @@ function RouteComponent() {
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const searchTerm = watch("userId") || "";
 
@@ -98,8 +100,11 @@ function RouteComponent() {
   };
 
   const onSubmit = () => {
-    //TODO: APIでメンバー招待を叩いて、ルーム画面に戻す
+    //TODO: APIでメンバー招待を叩く
     console.log("選択されたユーザー: ", selectedUsers);
+    //TODO: リクエストが失敗した時はエラートーストを表示
+    toast.success("メンバーを招待しました");
+    navigate({ to: "/home" });
   };
 
   // スクロール処理
@@ -117,7 +122,7 @@ function RouteComponent() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="bg-[#FFEADD] h-full">
       <div className="flex flex-col justify-center items-center">
         <div className="relative w-[310px] m-[32px_40px_16px_40px]">
           <input
@@ -125,7 +130,7 @@ function RouteComponent() {
             id="text"
             {...register("userId")}
             placeholder="ユーザーIDを検索"
-            className="w-full h-[48px] bg-[#D9D9D9] rounded px-4 pr-12 text-[#A2A2A2]"
+            className="w-full h-[48px] bg-white rounded px-4 pr-12 text-black border border-black outline-none"
           />
           <button
             type="button"
@@ -174,7 +179,7 @@ function RouteComponent() {
                   )}
                   <button
                     type="button"
-                    className="absolute -top-1 -right-1 bg-gray-200 rounded-full p-0.5 cursor-pointer hover:bg-gray-300"
+                    className="absolute -top-1 -right-1 bg-gray-300 rounded-full p-0.5 cursor-pointer hover:bg-gray-400"
                     onClick={() => removeSelectedUser(user.userId)}
                   >
                     <X size={12} />
