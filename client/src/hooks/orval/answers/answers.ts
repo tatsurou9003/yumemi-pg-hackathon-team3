@@ -12,7 +12,6 @@ import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import type {
   Answer,
   GetThemeAnswer,
-  ParentIdRequest,
 } from "../oogiriAppAPI.schemas";
 
 export const getAnswers = () => {
@@ -33,7 +32,6 @@ export const getAnswers = () => {
    */
   const getAnswersMessageId = <TData = AxiosResponse<GetThemeAnswer[]>>(
     messageId: string,
-    parentIdRequest: ParentIdRequest,
     options?: AxiosRequestConfig,
   ): Promise<TData> => {
     return axios.default.get(`/answers/${messageId}`, options);
