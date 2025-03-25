@@ -516,14 +516,6 @@ components:
       properties:
         groupName:
           type: string
-        groupImage:
-          type: string
-          description: グループ画像のURL
-        userIds:
-          type: array
-          description: 招待されるユーザーIDリスト
-          items:
-            type: string
       required:
         - groupName
 
