@@ -21,6 +21,7 @@ import { Route as LayoutHomeRoomIdIndexImport } from "./routes/_layout/home/$roo
 import { Route as LayoutHomeGroupCreateImport } from "./routes/_layout/home/group/create";
 import { Route as LayoutHomeRoomIdPostImport } from "./routes/_layout/home/$roomId/post";
 import { Route as LayoutHomeRoomIdHistoryImport } from "./routes/_layout/home/$roomId/history";
+import { Route as LayoutHomeRoomIdTnreadIdIndexImport } from "./routes/_layout/home/$roomId/$tnreadId/index";
 import { Route as LayoutHomeGroupGroupIdEditImport } from "./routes/_layout/home/group/$groupId/edit";
 
 // Create/Update Routes
@@ -83,6 +84,13 @@ const LayoutHomeRoomIdHistoryRoute = LayoutHomeRoomIdHistoryImport.update({
   path: "/home/$roomId/history",
   getParentRoute: () => LayoutRoute,
 } as any);
+
+const LayoutHomeRoomIdTnreadIdIndexRoute =
+  LayoutHomeRoomIdTnreadIdIndexImport.update({
+    id: "/home/$roomId/$tnreadId/",
+    path: "/home/$roomId/$tnreadId/",
+    getParentRoute: () => LayoutRoute,
+  } as any);
 
 const LayoutHomeGroupGroupIdEditRoute = LayoutHomeGroupGroupIdEditImport.update(
   {
@@ -173,6 +181,13 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutHomeGroupGroupIdEditImport;
       parentRoute: typeof LayoutImport;
     };
+    "/_layout/home/$roomId/$tnreadId/": {
+      id: "/_layout/home/$roomId/$tnreadId/";
+      path: "/home/$roomId/$tnreadId";
+      fullPath: "/home/$roomId/$tnreadId";
+      preLoaderRoute: typeof LayoutHomeRoomIdTnreadIdIndexImport;
+      parentRoute: typeof LayoutImport;
+    };
   }
 }
 
@@ -188,6 +203,7 @@ interface LayoutRouteChildren {
   LayoutHomeGroupCreateRoute: typeof LayoutHomeGroupCreateRoute;
   LayoutHomeRoomIdIndexRoute: typeof LayoutHomeRoomIdIndexRoute;
   LayoutHomeGroupGroupIdEditRoute: typeof LayoutHomeGroupGroupIdEditRoute;
+  LayoutHomeRoomIdTnreadIdIndexRoute: typeof LayoutHomeRoomIdTnreadIdIndexRoute;
 }
 
 const LayoutRouteChildren: LayoutRouteChildren = {
@@ -200,6 +216,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutHomeGroupCreateRoute: LayoutHomeGroupCreateRoute,
   LayoutHomeRoomIdIndexRoute: LayoutHomeRoomIdIndexRoute,
   LayoutHomeGroupGroupIdEditRoute: LayoutHomeGroupGroupIdEditRoute,
+  LayoutHomeRoomIdTnreadIdIndexRoute: LayoutHomeRoomIdTnreadIdIndexRoute,
 };
 
 const LayoutRouteWithChildren =
@@ -217,6 +234,7 @@ export interface FileRoutesByFullPath {
   "/home/group/create": typeof LayoutHomeGroupCreateRoute;
   "/home/$roomId": typeof LayoutHomeRoomIdIndexRoute;
   "/home/group/$groupId/edit": typeof LayoutHomeGroupGroupIdEditRoute;
+  "/home/$roomId/$tnreadId": typeof LayoutHomeRoomIdTnreadIdIndexRoute;
 }
 
 export interface FileRoutesByTo {
@@ -231,6 +249,7 @@ export interface FileRoutesByTo {
   "/home/group/create": typeof LayoutHomeGroupCreateRoute;
   "/home/$roomId": typeof LayoutHomeRoomIdIndexRoute;
   "/home/group/$groupId/edit": typeof LayoutHomeGroupGroupIdEditRoute;
+  "/home/$roomId/$tnreadId": typeof LayoutHomeRoomIdTnreadIdIndexRoute;
 }
 
 export interface FileRoutesById {
@@ -246,6 +265,7 @@ export interface FileRoutesById {
   "/_layout/home/group/create": typeof LayoutHomeGroupCreateRoute;
   "/_layout/home/$roomId/": typeof LayoutHomeRoomIdIndexRoute;
   "/_layout/home/group/$groupId/edit": typeof LayoutHomeGroupGroupIdEditRoute;
+  "/_layout/home/$roomId/$tnreadId/": typeof LayoutHomeRoomIdTnreadIdIndexRoute;
 }
 
 export interface FileRouteTypes {
@@ -261,7 +281,8 @@ export interface FileRouteTypes {
     | "/home/$roomId/post"
     | "/home/group/create"
     | "/home/$roomId"
-    | "/home/group/$groupId/edit";
+    | "/home/group/$groupId/edit"
+    | "/home/$roomId/$tnreadId";
   fileRoutesByTo: FileRoutesByTo;
   to:
     | "/"
@@ -274,7 +295,8 @@ export interface FileRouteTypes {
     | "/home/$roomId/post"
     | "/home/group/create"
     | "/home/$roomId"
-    | "/home/group/$groupId/edit";
+    | "/home/group/$groupId/edit"
+    | "/home/$roomId/$tnreadId";
   id:
     | "__root__"
     | "/"
@@ -287,7 +309,8 @@ export interface FileRouteTypes {
     | "/_layout/home/$roomId/post"
     | "/_layout/home/group/create"
     | "/_layout/home/$roomId/"
-    | "/_layout/home/group/$groupId/edit";
+    | "/_layout/home/group/$groupId/edit"
+    | "/_layout/home/$roomId/$tnreadId/";
   fileRoutesById: FileRoutesById;
 }
 
@@ -329,7 +352,8 @@ export const routeTree = rootRoute
         "/_layout/home/$roomId/post",
         "/_layout/home/group/create",
         "/_layout/home/$roomId/",
-        "/_layout/home/group/$groupId/edit"
+        "/_layout/home/group/$groupId/edit",
+        "/_layout/home/$roomId/$tnreadId/"
       ]
     },
     "/_layout/login": {
@@ -366,6 +390,10 @@ export const routeTree = rootRoute
     },
     "/_layout/home/group/$groupId/edit": {
       "filePath": "_layout/home/group/$groupId/edit.tsx",
+      "parent": "/_layout"
+    },
+    "/_layout/home/$roomId/$tnreadId/": {
+      "filePath": "_layout/home/$roomId/$tnreadId/index.tsx",
       "parent": "/_layout"
     }
   }

@@ -13,6 +13,7 @@ export { default as InfoIcon } from "./info-icon";
 export { default as PaperClip } from "./paper-clip";
 export { default as PhotoCamera } from "./photo-camera";
 export { default as Plus } from "./plus";
+export { default as SendBrown } from "./send-brown";
 export { default as SendSlantBrown } from "./send-slant-brown";
 export { default as SettingsIcon } from "./settings-icon";
 export { default as Smile } from "./smile";
