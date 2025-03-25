@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import Oogiri from "./oogiri";
+import { Link, useLocation } from "@tanstack/react-router";
 import { MessageData } from "@/types/messageData";
 import {
   Avatar,
@@ -9,6 +10,7 @@ import {
 type OogiriMessageProps = MessageData & { isSameUser: boolean };
 
 const OogiriMessage = ({
+  messageId,
   messageText,
   messageImage,
   deadline,
@@ -16,6 +18,7 @@ const OogiriMessage = ({
   isSameUser,
 }: OogiriMessageProps) => {
   const isDead = new Date(deadline) < new Date();
+  const location = useLocation();
 
   return (
     <div className="inline-flex items-start gap-6">
@@ -28,35 +31,9 @@ const OogiriMessage = ({
         </Avatar>
       )}
       <div className="flex flex-col items-center">
-        <div
-          className={`w-full rounded border border-gray-300 p-4 w-auto ${isDead ? "bg-[#FFE735]" : "bg-[#FFB8BA]"}`}
-        >
-          {messageImage && !messageText ? (
-            <img
-              src={messageImage}
-              alt="OogiriMessage image"
-              className="rounded w-[168px] h-auto"
-            />
-          ) : null}
-          {messageText && (
-            <div className="flex flex-col justify-center items-start gap-2.5 self-stretch p-[2px_12px_6px_12px]">
-              <span className="text-[#743E3E] text-[12px] leading-[20px]">
-                【大喜利】
-                <br />
-                {messageText}
-              </span>
-              {messageImage && (
-                <img
-                  src={messageImage}
-                  alt="OogiriMessage image"
-                  className="w-[168px] h-auto"
-                />
-              )}
-            </div>
-          )}
-        </div>
+        <Oogiri text={messageText} image={messageImage} isDead={isDead} />
         <Link
-          to={isDead ? "/home" : "/home"}
+          to={`${location.pathname}/${messageId}` as string}
           className={`flex justify-end w-full text-xs font-bold cursor-pointer ${isDead ? "text-[#743E3E]" : "text-[#E73E3E]"}`}
         >
           {isDead ? "回答を見る" : "回答する"}
