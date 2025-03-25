@@ -11,8 +11,8 @@ const GroupList = ({ groupData }: GroupData) => {
       {groupData.map((group: Group) => (
         <Link
           key={group.groupId}
-          to="/home/$roomId"
-          params={{ roomId: group.groupId }}
+          to="/home/$groupId"
+          params={{ groupId: group.groupId }}
           onClick={() => setCurrentGroupById(group.groupId)}
           className="float-left p-[12px] flex items-center gap-[21px] font-[Inter] truncate"
         >

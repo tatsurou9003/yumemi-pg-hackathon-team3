@@ -16,7 +16,7 @@ import { Textarea } from "@/components/common/textarea/textarea";
 import { SendSlantBrown, PaperClip } from "@/components/common/icon";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_layout/home/$roomId/post")({
+export const Route = createFileRoute("/_layout/home/$groupId/post")({
   component: RouteComponent,
 });
 
