@@ -23,3 +23,13 @@ variable "user_pool_client_id" {
   description = "Cognito User Pool Client ID"
   type        = string
 }
+
+variable "api_url" {
+  description = "API GatewayのURL"
+  type        = string
+}
+
+variable "ws_api_url" {
+  description = "WebSocket APIのURL"
+  type        = string
+}

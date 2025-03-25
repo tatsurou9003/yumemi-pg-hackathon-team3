@@ -24,6 +24,8 @@ module "amplify" {
   access_token   = var.access_token
   user_pool_id   = module.cognito.user_pool_id
   user_pool_client_id = module.cognito.user_pool_client_id
+  api_url       = module.api_gateway.api_gateway_url
+  ws_api_url    = module.websocket_api.websocket_api_endpoint
 }
 
 module "lambda" {
