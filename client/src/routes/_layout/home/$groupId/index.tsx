@@ -8,9 +8,6 @@ import { MessageData } from "@/types/messageData";
 import { User } from "@/types/userData";
 
 export const Route = createFileRoute("/_layout/home/$groupId/")({
-  parseParams: ({ groupId }: { groupId: string }) => ({
-    groupId: decodeURIComponent(groupId).replace(/[^a-zA-Z0-9_-]/g, ""), // `/` を除外
-  }),
   component: RouteComponent,
 });
 

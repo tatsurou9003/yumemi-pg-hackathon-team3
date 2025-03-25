@@ -5,7 +5,7 @@ import { useState, useRef } from "react";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "react-toastify";
 
-export const Route = createFileRoute("/_layout/home/group/$groupId/edit")({
+export const Route = createFileRoute("/_layout/home/$groupId/edit")({
   component: RouteComponent,
 });
 // TODO: ルーム画面のアイコンからここに飛べるようにする
