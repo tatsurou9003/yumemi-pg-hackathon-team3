@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
 import InviteModal from "./invite-modal";
 import { Group, GroupData } from "@/types/common";
+import { toast } from "react-toastify";
 
 const InvitedGroupList = ({ groupData }: GroupData) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,7 +18,21 @@ const InvitedGroupList = ({ groupData }: GroupData) => {
     setSelectedGroup(null);
   };
 
-  //TODO: 参加するって言ったらグループ一覧に追加する
+  const handleAccept = () => {
+    if (selectedGroup) {
+      toast.success(`${selectedGroup.groupName}に参加しました`);
+      handleCloseModal();
+      window.location.reload();
+    }
+  };
+
+  const handleDecline = () => {
+    if (selectedGroup) {
+      toast.info(`${selectedGroup.groupName}への招待を拒否しました`);
+      handleCloseModal();
+      window.location.reload();
+    }
+  };
 
   return (
     <div className="flex flex-col bg-[#FFEADD] w-full">
@@ -40,14 +55,8 @@ const InvitedGroupList = ({ groupData }: GroupData) => {
         <InviteModal
           group={selectedGroup}
           onClose={handleCloseModal}
-          onAccept={() => {
-            console.log(`Accepted invitation to ${selectedGroup.groupName}`);
-            handleCloseModal();
-          }}
-          onDecline={() => {
-            console.log(`Declined invitation to ${selectedGroup.groupName}`);
-            handleCloseModal();
-          }}
+          onAccept={handleAccept}
+          onDecline={handleDecline}
         />
       )}
     </div>

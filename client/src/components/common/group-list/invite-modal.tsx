@@ -1,5 +1,7 @@
 import { InviteModalProps } from "@/types/common";
 import { useEffect, useState } from "react";
+import { getGroups } from "@/hooks/orval/groups/groups";
+import { toast } from "react-toastify";
 
 const InviteModal = ({
   group,
@@ -8,6 +10,7 @@ const InviteModal = ({
   onDecline,
 }: InviteModalProps) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,6 +19,36 @@ const InviteModal = ({
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleAccept = async () => {
+    try {
+      setIsLoading(true);
+      await getGroups().patchGroupsUpdateMemberGroupId(group.groupId, {
+        status: "JOINED",
+      });
+      onAccept();
+    } catch (error) {
+      console.error("グループ参加エラー:", error);
+      toast.error("参加処理中にエラーが発生しました");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDecline = async () => {
+    try {
+      setIsLoading(true);
+      await getGroups().patchGroupsUpdateMemberGroupId(group.groupId, {
+        status: "REJECTED",
+      });
+      onDecline();
+    } catch (error) {
+      console.error("グループ招待拒否エラー:", error);
+      toast.error("招待拒否処理中にエラーが発生しました");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50">
@@ -26,6 +59,7 @@ const InviteModal = ({
       >
         <button
           onClick={onClose}
+          disabled={isLoading}
           className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full hover:bg-gray-100"
           aria-label="閉じる"
         >
@@ -53,16 +87,26 @@ const InviteModal = ({
         </p>
         <div className="flex justify-center gap-4">
           <button
-            onClick={onDecline}
-            className="px-4 py-2 bg-gray-200 rounded-md text-gray-700 hover:bg-gray-300 transition-colors"
+            onClick={handleDecline}
+            disabled={isLoading}
+            className={`px-4 py-2 rounded-md transition-colors ${
+              isLoading
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            }`}
           >
-            断る
+            {isLoading ? "処理中..." : "断る"}
           </button>
           <button
-            onClick={onAccept}
-            className="px-4 py-2 bg-[#FF9D5C] text-white rounded-md hover:bg-[#FF8D4C] transition-colors"
+            onClick={handleAccept}
+            disabled={isLoading}
+            className={`px-4 py-2 rounded-md transition-colors ${
+              isLoading
+                ? "bg-[#FFBE9D] text-white cursor-not-allowed"
+                : "bg-[#FF9D5C] text-white hover:bg-[#FF8D4C]"
+            }`}
           >
-            参加する
+            {isLoading ? "処理中..." : "参加する"}
           </button>
         </div>
       </div>
