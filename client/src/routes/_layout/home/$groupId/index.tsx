@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import io from "socket.io-client";
 import { createFileRoute, useLocation } from "@tanstack/react-router";
 import CloseOogiri from "@/features/room/close-oogiri";
 import Message from "@/features/room/message";
@@ -18,26 +17,35 @@ function RouteComponent() {
   const [messages, setMessages] = useState<MessageData[]>([]);
   const socketRef = useRef<any>(null);
   const location = useLocation();
+
+  const userId = localStorage.getItem(
+    `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
+  ) ?? "";
   const path = location.pathname ?? "";
+  const groupId = path.split("/")[2]
 
   useEffect(() => {
-    const socket = io(env.WS_API_URL);
-    // 接続の確率
-    socket.on("connect", () => {
-      console.log("WebSocket connected");
-    });
+    const websocket = new WebSocket(`${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`);
+    socketRef.current = websocket
     // メッセージの受信
-    socket.on("message", (event: any) => {
+    const onMessage = (event: any) => {
       setMessages((prev) => [...prev, event.data]);
-    });
-    // コンポーネントがアンマウントされたときにクリーンアップ
-    return () => {
-      socket.disconnect();
     };
+    websocket.addEventListener('message', onMessage)
+    // コンポーネントがアンマウントされたときにクリーンアップ
+
+    websocket.onerror = (error) => {
+      console.error("WebSocket Error:", error);
+    };
+
+    return () => {
+      websocket.close()
+      websocket.removeEventListener('message', onMessage)
+    }
   }, []);
 
   const currentUser: User = {
-    userId: "user123",
+    userId: userId,
     userName: "自分",
     profileImage: "/images/me.jpg",
     profileColor: "#ffcc00",
@@ -63,6 +71,16 @@ function RouteComponent() {
 
     return timestamps.map((entry, i) => {
       const message = messages[entry.index];
+
+      // message.createdBy が undefined でないことを確認
+      if (!message.createdBy || !message.createdBy.userId) {
+        console.error("message.createdBy is undefined or does not have userId:", message);
+        return null; // エラーハンドリング、表示しない
+      }
+
+      // userId が正常に取得できているかをデバッグする
+      console.log("Current userId:", currentUser.userId);
+      console.log("Message createdBy userId:", message.createdBy.userId);
 
       if (entry.type === "deadline") {
         return (
@@ -94,16 +112,18 @@ function RouteComponent() {
   })();
 
   const handleSend = (data: FormSchema) => {
-    if (!socketRef.current) return;
+    if (!socketRef.current) {
+      return
+    }
     const newMessage = {
       action: "sendMessage",
-      groupId: path.split("/")[2],
+      groupId: groupId,
+      createdBy: userId,
       messageType: "CHAT",
-      createdBy: new Date().toISOString(),
       messageText: data.message,
     };
-
-    socketRef.current.emit("message", newMessage);
+    console.log(newMessage)
+    socketRef.current?.send(newMessage);
   };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
