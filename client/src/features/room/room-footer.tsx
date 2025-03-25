@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import RoomForm from "./room-form";
+import RoomForm, { FormSchema } from "./room-form";
 import {
   Add,
   Album,
@@ -9,7 +9,11 @@ import {
   PhotoCamera,
 } from "@/components/common/icon";
 
-const RoomFooter = () => {
+type RoomFooterProps = {
+  onSend: (data: FormSchema) => void;
+};
+
+const RoomFooter = ({ onSend }: RoomFooterProps) => {
   const navigate = useNavigate();
   const [isCreateOogiriOpen, setCreateOogiriOpen] = useState<boolean>(false);
   const toggleCreateOogiri = () => {
@@ -45,7 +49,7 @@ const RoomFooter = () => {
             navigate({ to: "/home" });
           }}
         />
-        <RoomForm />
+        <RoomForm onSend={onSend} />
       </div>
       {isCreateOogiriOpen && (
         <div className="flex flex-col w-full px-[78px] py-[18px] items-center bg-[#FFF7E4]">
