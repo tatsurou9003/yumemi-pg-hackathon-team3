@@ -2,13 +2,14 @@ import { useForm } from "react-hook-form";
 import { formData } from "@/types/formData";
 import { Amplify, Auth } from "aws-amplify";
 import { useNavigate } from "@tanstack/react-router";
+import { env } from "@/env";
 
 // Amplify の設定（コンポーネント外で実行）
 Amplify.configure({
   Auth: {
     region: "ap-northeast-1",
-    userPoolId: "",
-    userPoolWebClientId: "",
+    userPoolId: env.USER_POOL_ID,
+    userPoolWebClientId: env.USER_POOL_CLIENT_ID,
   },
 });
 
