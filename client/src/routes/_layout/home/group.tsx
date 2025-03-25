@@ -1,4 +1,3 @@
-import { Group } from "@/types/groupData";
 import { createFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
@@ -6,6 +5,7 @@ import { toast } from "react-toastify";
 import { getGroups } from "@/hooks/orval/groups/groups";
 import { useState } from "react";
 import LoadingIndicator from "@/components/common/loading/loading";
+import { Group } from "@/types/common";
 
 export const Route = createFileRoute("/_layout/home/group")({
   component: RouteComponent,

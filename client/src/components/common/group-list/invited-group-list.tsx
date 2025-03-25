@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Group, GroupData } from "@/types/groupData";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
 import InviteModal from "./invite-modal";
+import { Group, GroupData } from "@/types/common";
 
 const InvitedGroupList = ({ groupData }: GroupData) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
