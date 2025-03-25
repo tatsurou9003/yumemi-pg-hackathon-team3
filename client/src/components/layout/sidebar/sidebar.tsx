@@ -1,3 +1,4 @@
+import { useNavigate } from "@tanstack/react-router";
 import SidebarListItem from "./sidebar-list-item";
 import { CharacterWink, InfoIcon } from "@/components/common/icon";
 
@@ -7,6 +8,8 @@ interface SidebarProps {
 }
 
 export const Sidebar = ({ version, onLogout }: SidebarProps) => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex flex-col justify-between items-center w-[280px] h-full bg-white py-10 shadow-lg">
       <div className="flex flex-col items-start gap-6 w-full">
@@ -17,7 +20,12 @@ export const Sidebar = ({ version, onLogout }: SidebarProps) => {
           </span>
         </div>
         <div className="flex flex-col items-start gap-1 w-full">
-          <SidebarListItem text="プライバシーポリシー" onClick={() => {}} />
+          <SidebarListItem
+            text="プライバシーポリシー"
+            onClick={() => {
+              navigate({ to: "/home/policy" });
+            }}
+          />
           <SidebarListItem text="利用規約" onClick={() => {}} />
           <div className="flex justify-between items-center py-2 px-6 pr-8 w-full text-[#743E3E] font-noto text-sm">
             <span>アプリバージョン</span>
