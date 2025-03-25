@@ -15,7 +15,6 @@ import { getGroups } from "@/hooks/orval/groups/groups";
 export const Route = createFileRoute("/_layout/home/$groupId/edit")({
   component: RouteComponent,
 });
-// TODO: ルーム画面のアイコンからここに飛べるようにする
 
 function RouteComponent() {
   const { handleSubmit, register, watch } = useForm<User>();
@@ -61,7 +60,7 @@ function RouteComponent() {
     setSelectedUsers((prev) =>
       prev.includes(userId)
         ? prev.filter((id) => id !== userId)
-        : [...prev, userId],
+        : [...prev, userId]
     );
   };
 
