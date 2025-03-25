@@ -22,7 +22,7 @@ const GroupList = ({ groupData }: GroupData) => {
               {group.groupName.charAt(0)}
             </AvatarFallback>
           </Avatar>
-          {group.groupName}({group.count})
+          {group.groupName}({group.memberCount})
         </Link>
       ))}
     </div>

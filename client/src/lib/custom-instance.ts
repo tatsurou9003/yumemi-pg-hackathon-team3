@@ -16,9 +16,11 @@ const instance: AxiosInstance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     // ローカルストレージからアクセストークンを取得
-    const userId = `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.LastAuthUser`;
+    const userId = localStorage.getItem(
+      `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.LastAuthUser`,
+    );
     const idToken = localStorage.getItem(
-      `CognitoIdentityServiceProvider.62p2moq06chrr2116tnph73rjl.${userId}.idToken`,
+      `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.${userId}.idToken`,
     );
 
     // トークンが存在する場合、認証ヘッダーに追加
