@@ -1,32 +1,57 @@
-import { useForm } from "react-hook-form";
-import { loginData } from "../../../types/loginData";
+import React, { useState } from "react";
+import { CognitoUser, AuthenticationDetails, CognitoUserPool } from "amazon-cognito-identity-js";
+import { useNavigate } from "@tanstack/react-router";
+import awsConfiguration from "@/awsConfiguration";
+
+const userPool = new CognitoUserPool({
+  UserPoolId: awsConfiguration.UserPoolId,
+  ClientId: awsConfiguration.ClientId,
+});
 
 const LoginForm = () => {
-  // useFormフックの呼び出し
-  const { handleSubmit, register } = useForm<loginData>();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const handleLogin = (event: React.FormEvent) => {
+    event.preventDefault(); 
 
-  const onSubmit = (data: loginData) => {
-    console.log("フォームデータ: ", data);
+    const user = new CognitoUser({
+      Username: email,
+      Pool: userPool,
+    });
+
+    const authDetails = new AuthenticationDetails({
+      Username: email,
+      Password: password,
+    });
+
+    user.authenticateUser(authDetails, {
+      onSuccess: (result) => {
+        console.log("ログイン成功: ", result);
+        navigate({to : "/home"});
+      },
+      onFailure: (err) => {
+        console.error("ログイン失敗: ", err);
+      },
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col justify-center items-center ">
-        <input
-          type="email"
-          id="email"
-          {...register("email", { required: "メールアドレス" })}
-          placeholder="メールアドレス"
-          className="w-[310px] h-[48px] relative top-[74px] bg-white border border-gray-300 rounded px-4 text-gray-500 mb-4 cursor-pointer"
-        />
-        <input
-          type="password"
-          id="password"
-          {...register("password", { required: "パスワード" })}
-          placeholder="パスワード"
-          className="w-[310px] h-[48px] relative top-[84px] bg-white border border-gray-300 rounded px-4 text-gray-500 cursor-pointer"
-        />
-      </div>
+    <form onSubmit={handleLogin} className="flex flex-col justify-center items-center">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="メールアドレス"
+        className="w-[310px] h-[48px] mb-4 bg-white border border-gray-300 rounded px-4 text-gray-500"
+      />
+      <input
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="パスワード"
+        className="w-[310px] h-[48px] mb-4 bg-white border border-gray-300 rounded px-4 text-gray-500"
+      />
     </form>
   );
 };

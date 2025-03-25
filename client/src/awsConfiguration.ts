@@ -4,3 +4,4 @@ const awsConfiguration = {
   UserPoolId: "ap-northeast-1_0HUXMMUpF",
   ClientId: "62p2moq06chrr2116tnph73rjl",
 };
+export default awsConfiguration;
