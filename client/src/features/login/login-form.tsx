@@ -50,11 +50,11 @@ const LoginForm = () => {
             },
           },
         );
-        navigate({ to: "/home" }); // 初回ログインではない (200 OK) 場合の遷移先
+        // navigate({ to: "/setting" }); // 初回ログイン (200 OK) 場合の遷移先
       } catch (error: any) {
         console.error(error);
         if (error.response?.status === 404) {
-          navigate({ to: "/home/policy" }); // 初回ログイン (404 Not Found) の場合の遷移先
+          navigate({ to: "/home" }); // 初回ログインではない (404 Not Found) の場合の遷移先
         }
       }
     } catch (error) {
