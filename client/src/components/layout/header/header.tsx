@@ -92,8 +92,9 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
         />
       )}
       <div
-        className={`flex-grow text-white text-[12px] font-semibold leading-[28px] ${groupId ? "text-left" : "text-center"
-          }`}
+        className={`flex-grow text-white text-[12px] font-semibold leading-[28px] ${
+          groupId ? "text-left" : "text-center"
+        }`}
       >
         {getTitle()}
       </div>
