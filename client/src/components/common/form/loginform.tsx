@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { CognitoUser, AuthenticationDetails, CognitoUserPool } from "amazon-cognito-identity-js";
-import { useNavigate } from "@tanstack/react-router";
+import React from "react";
+import {
+  CognitoUserPool,
+  CognitoUserAttribute,
+} from "amazon-cognito-identity-js";
 import awsConfiguration from "@/awsConfiguration";
 
 const userPool = new CognitoUserPool({
@@ -9,49 +11,56 @@ const userPool = new CognitoUserPool({
 });
 
 const LoginForm = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const handleLogin = (event: React.FormEvent) => {
-    event.preventDefault(); 
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
 
-    const user = new CognitoUser({
-      Username: email,
-      Pool: userPool,
-    });
-
-    const authDetails = new AuthenticationDetails({
-      Username: email,
-      Password: password,
-    });
-
-    user.authenticateUser(authDetails, {
-      onSuccess: (result) => {
-        console.log("ログイン成功: ", result);
-        navigate({to : "/home"});
-      },
-      onFailure: (err) => {
-        console.error("ログイン失敗: ", err);
-      },
+  const changedEmailHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setEmail(event.target.value);
+  const changedPasswordHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setPassword(event.target.value);
+  const signUp = () => {
+    const attributeList = [
+      new CognitoUserAttribute({
+        Name: "email",
+        Value: email,
+      }),
+    ];
+    userPool.signUp(email, password, attributeList, [], (err, result) => {
+      if (err) {
+        console.error(err);
+        console.error(result);
+        alert("Error, signUp");
+        return;
+      }
+      setEmail("");
+      setPassword("");
+      console.log("conmplete, SignUp !!");
     });
   };
 
   return (
-    <form onSubmit={handleLogin} className="flex flex-col justify-center items-center">
+    <form className="flex flex-col justify-center items-center">
       <input
         type="email"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        onChange={changedEmailHandler}
         placeholder="メールアドレス"
         className="w-[310px] h-[48px] mb-4 bg-white border border-gray-300 rounded px-4 text-gray-500"
       />
       <input
         type="password"
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={changedPasswordHandler}
         placeholder="パスワード"
         className="w-[310px] h-[48px] mb-4 bg-white border border-gray-300 rounded px-4 text-gray-500"
       />
+      <button
+        onClick={signUp}
+        type="submit"
+        className="relative w-[152px] h-[27px]  top-[104px] rounded-[4px] bg-white text-black text-sm font-medium cursor-pointer  "
+      >
+        ログイン
+      </button>
     </form>
   );
 };

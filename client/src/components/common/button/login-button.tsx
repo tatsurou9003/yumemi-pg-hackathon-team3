@@ -1,11 +1,11 @@
 import { useNavigate } from "@tanstack/react-router";
 const LoginButton = () => {
   const navigate = useNavigate();
-  
-  function signUp(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
+
+  function signUp(
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ): void {
     event.preventDefault();
-    // Implement your sign-up logic here
-    // For example, navigate to a different page after sign-up
     navigate({ to: "/home" });
   }
   return (
