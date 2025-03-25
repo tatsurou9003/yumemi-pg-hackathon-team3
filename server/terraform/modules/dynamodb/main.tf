@@ -138,3 +138,43 @@ resource "aws_dynamodb_table" "likes" {
         Project = "Wa-Life"
     }
 }
+
+# 接続テーブル（WebSocket接続を追跡するためのDynamoDBテーブル）
+resource "aws_dynamodb_table" "ws_connections" {
+    name           = "ws-connections"
+    billing_mode   = "PAY_PER_REQUEST"
+    hash_key       = "connectionId"
+    
+    attribute {
+        name = "connectionId"
+        type = "S"
+    }
+    
+    attribute {
+        name = "userId"
+        type = "S"
+    }
+    
+    attribute {
+        name = "groupId"
+        type = "S"
+    }
+    
+    # ユーザーIDでの検索用GSI
+    global_secondary_index {
+        name               = "UserIdIndex"
+        hash_key           = "userId"
+        projection_type    = "ALL"
+    }
+    
+    # グループIDでの検索用GSI
+    global_secondary_index {
+        name               = "GroupIdIndex"
+        hash_key           = "groupId"
+        projection_type    = "ALL"
+    }
+
+        tags = {
+        Project = "Wa-Life"
+    }
+}

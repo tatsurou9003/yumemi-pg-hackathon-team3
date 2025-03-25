@@ -1,9 +1,9 @@
 resource "aws_amplify_app" "react_app" {
-  name       = var.amplify_app_name
-  repository = var.repository_url
+  name         = var.amplify_app_name
+  repository   = var.repository_url
   access_token = var.access_token
-  platform   = "WEB"
-  build_spec =  <<EOF
+  platform     = "WEB"
+  build_spec   = <<EOF
 version: 1
 frontend:
   phases:
@@ -13,6 +13,9 @@ frontend:
         - nvm install 20.18.3
         - nvm use 20.18.3
         - npm install
+        - rm -f .env
+        - echo "VITE_USER_POOL_ID=$VITE_USER_POOL_ID" > .env
+        - echo "VITE_USER_POOL_CLIENT_ID=$VITE_USER_POOL_CLIENT_ID" >> .env
     build:
       commands:
         - npm run build
@@ -25,7 +28,7 @@ frontend:
       - node_modules/**/*
   environment:
     NPM_CONFIG_PRODUCTION: false
-  EOF
+EOF
 }
 
 resource "aws_amplify_branch" "main_branch" {
@@ -37,6 +40,8 @@ resource "aws_amplify_branch" "main_branch" {
   enable_basic_auth = false
 
   environment_variables = {
-    "DUMMY_VAR" = "unused"
+    "DUMMY_VAR"               = "unused"
+    "VITE_USER_POOL_ID"       = var.user_pool_id
+    "VITE_USER_POOL_CLIENT_ID" = var.user_pool_client_id
   }
 }

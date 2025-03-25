@@ -4,7 +4,7 @@ from datetime import datetime
 import os
 
 # DynamoDBリソースの取得
-dynamodb = boto3.resource('dynamodb')
+dynamodb = boto3.resource('dynamodb', region_name='ap-northeast-1')
 table = dynamodb.Table("users")
 
 def lambda_handler(event, context):
