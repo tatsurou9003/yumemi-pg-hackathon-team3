@@ -6,9 +6,9 @@ import { useNavigate } from "@tanstack/react-router";
 // Amplify の設定（コンポーネント外で実行）
 Amplify.configure({
   Auth: {
-    region: 'ap-northeast-1',
-    userPoolId: '',
-    userPoolWebClientId: '',
+    region: "ap-northeast-1",
+    userPoolId: "",
+    userPoolWebClientId: "",
   },
 });
 
@@ -33,11 +33,11 @@ const SignupForm = () => {
   const onSubmit = async (data: formData) => {
     try {
       await handleSignUp(data.email, data.password);
-      localStorage.setItem('email', data.email);
-      localStorage.setItem('password', data.password);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("password", data.password);
       navigate({ to: "/verify" }); // サインアップ成功時に /complete に遷移
     } catch (error) {
-      console.error('サインアップエラー:', error);
+      console.error("サインアップエラー:", error);
       // エラーハンドリング（例：エラーメッセージを表示）
     }
   };

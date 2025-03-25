@@ -2,7 +2,11 @@ import { useNavigate } from "@tanstack/react-router";
 const SignUpButton = () => {
   const navigate = useNavigate();
   function displayLocalStorage() {
-    console.log(localStorage.getItem('CognitoIdentityServiceProvider.62p2moq06chrr2116tnph73rjl.lotus1759@gmail.com.idToken'))
+    console.log(
+      localStorage.getItem(
+        "CognitoIdentityServiceProvider.62p2moq06chrr2116tnph73rjl.lotus1759@gmail.com.idToken",
+      ),
+    );
   }
 
   displayLocalStorage();

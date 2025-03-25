@@ -5,9 +5,9 @@ import { useNavigate } from "@tanstack/react-router";
 // Amplify の設定（コンポーネント外で実行）
 Amplify.configure({
   Auth: {
-    region: 'ap-northeast-1',
-    userPoolId: '',
-    userPoolWebClientId: '',
+    region: "ap-northeast-1",
+    userPoolId: "",
+    userPoolWebClientId: "",
   },
 });
 
@@ -16,8 +16,12 @@ const VerifyForm = () => {
   const navigate = useNavigate();
 
   // 確認コード検証関数
-  async function handleConfirmSignUp(email: string, code: number, password: string) {
-    console.log(email, code, password)
+  async function handleConfirmSignUp(
+    email: string,
+    code: number,
+    password: string,
+  ) {
+    console.log(email, code, password);
     try {
       // 確認コードを検証
       await Auth.confirmSignUp(email, code);
@@ -25,20 +29,20 @@ const VerifyForm = () => {
       const user = await Auth.signIn(email, password);
       return user;
     } catch (error) {
-      console.error('確認/サインインエラー:', error);
+      console.error("確認/サインインエラー:", error);
       throw error;
     }
   }
 
   const onSubmit = async (data: { code: number }) => {
-    const email = localStorage.getItem('email') ?? "";
-    const password = localStorage.getItem('password') ?? "";
+    const email = localStorage.getItem("email") ?? "";
+    const password = localStorage.getItem("password") ?? "";
 
     try {
       await handleConfirmSignUp(email, data.code, password);
       navigate({ to: "/login" });
     } catch (error) {
-      console.error('確認エラー:', error);
+      console.error("確認エラー:", error);
     }
   };
 

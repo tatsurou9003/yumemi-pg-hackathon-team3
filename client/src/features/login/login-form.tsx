@@ -6,9 +6,9 @@ import { useNavigate } from "@tanstack/react-router";
 // Amplify の設定（コンポーネント外で実行）
 Amplify.configure({
   Auth: {
-    region: 'ap-northeast-1',
-    userPoolId: '',
-    userPoolWebClientId: '',
+    region: "ap-northeast-1",
+    userPoolId: "",
+    userPoolWebClientId: "",
   },
 });
 
@@ -21,19 +21,19 @@ const LoginForm = () => {
   const handleLogin = async (email: string, password: string) => {
     try {
       const user = await Auth.signIn(email, password);
-      console.log('認証済みユーザー:', user);
+      console.log("認証済みユーザー:", user);
       return user;
     } catch (error) {
-      console.log('認証されていません');
+      console.log("認証されていません");
       return null;
     }
-  }
+  };
 
   const onSubmit = async (data: formData) => {
     try {
       await handleLogin(data.email, data.password);
     } catch (error) {
-      console.error('サインアップエラー:', error);
+      console.error("サインアップエラー:", error);
       // エラーハンドリング（例：エラーメッセージを表示）
     }
   };
