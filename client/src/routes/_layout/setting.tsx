@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
-import SettingForm from '@/components/common/form/settingfrom';
+import { createFileRoute } from "@tanstack/react-router";
+import SettingForm from "@/components/common/form/settingfrom";
 
-export const Route = createFileRoute('/_layout/setting')({
+export const Route = createFileRoute("/_layout/setting")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   return (
