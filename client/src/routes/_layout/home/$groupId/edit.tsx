@@ -1,4 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  useNavigate,
+  useParams,
+} from "@tanstack/react-router";
 import { User } from "@/types/userData";
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
@@ -6,6 +10,7 @@ import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "react-toastify";
 import { getUsers } from "@/hooks/orval/users/users";
 import LoadingIndicator from "@/components/common/loading/loading";
+import { getGroups } from "@/hooks/orval/groups/groups";
 
 export const Route = createFileRoute("/_layout/home/$groupId/edit")({
   component: RouteComponent,
@@ -19,6 +24,7 @@ function RouteComponent() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const params = useParams({ from: "/_layout/home/$groupId/edit" });
 
   const searchTerm = watch("userId") || "";
 
@@ -70,12 +76,23 @@ function RouteComponent() {
       .filter(Boolean) as User[];
   };
 
-  const onSubmit = () => {
-    //TODO: APIでメンバー招待を叩く
-    console.log("選択されたユーザー: ", selectedUsers);
-    //TODO: リクエストが失敗した時はエラートーストを表示
-    toast.success("メンバーを招待しました");
-    navigate({ to: "/home" });
+  const onSubmit = async () => {
+    try {
+      setIsLoading(true);
+
+      await getGroups().postGroupsInviteGroupId(params.groupId, {
+        userIds: selectedUsers,
+      });
+
+      toast.success("メンバーを招待しました");
+
+      navigate({ to: `/home` });
+    } catch (error) {
+      console.error("メンバー招待エラー:", error);
+      toast.error("メンバーの招待に失敗しました");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // スクロール処理
