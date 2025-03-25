@@ -13,13 +13,13 @@ Amplify.configure({
 });
 
 const VerifyForm = () => {
-  const { handleSubmit, register } = useForm<{ code: number }>();
+  const { handleSubmit, register } = useForm<{ code: string }>();
   const navigate = useNavigate();
 
   // 確認コード検証関数
   async function handleConfirmSignUp(
     email: string,
-    code: number,
+    code: string,
     password: string,
   ) {
     console.log(email, code, password);
@@ -31,11 +31,10 @@ const VerifyForm = () => {
       return user;
     } catch (error) {
       console.error("確認/サインインエラー:", error);
-      throw error;
     }
   }
 
-  const onSubmit = async (data: { code: number }) => {
+  const onSubmit = async (data: { code: string }) => {
     const email = localStorage.getItem("email") ?? "";
     const password = localStorage.getItem("password") ?? "";
 

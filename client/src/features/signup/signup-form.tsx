@@ -4,7 +4,7 @@ import { Amplify, Auth } from "aws-amplify";
 import { useNavigate } from "@tanstack/react-router";
 import { env } from "@/env";
 
-// Amplify の設定（コンポーネント外で実行）
+// Amplify の設定
 Amplify.configure({
   Auth: {
     region: "ap-northeast-1",
@@ -36,12 +36,12 @@ const SignupForm = () => {
       await handleSignUp(data.email, data.password);
       localStorage.setItem("email", data.email);
       localStorage.setItem("password", data.password);
-      navigate({ to: "/verify" }); // サインアップ成功時に /complete に遷移
+      navigate({ to: "/verify" }); // サインアップ成功時に遷移
     } catch (error) {
       console.error("サインアップエラー:", error);
-      // エラーハンドリング（例：エラーメッセージを表示）
     }
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-col justify-center items-center">
