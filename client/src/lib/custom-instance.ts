@@ -18,7 +18,7 @@ instance.interceptors.request.use(
     // ローカルストレージからアクセストークンを取得
     const userId = `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.LastAuthUser`;
     const idToken = localStorage.getItem(
-      `CognitoIdentityServiceProvider.62p2moq06chrr2116tnph73rjl.${userId}.idToken`
+      `CognitoIdentityServiceProvider.62p2moq06chrr2116tnph73rjl.${userId}.idToken`,
     );
 
     // トークンが存在する場合、認証ヘッダーに追加
@@ -30,7 +30,7 @@ instance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // レスポンスインターセプター - エラーハンドリング
@@ -45,12 +45,12 @@ instance.interceptors.response.use(
       window.location.href = "/login";
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 // Orval用のエクスポート関数
 export const customInstance = <T>(
-  config: AxiosRequestConfig
+  config: AxiosRequestConfig,
 ): Promise<AxiosResponse<T>> => {
   return instance.request<T>(config);
 };
