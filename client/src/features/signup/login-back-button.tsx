@@ -8,8 +8,7 @@ const LginBackButton = () => {
           navigate({ to: "/login" });
         }}
         type="submit"
-        className="relative w-[152px] h-[27px] top-[120px] 
-                  text-black text-sm font-medium cursor-pointer"
+        className="relative w-[152px] h-[27px]  top-[104px] rounded-[4px] text-black text-sm font-medium cursor-pointer"
       >
         ログイン
       </button>

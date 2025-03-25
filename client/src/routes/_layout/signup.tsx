@@ -10,6 +10,7 @@ function RouteComponent() {
     <div className="min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)] bg-no-repeat bg-contain bg-center ">
       <LoginForm />
       <SignUpSettingButton />
+      <div className="h-3" />
       <LginBackButton />
     </div>
   );
