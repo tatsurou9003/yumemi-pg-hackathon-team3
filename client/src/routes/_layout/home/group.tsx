@@ -3,6 +3,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "react-toastify";
+import { getGroups } from "@/hooks/orval/groups/groups";
+import { useState } from "react";
+import LoadingIndicator from "@/components/common/loading/loading";
 
 export const Route = createFileRoute("/_layout/home/group")({
   component: RouteComponent,
@@ -12,16 +15,24 @@ function RouteComponent() {
   const { handleSubmit, register, watch } = useForm<Group>();
   const navigate = useNavigate();
   const groupNameValue = watch("groupName");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = (data: Group) => {
+  const onSubmit = async (data: Group) => {
     //TODO: APIでグループ作成を叩いて、ホーム画面に戻す
     if (data) {
-      console.log("フォームデータ: ", data);
+      setIsLoading(true);
+      // APIからユーザーホーム情報を取得
+      await getGroups().postGroupsCreate(data);
       //TODO: エラーだったらエラートーストを表示
       toast.success("グループを作成しました");
       navigate({ to: "/home" });
     }
   };
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="bg-[#FFEADD] h-full">
       <div className="flex flex-col justify-center items-center ">
