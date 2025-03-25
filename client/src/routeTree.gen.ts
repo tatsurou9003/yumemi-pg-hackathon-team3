@@ -13,7 +13,6 @@
 import { Route as rootRoute } from "./routes/__root";
 import { Route as LayoutImport } from "./routes/_layout";
 import { Route as IndexImport } from "./routes/index";
-import { Route as LayoutSigunpImport } from "./routes/_layout/sigunp";
 import { Route as LayoutSignupImport } from "./routes/_layout/signup";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutLoginImport } from "./routes/_layout/login";
@@ -38,12 +37,6 @@ const IndexRoute = IndexImport.update({
   id: "/",
   path: "/",
   getParentRoute: () => rootRoute,
-} as any);
-
-const LayoutSigunpRoute = LayoutSigunpImport.update({
-  id: "/sigunp",
-  path: "/sigunp",
-  getParentRoute: () => LayoutRoute,
 } as any);
 
 const LayoutSignupRoute = LayoutSignupImport.update({
@@ -165,13 +158,6 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutSignupImport;
       parentRoute: typeof LayoutImport;
     };
-    "/_layout/sigunp": {
-      id: "/_layout/sigunp";
-      path: "/sigunp";
-      fullPath: "/sigunp";
-      preLoaderRoute: typeof LayoutSigunpImport;
-      parentRoute: typeof LayoutImport;
-    };
     "/_layout/home/group": {
       id: "/_layout/home/group";
       path: "/home/group";
@@ -238,7 +224,6 @@ interface LayoutRouteChildren {
   LayoutLoginRoute: typeof LayoutLoginRoute;
   LayoutProfileRoute: typeof LayoutProfileRoute;
   LayoutSignupRoute: typeof LayoutSignupRoute;
-  LayoutSigunpRoute: typeof LayoutSigunpRoute;
   LayoutHomeGroupRoute: typeof LayoutHomeGroupRoute;
   LayoutHomePolicyRoute: typeof LayoutHomePolicyRoute;
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute;
@@ -254,7 +239,6 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutLoginRoute: LayoutLoginRoute,
   LayoutProfileRoute: LayoutProfileRoute,
   LayoutSignupRoute: LayoutSignupRoute,
-  LayoutSigunpRoute: LayoutSigunpRoute,
   LayoutHomeGroupRoute: LayoutHomeGroupRoute,
   LayoutHomePolicyRoute: LayoutHomePolicyRoute,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
@@ -275,7 +259,6 @@ export interface FileRoutesByFullPath {
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
   "/signup": typeof LayoutSignupRoute;
-  "/sigunp": typeof LayoutSigunpRoute;
   "/home/group": typeof LayoutHomeGroupRoute;
   "/home/policy": typeof LayoutHomePolicyRoute;
   "/home": typeof LayoutHomeIndexRoute;
@@ -293,7 +276,6 @@ export interface FileRoutesByTo {
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
   "/signup": typeof LayoutSignupRoute;
-  "/sigunp": typeof LayoutSigunpRoute;
   "/home/group": typeof LayoutHomeGroupRoute;
   "/home/policy": typeof LayoutHomePolicyRoute;
   "/home": typeof LayoutHomeIndexRoute;
@@ -312,7 +294,6 @@ export interface FileRoutesById {
   "/_layout/login": typeof LayoutLoginRoute;
   "/_layout/profile": typeof LayoutProfileRoute;
   "/_layout/signup": typeof LayoutSignupRoute;
-  "/_layout/sigunp": typeof LayoutSigunpRoute;
   "/_layout/home/group": typeof LayoutHomeGroupRoute;
   "/_layout/home/policy": typeof LayoutHomePolicyRoute;
   "/_layout/home/": typeof LayoutHomeIndexRoute;
@@ -332,7 +313,6 @@ export interface FileRouteTypes {
     | "/login"
     | "/profile"
     | "/signup"
-    | "/sigunp"
     | "/home/group"
     | "/home/policy"
     | "/home"
@@ -349,7 +329,6 @@ export interface FileRouteTypes {
     | "/login"
     | "/profile"
     | "/signup"
-    | "/sigunp"
     | "/home/group"
     | "/home/policy"
     | "/home"
@@ -366,7 +345,6 @@ export interface FileRouteTypes {
     | "/_layout/login"
     | "/_layout/profile"
     | "/_layout/signup"
-    | "/_layout/sigunp"
     | "/_layout/home/group"
     | "/_layout/home/policy"
     | "/_layout/home/"
@@ -412,7 +390,6 @@ export const routeTree = rootRoute
         "/_layout/login",
         "/_layout/profile",
         "/_layout/signup",
-        "/_layout/sigunp",
         "/_layout/home/group",
         "/_layout/home/policy",
         "/_layout/home/",
@@ -437,10 +414,6 @@ export const routeTree = rootRoute
     },
     "/_layout/signup": {
       "filePath": "_layout/signup.tsx",
-      "parent": "/_layout"
-    },
-    "/_layout/sigunp": {
-      "filePath": "_layout/sigunp.tsx",
       "parent": "/_layout"
     },
     "/_layout/home/group": {

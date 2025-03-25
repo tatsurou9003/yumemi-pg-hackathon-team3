@@ -6,31 +6,34 @@
 
  * OpenAPI spec version: 1.0.0
  */
-import * as axios from "axios";
-import type { AxiosRequestConfig, AxiosResponse } from "axios";
+import { customInstance } from "../../../lib/custom-instance";
 
 export const getLikes = () => {
   /**
    * 回答に対していいねをします。
    * @summary いいね
    */
-  const putAnswersLikeAnswerId = <TData = AxiosResponse<void>>(
-    answerId: string,
-    options?: AxiosRequestConfig,
-  ): Promise<TData> => {
-    return axios.default.put(`/answers/like/${answerId}`, undefined, options);
+  const putAnswersLikeAnswerId = (answerId: string) => {
+    return customInstance<void>({
+      url: `/answers/like/${answerId}`,
+      method: "PUT",
+    });
   };
   /**
    * 回答に対していいねを解除します。
    * @summary いいね解除
    */
-  const deleteAnswersLikeAnswerId = <TData = AxiosResponse<void>>(
-    answerId: string,
-    options?: AxiosRequestConfig,
-  ): Promise<TData> => {
-    return axios.default.delete(`/answers/like/${answerId}`, options);
+  const deleteAnswersLikeAnswerId = (answerId: string) => {
+    return customInstance<void>({
+      url: `/answers/like/${answerId}`,
+      method: "DELETE",
+    });
   };
   return { putAnswersLikeAnswerId, deleteAnswersLikeAnswerId };
 };
-export type PutAnswersLikeAnswerIdResult = AxiosResponse<void>;
-export type DeleteAnswersLikeAnswerIdResult = AxiosResponse<void>;
+export type PutAnswersLikeAnswerIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getLikes>["putAnswersLikeAnswerId"]>>
+>;
+export type DeleteAnswersLikeAnswerIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getLikes>["deleteAnswersLikeAnswerId"]>>
+>;
