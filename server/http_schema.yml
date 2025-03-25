@@ -329,13 +329,6 @@ paths:
             type: string
           required: true
           description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
-      requestBody:
-        description: 回答情報
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Answer"
       responses:
         "201":
           description: 回答投稿成功
