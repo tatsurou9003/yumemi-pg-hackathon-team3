@@ -56,8 +56,8 @@ const mockUsers: UserData[] = [
 ];
 
 function RouteComponent() {
-  const { handleSubmit, register, watch } = useForm<User>();
-  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const { handleSubmit, register, watch } = useForm<UserData>();
+  const [searchResults, setSearchResults] = useState<UserData[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -96,7 +96,7 @@ function RouteComponent() {
   const getSelectedUserObjects = () => {
     return selectedUsers
       .map((id) => mockUsers.find((user) => user.userId === id))
-      .filter(Boolean) as User[];
+      .filter(Boolean) as UserData[];
   };
 
   const onSubmit = () => {
