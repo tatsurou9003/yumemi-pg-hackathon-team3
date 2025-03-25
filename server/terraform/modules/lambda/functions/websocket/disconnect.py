@@ -3,7 +3,7 @@ import boto3
 
 # DynamoDBのリソースとテーブルの取得
 dynamodb = boto3.resource("dynamodb")
-connections_table = dynamodb.Table("websocket-connections")
+connections_table = dynamodb.Table("ws-connections")
 
 def lambda_handler(event, context):
     # 接続IDの取得

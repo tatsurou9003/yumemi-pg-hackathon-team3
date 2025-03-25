@@ -59,7 +59,7 @@ resource "aws_lambda_permission" "websocket_connect" {
   action        = "lambda:InvokeFunction"
   function_name = var.lambda_connect_arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/$connect"
+  source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
 }
 
 # Lambda関数の呼び出し権限（$disconnect）
@@ -68,7 +68,7 @@ resource "aws_lambda_permission" "websocket_disconnect" {
   action        = "lambda:InvokeFunction"
   function_name = var.lambda_disconnect_arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/$disconnect"
+  source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
 }
 
 # Lambda関数の呼び出し権限（sendMessage）
@@ -77,7 +77,7 @@ resource "aws_lambda_permission" "websocket_send_message" {
   action        = "lambda:InvokeFunction"
   function_name = var.lambda_send_message_arn
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/sendMessage"
+  source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
 }
 
 resource "aws_cloudwatch_log_group" "api_gw_log_group" {
