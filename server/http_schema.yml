@@ -142,19 +142,18 @@ paths:
       summary: ユーザー検索
       description: 招待画面でユーザーIDを指定してユーザー情報を検索します。
       parameters:
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ログイン中のユーザーIDをクエリパラメータに含んで送信する
         - in: header
           name: Authorization
           schema:
             type: string
           required: true
           description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
-      requestBody:
-        description: ユーザーID
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/UserIdRequest"
       responses:
         "200":
           description: ユーザー情報取得成功
