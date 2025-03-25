@@ -13,7 +13,7 @@
 import { Route as rootRoute } from "./routes/__root";
 import { Route as LayoutImport } from "./routes/_layout";
 import { Route as IndexImport } from "./routes/index";
-import { Route as LayoutSigunpImport } from "./routes/_layout/sigunp";
+import { Route as LayoutSigunpImport } from "./routes/_layout/signup";
 import { Route as LayoutSettingImport } from "./routes/_layout/setting";
 import { Route as LayoutProfileImport } from "./routes/_layout/profile";
 import { Route as LayoutLoginImport } from "./routes/_layout/login";
@@ -41,8 +41,8 @@ const IndexRoute = IndexImport.update({
 } as any);
 
 const LayoutSigunpRoute = LayoutSigunpImport.update({
-  id: "/sigunp",
-  path: "/sigunp",
+  id: "/signup",
+  path: "/signup",
   getParentRoute: () => LayoutRoute,
 } as any);
 
@@ -165,10 +165,10 @@ declare module "@tanstack/react-router" {
       preLoaderRoute: typeof LayoutSettingImport;
       parentRoute: typeof LayoutImport;
     };
-    "/_layout/sigunp": {
-      id: "/_layout/sigunp";
-      path: "/sigunp";
-      fullPath: "/sigunp";
+    "/_layout/signup": {
+      id: "/_layout/signup";
+      path: "/signup";
+      fullPath: "/signup";
       preLoaderRoute: typeof LayoutSigunpImport;
       parentRoute: typeof LayoutImport;
     };
@@ -238,7 +238,7 @@ interface LayoutRouteChildren {
   LayoutLoginRoute: typeof LayoutLoginRoute;
   LayoutProfileRoute: typeof LayoutProfileRoute;
   LayoutSettingRoute: typeof LayoutSettingRoute;
-  LayoutSigunpRoute: typeof LayoutSigunpRoute;
+  LayoutSignupRoute: typeof LayoutSignupRoute;
   LayoutHomeGroupRoute: typeof LayoutHomeGroupRoute;
   LayoutHomePolicyRoute: typeof LayoutHomePolicyRoute;
   LayoutHomeIndexRoute: typeof LayoutHomeIndexRoute;
@@ -254,7 +254,7 @@ const LayoutRouteChildren: LayoutRouteChildren = {
   LayoutLoginRoute: LayoutLoginRoute,
   LayoutProfileRoute: LayoutProfileRoute,
   LayoutSettingRoute: LayoutSettingRoute,
-  LayoutSigunpRoute: LayoutSigunpRoute,
+  LayoutSignupRoute: LayoutSignupRoute,
   LayoutHomeGroupRoute: LayoutHomeGroupRoute,
   LayoutHomePolicyRoute: LayoutHomePolicyRoute,
   LayoutHomeIndexRoute: LayoutHomeIndexRoute,
@@ -275,7 +275,7 @@ export interface FileRoutesByFullPath {
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
   "/setting": typeof LayoutSettingRoute;
-  "/sigunp": typeof LayoutSigunpRoute;
+  "/signup": typeof LayoutSignupRoute;
   "/home/group": typeof LayoutHomeGroupRoute;
   "/home/policy": typeof LayoutHomePolicyRoute;
   "/home": typeof LayoutHomeIndexRoute;
@@ -293,7 +293,7 @@ export interface FileRoutesByTo {
   "/login": typeof LayoutLoginRoute;
   "/profile": typeof LayoutProfileRoute;
   "/setting": typeof LayoutSettingRoute;
-  "/sigunp": typeof LayoutSigunpRoute;
+  "/signup": typeof LayoutSignupRoute;
   "/home/group": typeof LayoutHomeGroupRoute;
   "/home/policy": typeof LayoutHomePolicyRoute;
   "/home": typeof LayoutHomeIndexRoute;
@@ -312,7 +312,7 @@ export interface FileRoutesById {
   "/_layout/login": typeof LayoutLoginRoute;
   "/_layout/profile": typeof LayoutProfileRoute;
   "/_layout/setting": typeof LayoutSettingRoute;
-  "/_layout/sigunp": typeof LayoutSigunpRoute;
+  "/_layout/signup": typeof LayoutSignupRoute;
   "/_layout/home/group": typeof LayoutHomeGroupRoute;
   "/_layout/home/policy": typeof LayoutHomePolicyRoute;
   "/_layout/home/": typeof LayoutHomeIndexRoute;
@@ -332,7 +332,7 @@ export interface FileRouteTypes {
     | "/login"
     | "/profile"
     | "/setting"
-    | "/sigunp"
+    | "/signup"
     | "/home/group"
     | "/home/policy"
     | "/home"
@@ -349,7 +349,7 @@ export interface FileRouteTypes {
     | "/login"
     | "/profile"
     | "/setting"
-    | "/sigunp"
+    | "/signup"
     | "/home/group"
     | "/home/policy"
     | "/home"
@@ -366,7 +366,7 @@ export interface FileRouteTypes {
     | "/_layout/login"
     | "/_layout/profile"
     | "/_layout/setting"
-    | "/_layout/sigunp"
+    | "/_layout/signup"
     | "/_layout/home/group"
     | "/_layout/home/policy"
     | "/_layout/home/"
