@@ -1,28 +1,51 @@
 import { useForm } from "react-hook-form";
 import { formData } from "@/types/formData";
+import { Amplify, Auth } from "aws-amplify";
+
+// Amplify の設定（コンポーネント外で実行）
+Amplify.configure({
+  Auth: {
+    region: 'ap-northeast-1',
+    userPoolId: '',
+    userPoolWebClientId: '',
+  },
+});
 
 const SignupForm = () => {
-  // useFormフックの呼び出し
   const { handleSubmit, register } = useForm<formData>();
 
-  const onSubmit = (data: formData) => {
-    console.log("フォームデータ: ", data);
+  // サインアップ処理を実行する関数
+  const handleSignUp = async (email: string, password: string) => {
+    try {
+      const { user } = await Auth.signUp({
+        username: email,
+        password,
+      });
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // フォーム送信時の処理
+  const onSubmit = async (data: formData) => {
+    await handleSignUp(data.email, data.password);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col justify-center items-center ">
+      <div className="flex flex-col justify-center items-center">
         <input
           type="email"
           id="email"
-          {...register("email", { required: "メールアドレス" })}
+          {...register("email", { required: "メールアドレスは必須です" })}
           placeholder="メールアドレス"
           className="w-[310px] h-[48px] relative top-[74px] bg-white border border-gray-300 rounded px-4 text-gray-500 mb-4 cursor-pointer"
         />
         <input
           type="password"
           id="password"
-          {...register("password", { required: "パスワード" })}
+          {...register("password", { required: "パスワードは必須です" })}
           placeholder="パスワード"
           className="w-[310px] h-[48px] relative top-[84px] bg-white border border-gray-300 rounded px-4 text-gray-500 cursor-pointer"
         />
@@ -30,8 +53,8 @@ const SignupForm = () => {
       <div className="flex flex-col justify-center items-center">
         <button
           type="submit"
-          className="relative w-[152px] h-[27px]  top-[104px] rounded
-                   bg-white text-black text-sm font-medium cursor-pointer  "
+          className="relative w-[152px] h-[27px] top-[104px] rounded
+                   bg-white text-black text-sm font-medium cursor-pointer"
         >
           新規登録
         </button>
