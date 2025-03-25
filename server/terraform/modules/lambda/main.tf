@@ -68,7 +68,7 @@ resource "aws_iam_policy" "lambda_api_gateway_policy" {
           "execute-api:ManageConnections"
         ]
         Effect   = "Allow"
-        Resource = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*"
+        Resource = "arn:aws:execute-api:*:*:*/*"
       }
     ]
   })

@@ -54,6 +54,15 @@ resource "aws_cognito_user_pool_client" "user_pool_client" {
   }
 }
 
+# Cognitoに対してLambdaを呼び出す権限を付与
+resource "aws_lambda_permission" "allow_cognito" {
+  statement_id  = "AllowExecutionFromCognito"
+  action        = "lambda:InvokeFunction"
+  function_name = var.post_confirmation_lambda_arn
+  principal     = "cognito-idp.amazonaws.com"
+  source_arn    = aws_cognito_user_pool.user_pool.arn
+}
+
 output "user_pool_id" {
   value = aws_cognito_user_pool.user_pool.id
 }

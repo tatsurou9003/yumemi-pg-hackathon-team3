@@ -80,6 +80,59 @@ resource "aws_lambda_permission" "websocket_send_message" {
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/sendMessage"
 }
 
+resource "aws_cloudwatch_log_group" "api_gw_log_group" {
+  name              = "/aws/apigateway/${aws_apigatewayv2_api.websocket_api.name}"
+  retention_in_days = 7
+}
+
+# CloudWatch Logsへの書き込み権限を持つIAMロール
+resource "aws_iam_role" "api_gateway_cloudwatch_role" {
+  name = "api-gateway-cloudwatch-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Principal = {
+          Service = "apigateway.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+# CloudWatch Logsへの書き込み権限を付与するポリシー
+resource "aws_iam_role_policy" "api_gateway_cloudwatch_policy" {
+  name = "api-gateway-cloudwatch-policy"
+  role = aws_iam_role.api_gateway_cloudwatch_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:DescribeLogGroups",
+          "logs:DescribeLogStreams",
+          "logs:PutLogEvents",
+          "logs:GetLogEvents",
+          "logs:FilterLogEvents"
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# API Gateway アカウント設定 - CloudWatchロールを指定
+resource "aws_api_gateway_account" "api_gateway_account" {
+  cloudwatch_role_arn = aws_iam_role.api_gateway_cloudwatch_role.arn
+}
+
 # デプロイメント
 resource "aws_apigatewayv2_deployment" "websocket_deployment" {
   api_id      = aws_apigatewayv2_api.websocket_api.id
@@ -87,20 +140,25 @@ resource "aws_apigatewayv2_deployment" "websocket_deployment" {
   
   # すべてのルートとその統合が作成された後にデプロイするために依存関係を設定
   depends_on = [
-    aws_apigatewayv2_route.connect,
-    aws_apigatewayv2_route.disconnect,
-    aws_apigatewayv2_route.send_message
+    aws_api_gateway_account.api_gateway_account,
+    aws_cloudwatch_log_group.api_gw_log_group,
+    aws_lambda_permission.websocket_connect,
+    aws_lambda_permission.websocket_disconnect,
+    aws_lambda_permission.websocket_send_message
   ]
   
   # 変更があった場合に毎回新しいデプロイメントを作成するためのトリガー
   triggers = {
     redeployment = sha1(jsonencode([
-      aws_apigatewayv2_route.connect,
-      aws_apigatewayv2_route.disconnect,
-      aws_apigatewayv2_route.send_message,
-      aws_apigatewayv2_integration.connect,
-      aws_apigatewayv2_integration.disconnect,
-      aws_apigatewayv2_integration.send_message
+    aws_apigatewayv2_route.connect,
+    aws_apigatewayv2_route.disconnect,
+    aws_apigatewayv2_route.send_message,
+    aws_apigatewayv2_integration.connect,
+    aws_apigatewayv2_integration.disconnect,
+    aws_apigatewayv2_integration.send_message,
+    aws_lambda_permission.websocket_connect,
+    aws_lambda_permission.websocket_disconnect,
+    aws_lambda_permission.websocket_send_message
     ]))
   }
 
@@ -121,6 +179,15 @@ resource "aws_apigatewayv2_stage" "websocket_stage" {
     throttling_burst_limit   = 50
     throttling_rate_limit    = 50
   }
+
+    access_log_settings {
+    destination_arn = aws_cloudwatch_log_group.api_gw_log_group.arn
+    format          = "$context.identity.sourceIp - [$context.requestTime] \"$context.routeKey $context.connectionId\" $context.status $context.responseLength $context.requestId"
+  }
+    # 明示的な依存関係を追加
+  depends_on = [
+    aws_api_gateway_account.api_gateway_account
+  ]
 }
 
 # 出力値

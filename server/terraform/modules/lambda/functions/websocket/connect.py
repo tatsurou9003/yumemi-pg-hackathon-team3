@@ -40,5 +40,5 @@ def lambda_handler(event, context):
     except Exception as e:
         print(f"エラーが発生しました: {str(e)}")
         return {
-            "statusCode": 500
+            "statusCode": 200
         }

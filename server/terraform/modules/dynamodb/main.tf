@@ -173,4 +173,8 @@ resource "aws_dynamodb_table" "ws_connections" {
         hash_key           = "groupId"
         projection_type    = "ALL"
     }
+
+        tags = {
+        Project = "Wa-Life"
+    }
 }
