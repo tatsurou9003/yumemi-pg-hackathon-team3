@@ -58,7 +58,7 @@ export const getUsers = () => {
    */
   const putUsersProfileUserId = (
     userId: string,
-    userProfileUpdate: UserProfileUpdate
+    userProfileUpdate: UserProfileUpdate,
   ) => {
     return customInstance<void>({
       url: `/users/profile/${userId}`,
