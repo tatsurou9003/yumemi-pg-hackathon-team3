@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import LoginForm from "@/components/common/form/loginform";
-import LoginButton from "@/components/common/button/login-button";
-import GoogleButton from "@/components/common/button/google-login-button";
-import SignUpButton from "@/components/common/button/sign-up-button";
+import LoginButton from "@/features/login/login-button";
+import GoogleButton from "@/features/login/google-login-button";
+import SignUpButton from "@/features/login/sign-up-button";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_layout/login")({
@@ -22,9 +22,7 @@ function RouteComponent() {
   }, []);
   return (
     <div
-      className={`min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)] bg-no-repeat bg-contain bg-center transition-opacity duration-1000 ease-in-out ${
-        isVisible ? "opacity-100" : "opacity-0"
-      }`}
+      className={`min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)] bg-no-repeat bg-contain bg-center ${isVisible ? "opacity-100" : "opacity-0"} transition-opacity duration-500`}
     >
       <LoginForm />
       <LoginButton />
