@@ -8,6 +8,7 @@ import { FormSchema } from "@/features/room/room-form";
 import { MessageData } from "@/types/messageData";
 import { env } from "@/env";
 import { getGroups } from "@/hooks/orval/groups/groups";
+import { toast } from "react-toastify";
 
 export const Route = createFileRoute("/_layout/home/$groupId/")({
   component: RouteComponent,
@@ -20,7 +21,7 @@ function RouteComponent() {
 
   const userId =
     localStorage.getItem(
-      `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
+      `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`
     ) ?? "";
   const path = location.pathname ?? "";
   const groupId = path.split("/")[2];
@@ -43,7 +44,7 @@ function RouteComponent() {
         setMessages(chatDataFormatted);
 
         const websocket = new WebSocket(
-          `${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`,
+          `${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`
         );
         socketRef.current = websocket;
 
@@ -58,6 +59,7 @@ function RouteComponent() {
 
         socketRef.current.onerror = (error) => {
           console.error("エラーが発生しました:", error);
+          toast.error("エラーが発生しました");
         };
 
         socketRef.current.onclose = () => {
@@ -65,6 +67,7 @@ function RouteComponent() {
         };
       } catch (error) {
         console.error("データの取得に失敗しました:", error);
+        toast.error("データの取得に失敗しました");
       }
     };
 
@@ -96,8 +99,9 @@ function RouteComponent() {
       if (!message.createdBy || !message.createdBy.userId) {
         console.error(
           "message.createdBy is null or does not have userId:",
-          message,
+          message
         );
+        toast.error("エラーが発生しました");
         return null; // エラーハンドリング、表示しない
       }
 

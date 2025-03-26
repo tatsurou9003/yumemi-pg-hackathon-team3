@@ -3,6 +3,7 @@ import { formData } from "@/types/formData";
 import { Amplify, Auth } from "aws-amplify";
 import { useNavigate } from "@tanstack/react-router";
 import { env } from "@/env";
+import { toast } from "react-toastify";
 
 // Amplify の設定
 Amplify.configure({
@@ -26,7 +27,9 @@ const SignupForm = () => {
       });
       return user;
     } catch (error) {
-      console.error("サインアップエラー:", error);
+      toast.error(
+        `サインアップに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`
+      );
     }
   };
 
@@ -39,6 +42,9 @@ const SignupForm = () => {
       navigate({ to: "/verify" }); // サインアップ成功時に遷移
     } catch (error) {
       console.error("サインアップエラー:", error);
+      toast.error(
+        `サインアップに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`
+      );
     }
   };
 
