@@ -159,7 +159,7 @@ function RouteComponent() {
           )}
         </div>
       )}
-      {!isDead && <ThreadFooter answers={answers} />}
+      {!isDead && <ThreadFooter answers={answers} onGood={handleGood} />}
     </div>
   );
 }
