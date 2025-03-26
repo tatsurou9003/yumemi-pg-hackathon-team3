@@ -90,6 +90,9 @@ function RouteComponent() {
           goodCount: answer.goodCount,
           isliked: answer.isliked,
         }));
+        formattedAnswers.sort(
+          (a: AnswerData, b: AnswerData) => b.goodCount - a.goodCount,
+        );
         setAnswers(formattedAnswers);
       } catch (error) {
         console.error("データの取得に失敗しました:", error);

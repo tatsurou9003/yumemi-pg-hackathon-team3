@@ -28,6 +28,7 @@ def lambda_handler(event, context):
     try:
         # メッセージの内容を取得
         body = json.loads(event["body"])
+        print(f"メッセージデータ: {body}")
         
         # 必須フィールドのチェック
         required_fields = ["action", "groupId", "messageType", "createdBy", "messageText"]
@@ -46,6 +47,13 @@ def lambda_handler(event, context):
         # 画像のS3アップロード処理
         message_image_url = ""
         message_image = body.get("messageImage", "")
+        print(f"画像データ: {message_image}")
+
+        # 安全なデバッグ表示
+        if message_image:
+            print(f"画像データタイプ: {type(message_image)}, 長さ: {len(str(message_image))}")
+            if isinstance(message_image, str) and len(message_image) > 30:
+                print(f"画像データプレビュー: {message_image[:30]}...")
         
         if message_image and isinstance(message_image, str) and message_image.startswith('data:'):
             try:
@@ -83,7 +91,8 @@ def lambda_handler(event, context):
                 print(traceback.format_exc())
                 # 画像アップロードに失敗してもメッセージ送信は続行
         else:
-            print(f"画像データなし、または不正な形式: {message_image[:30]}...")
+            image_preview = str(message_image)[:30] if message_image is not None else "None"
+            print(f"画像データなし、または不正な形式: {image_preview}...")
 
         
         # メッセージデータを作成
@@ -104,20 +113,29 @@ def lambda_handler(event, context):
         messages_table.put_item(Item=message_data)
         
         # ユーザー情報を取得
-        user_response = users_table.get_item(
-            Key={"userId": user_id}
-        )
-        
-        user_info = {}
-        if "Item" in user_response:
-            user = user_response["Item"]
-            user_info = {
-                "userId": user_id,
-                "userName": user.get("userName", ""),
-                "profileImage": user.get("profileImage", ""),
-                "profileColor": user.get("profileColor", "")
-            }
-        else:
+        try:
+            user_response = users_table.get_item(
+                Key={"userId": user_id}
+            )
+            
+            user_info = {}
+            if user_response and "Item" in user_response:
+                user = user_response["Item"]
+                user_info = {
+                    "userId": user_id,
+                    "userName": user.get("userName", ""),
+                    "profileImage": user.get("profileImage", ""),
+                    "profileColor": user.get("profileColor", "")
+                }
+            else:
+                user_info = {
+                    "userId": user_id,
+                    "userName": "不明なユーザー",
+                    "profileImage": "",
+                    "profileColor": ""
+                }
+        except Exception as user_error:
+            print(f"ユーザー情報取得エラー: {str(user_error)}")
             user_info = {
                 "userId": user_id,
                 "userName": "不明なユーザー",

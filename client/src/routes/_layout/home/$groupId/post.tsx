@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useForm, ControllerRenderProps } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { compressImage } from "@/lib/compress";
 import {
   createFileRoute,
   useLocation,
@@ -87,24 +88,44 @@ function RouteComponent() {
         resolve(false);
         return;
       }
-      const newMessage = {
-        action: "sendMessage",
-        groupId: groupId,
-        createdBy: userId,
-        messageType: "THEME",
-        messageText: data.text,
-        messageImage: data.image ?? null,
-        prizeText: data.prize ?? null,
-        deadline: data.deadline ?? null,
+
+      const processMessage = (imageBase64: string | null) => {
+        const newMessage = {
+          action: "sendMessage",
+          groupId: groupId,
+          createdBy: userId,
+          messageType: "THEME",
+          messageText: data.text,
+          messageImage: imageBase64,
+          prizeText: data.prize ?? null,
+          deadline: data.deadline ?? null,
+        };
+
+        try {
+          if (socketRef.current) {
+            console.log(newMessage);
+            socketRef.current.send(JSON.stringify(newMessage));
+            resolve(true);
+          }
+        } catch (error) {
+          toast.error("投稿に失敗しました");
+          console.error("メッセージ送信エラー:", error);
+          resolve(false);
+        }
       };
 
-      try {
-        socketRef.current.send(JSON.stringify(newMessage));
-        resolve(true);
-      } catch (error) {
-        toast.error("投稿に失敗しました");
-        console.error("メッセージ送信エラー:", error);
-        resolve(false);
+      // 画像がある場合はBase64に変換して送信
+      if (data.image) {
+        const reader = new FileReader();
+        reader.readAsDataURL(data.image);
+        reader.onload = () => processMessage(reader.result as string);
+        reader.onerror = (error) => {
+          console.error("画像のエンコードに失敗しました:", error);
+          toast.error("画像のエンコードに失敗しました");
+          resolve(false);
+        };
+      } else {
+        processMessage(null);
       }
     });
   };
@@ -115,6 +136,10 @@ function RouteComponent() {
     setIsSubmitting(true);
 
     try {
+      if (data.image) {
+        const compressedFile = await compressImage(data.image);
+        data.image = compressedFile;
+      }
       const success = await handlePost(data);
       if (success) {
         toast.success("投稿が完了しました");
