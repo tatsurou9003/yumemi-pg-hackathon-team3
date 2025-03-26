@@ -5,10 +5,7 @@ import {
   AvatarImage,
 } from "@/components/common/avatar/avatar";
 import { UserCard } from "@/components/common/user-card/user-card";
-
-interface HomeAvatarProps {
-  src: string;
-}
+import { HomeAvatarProps } from "@/types/layout";
 
 const HomeAvatar = ({ src }: HomeAvatarProps) => {
   const [isUserCardOpen, setIsUserCardOpen] = useState(false);

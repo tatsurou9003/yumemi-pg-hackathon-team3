@@ -1,20 +1,14 @@
 import { useState } from "react";
 import { Header } from "./header/header";
 import { Sidebar } from "./sidebar/sidebar";
+import { LayoutProps } from "@/types/layout";
 
-interface LayoutProps {
-  version: string;
-  avatar: string;
-  children: React.ReactNode;
-  onLogout: () => void;
-}
-
-export const Layout: React.FC<LayoutProps> = ({
+export const Layout = ({
   version,
   avatar,
   children,
   onLogout,
-}) => {
+}: LayoutProps) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const handleSidebar = () => {
     setSidebarOpen((prevState) => !prevState);

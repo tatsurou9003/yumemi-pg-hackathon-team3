@@ -7,8 +7,8 @@ import { useGroup } from "@/hooks/useGroup";
 import { useEffect, useState } from "react";
 import { getUsers } from "@/hooks/orval/users/users";
 import { toast } from "react-toastify";
-import { Group } from "@/types/groupData";
 import LoadingIndicator from "@/components/common/loading/loading";
+import { Group } from "@/types/common";
 
 export const Route = createFileRoute("/_layout/home/")({
   component: RouteComponent,

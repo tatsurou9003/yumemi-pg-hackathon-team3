@@ -1,4 +1,4 @@
-import { LoadingIndicatorProps } from "@/types/loading";
+import { LoadingIndicatorProps } from "@/types/common";
 
 const LoadingIndicator = ({
   message = "大喜利準備中",
