@@ -6,7 +6,6 @@ import OogiriMessage from "@/features/room/oogiri-message";
 import RoomFooter from "@/features/room/room-footer";
 import { FormSchema } from "@/features/room/room-form";
 import { MessageData } from "@/types/messageData";
-import { User } from "@/types/userData";
 import { env } from "@/env";
 import { getGroups } from "@/hooks/orval/groups/groups";
 import { Themes } from "@/hooks/orval/oogiriAppAPI.schemas";
@@ -97,13 +96,6 @@ function RouteComponent() {
     fetchData();
   }, [groupId, userId]);
 
-  const currentUser: User = {
-    userId: userId,
-    userName: "自分",
-    profileImage: "/images/me.jpg",
-    profileColor: "#ffcc00",
-  };
-
   const sortedMessages = (() => {
     const now = new Date();
     const timestamps = messages.flatMap((message, index) => {
@@ -144,20 +136,20 @@ function RouteComponent() {
 
       return message.messageType === "THEME" ? (
         <div
-          className={`flex ${message.createdBy.userId === currentUser.userId ? "justify-end" : "justify-start"}`}
+          className={`flex ${message.createdBy.userId === userId ? "justify-end" : "justify-start"}`}
           key={message.messageId}
         >
           <OogiriMessage
             {...message}
-            isSameUser={message.createdBy.userId === currentUser.userId}
+            isSameUser={message.createdBy.userId === userId}
           />
         </div>
       ) : (
         <div
-          className={`flex ${message.createdBy.userId === currentUser.userId ? "justify-end" : "justify-start"}`}
+          className={`flex ${message.createdBy.userId === userId ? "justify-end" : "justify-start"}`}
           key={message.messageId}
         >
-          <Message {...message} userId={currentUser.userId} />
+          <Message {...message} userId={userId} />
         </div>
       );
     });
