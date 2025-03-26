@@ -28,10 +28,15 @@ const RoomForm = ({ onSend }: RoomFormProps) => {
     },
   });
 
+  const handleSubmit = (data: FormSchema) => {
+    onSend(data); // 入力データを送信する
+    form.reset(); // 送信後にフォームの内容をリセット
+  };
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSend)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="w-full flex items-center space-x-2"
       >
         <FormField

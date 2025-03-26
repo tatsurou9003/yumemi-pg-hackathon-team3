@@ -8,6 +8,8 @@ import { FormSchema } from "@/features/room/room-form";
 import { MessageData } from "@/types/messageData";
 import { User } from "@/types/userData";
 import { env } from "@/env";
+import { getGroups } from "@/hooks/orval/groups/groups";
+import { Themes } from "@/hooks/orval/oogiriAppAPI.schemas";
 
 export const Route = createFileRoute("/_layout/home/$groupId/")({
   component: RouteComponent,
@@ -18,33 +20,82 @@ function RouteComponent() {
   const socketRef = useRef<any>(null);
   const location = useLocation();
 
-  const userId = localStorage.getItem(
-    `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
-  ) ?? "";
+  const userId =
+    localStorage.getItem(
+      `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
+    ) ?? "";
   const path = location.pathname ?? "";
-  const groupId = path.split("/")[2]
+  const groupId = path.split("/")[2];
 
   useEffect(() => {
-    const websocket = new WebSocket(`${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`);
-    socketRef.current = websocket
+    const fetchData = async () => {
+      try {
+        const chatResponse = await getGroups().getGroupsChatGroupId(groupId);
+        const themeResponse = await getGroups().getGroupsThemesGroupId(groupId);
+        console.log(chatResponse);
+        console.log(themeResponse);
+        const chatDataFormatted = chatResponse.data.messages.map(
+          (message: any) => ({
+            messageId: message.messageId,
+            messageType: "CHAT",
+            messageText: message.messageText,
+            messageImage: message.messageImage ?? undefined,
+            prizeText: message.prizeText ?? undefined,
+            deadline: message.deadline ?? undefined,
+            winner: message.winner ?? undefined,
+            createdBy: message.createdBy ?? undefined,
+            createdAt: message.createdAt ?? undefined,
+          }),
+        );
+        const themeDataFormatted = themeResponse.data.flatMap((theme: Themes) =>
+          (theme.themes ?? []).map((message) => ({
+            messageId: message.messageId,
+            messageType: "THEME",
+            messageText: message.messageText,
+            messageImage: message.messageImage ?? undefined,
+            prizeText: message.prizeText ?? undefined,
+            deadline: message.deadline ?? undefined,
+            winner: message.winner ?? undefined,
+            createdBy: message.createdBy,
+            createdAt: message.createdAt,
+          })),
+        );
+        const combinedData = [...chatDataFormatted, ...themeDataFormatted];
+        setMessages(combinedData);
 
-    socketRef.current.onopen = () => {
-      console.log("コネクションを確立しました");
+        // combinedDataを1つずつsetMessagesに追加
+        combinedData.forEach((message) => {
+          setMessages((prev) => [...prev, message]);
+        });
+
+        const websocket = new WebSocket(
+          `${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`,
+        );
+        socketRef.current = websocket;
+
+        socketRef.current.onopen = () => {
+          console.log("コネクションを確立しました");
+        };
+
+        socketRef.current.onmessage = (event: any) => {
+          const parsedData = JSON.parse(event.data);
+          setMessages((prev) => [...prev, parsedData]);
+        };
+
+        socketRef.current.onerror = (error: any) => {
+          console.error("エラーが発生しました:", error);
+        };
+
+        socketRef.current.onclose = () => {
+          console.log("サーバとのコネクションをクローズしました");
+        };
+      } catch (error) {
+        console.error("データの取得に失敗しました:", error);
+      }
     };
 
-    socketRef.current.onmessage = (event: any) => {
-      const parsedData = JSON.parse(event.data);
-      setMessages((prev) => [...prev, parsedData]);
-    };
-
-    socketRef.current.onerror = (error: any) => {
-      console.error("エラーが発生しました:", error);
-    };
-
-    socketRef.current.onclose = () => {
-      console.log("サーバとのコネクションをクローズしました");
-    }
-  }, []);
+    fetchData();
+  }, [groupId, userId]);
 
   const currentUser: User = {
     userId: userId,
@@ -74,15 +125,14 @@ function RouteComponent() {
     return timestamps.map((entry, i) => {
       const message = messages[entry.index];
 
-      // message.createdBy が undefined でないことを確認
+      // message.createdBy が null でないことを確認
       if (!message.createdBy || !message.createdBy.userId) {
-        console.error("message.createdBy is undefined or does not have userId:", message);
+        console.error(
+          "message.createdBy is null or does not have userId:",
+          message,
+        );
         return null; // エラーハンドリング、表示しない
       }
-
-      // userId が正常に取得できているかをデバッグする
-      console.log("Current userId:", currentUser.userId);
-      console.log("Message createdBy userId:", message.createdBy.userId);
 
       if (entry.type === "deadline") {
         return (

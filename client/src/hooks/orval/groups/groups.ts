@@ -64,7 +64,7 @@ export const getGroups = () => {
    * @summary グループチャット履歴取得
    */
   const getGroupsChatGroupId = (groupId: string) => {
-    return customInstance<ChatHistoryResponse[]>({
+    return customInstance<ChatHistoryResponse>({
       url: `/groups/chat/${groupId}`,
       method: "GET",
     });
