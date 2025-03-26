@@ -21,7 +21,6 @@ export interface LoadingIndicatorProps {
 }
 
 export interface UserCardProps {
-  isPreview: boolean;
   name: string;
   src: string;
   id: string;
