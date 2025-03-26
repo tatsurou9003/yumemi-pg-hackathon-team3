@@ -88,10 +88,9 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   const getTitle = () => {
     // 静的なルート
     if (path === "/login") return "ログイン";
-    if (path === "/signup") return "新規登録";
-    if (path === "/verify") return "新規登録";
-    if (path === "/home") return "ホーム";
-    if (path === "/home/policy") return "ホーム";
+    if (path === "/signup" || path === "/verify" || path === "/setting")
+      return "新規登録";
+    if (path === "/home" || path === "/home/policy") return "ホーム";
     if (path === "/home/group") return "グループ作成";
     if (path === "/profile") return "プロフィール";
     // 動的なルート
@@ -112,16 +111,14 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   };
 
   const getTo = () => {
-    // 静的なルート
-    if (path === "/profile") return "/home";
-    if (path === "/home/group") return "/home";
-    // 動的なルート
-    if (path.match(/^\/home\/\w+\/\w+\/edit$/)) {
+    if (
+      path === "/profile" ||
+      path === "/home/group" ||
+      path.match(/^\/home\/\w+\/\w+\/edit$/) ||
+      path.match(/^\/home\/\w+\/\w+\/edit$/) ||
+      path.match(/^\/home\/[\w-]+$/)
+    )
       return "/home";
-    }
-    if (path.match(/^\/home\/[\w-]+$/)) {
-      return "/home";
-    }
     if (path.match(/^\/home\/[\w-]+\/[\w-]+$/)) {
       const groupId = path.split("/")[2];
       return `/home/${groupId}`;
