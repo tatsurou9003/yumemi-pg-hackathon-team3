@@ -12,6 +12,9 @@ export interface HeaderProps {
 
 export interface HomeAvatarProps {
   src: string;
+  userName?: string;
+  userId?: string;
+  profileColor?: string;
 }
 
 export interface SidebarProps {

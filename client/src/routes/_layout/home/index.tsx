@@ -3,7 +3,6 @@ import InvitedGroupList from "@/components/common/group-list/invited-group-list"
 import { createFileRoute } from "@tanstack/react-router";
 import CreateGroup from "@/features/home/create-group";
 import HeaderCarousel from "@/features/home/header-carousel";
-import { useGroup } from "@/hooks/useGroup";
 import { useEffect, useState } from "react";
 import { getUsers } from "@/hooks/orval/users/users";
 import { toast } from "react-toastify";
@@ -22,7 +21,6 @@ const headerImages = [
 ];
 
 function RouteComponent() {
-  const { setGroups } = useGroup();
   const [joinedGroups, setJoinedGroups] = useState<Group[]>([]);
   const [invitedGroups, setInvitedGroups] = useState<Group[]>();
   const [isLoading, setIsLoading] = useState(true);
@@ -58,9 +56,6 @@ function RouteComponent() {
           // 状態を更新
           setJoinedGroups(joined);
           setInvitedGroups(invited);
-
-          // コンテキストにも参加中グループを設定
-          setGroups(joined);
         }
       } catch (error) {
         console.error("ユーザーデータの取得に失敗しました:", error);
@@ -71,7 +66,7 @@ function RouteComponent() {
     };
 
     fetchUserData();
-  }, [setGroups]);
+  }, []);
 
   if (isLoading) {
     return <LoadingIndicator />;

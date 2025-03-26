@@ -24,6 +24,7 @@ export interface UserCardProps {
   name: string;
   src: string;
   id: string;
+  profileColor: string;
   onSettings: () => void;
   onCamera: () => void;
 }

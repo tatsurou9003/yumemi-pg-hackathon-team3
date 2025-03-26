@@ -1,11 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
 import { Link } from "@tanstack/react-router";
-import { useGroup } from "@/hooks/useGroup";
 import { Group, GroupData } from "@/types/common";
 
 const GroupList = ({ groupData }: GroupData) => {
-  const { setCurrentGroupById } = useGroup();
-
   return (
     <div className="flex flex-col bg-[#FFEADD] w-full">
       {groupData.map((group: Group) => (
@@ -13,7 +10,6 @@ const GroupList = ({ groupData }: GroupData) => {
           key={group.groupId}
           to="/home/$groupId"
           params={{ groupId: group.groupId }}
-          onClick={() => setCurrentGroupById(group.groupId)}
           className="float-left p-[12px] flex items-center gap-[21px] font-[Inter] truncate"
         >
           <Avatar>
