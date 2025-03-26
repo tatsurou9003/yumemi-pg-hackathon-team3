@@ -32,7 +32,9 @@ def lambda_handler(event, context):
     
     # パスパラメータから回答IDを取得
     path_parameters = event.get("pathParameters", {})
+    query_parameters = event.get("queryStringParameters", {})
     answer_id = path_parameters.get("answerId")
+    parent_id = query_parameters.get("parentId")
     
     if not answer_id:
         return {
@@ -47,7 +49,10 @@ def lambda_handler(event, context):
         
         # 回答が存在するかチェック
         answer_response = answers_table.get_item(
-            Key={"answerId": answer_id}
+            Key={
+                "parentId": parent_id,
+                "answerId": answer_id
+            }
         )
         
         if "Item" not in answer_response:
@@ -94,7 +99,10 @@ def lambda_handler(event, context):
             
             # 回答のいいね数を更新（+1）
             answers_table.update_item(
-                Key={"answerId": answer_id},
+                Key={
+                    "parentId": parent_id,
+                    "answerId": answer_id
+                },
                 UpdateExpression="SET goodCount = if_not_exists(goodCount, :zero) + :inc",
                 ExpressionAttributeValues={
                     ":zero": 0,
@@ -132,17 +140,24 @@ def lambda_handler(event, context):
             current_good_count = int(answer.get("goodCount", 0))
             
             if current_good_count > 0:
-                answers_table.update_item(
-                    Key={"answerId": answer_id},
-                    UpdateExpression="SET goodCount = goodCount - :dec",
-                    ExpressionAttributeValues={":dec": 1},
-                    ConditionExpression="goodCount > :zero",
-                    ExpressionAttributeValues={
-                        ":dec": 1,
-                        ":zero": 0
-                    },
-                    ReturnValues="UPDATED_NEW"
-                )
+                try:
+                    # 正しい更新処理（ExpressionAttributeValuesは1度だけ）
+                    answers_table.update_item(
+                        Key={
+                                "parentId": parent_id,
+                                "answerId": answer_id
+                            },
+                        UpdateExpression="SET goodCount = goodCount - :dec",
+                        ConditionExpression="goodCount > :zero",
+                        ExpressionAttributeValues={
+                            ":dec": 1,
+                            ":zero": 0
+                        },
+                        ReturnValues="UPDATED_NEW"
+                    )
+                except dynamodb.meta.client.exceptions.ConditionalCheckFailedException:
+                    # goodCountが0以下の場合は何もしない
+                    print(f"goodCountが既に0以下です: answer_id={answer_id}")
             
             return {
                 "statusCode": 200,

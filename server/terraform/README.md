@@ -17,9 +17,12 @@ No providers.
 |------|--------|---------|
 | <a name="module_amplify"></a> [amplify](#module\_amplify) | ./modules/amplify | n/a |
 | <a name="module_api_gateway"></a> [api\_gateway](#module\_api\_gateway) | ./modules/api_gateway | n/a |
+| <a name="module_cloudwatch_event"></a> [cloudwatch\_event](#module\_cloudwatch\_event) | ./modules/cloudwatch_event | n/a |
 | <a name="module_cognito"></a> [cognito](#module\_cognito) | ./modules/cognito | n/a |
 | <a name="module_dynamodb"></a> [dynamodb](#module\_dynamodb) | ./modules/dynamodb | n/a |
 | <a name="module_lambda"></a> [lambda](#module\_lambda) | ./modules/lambda | n/a |
+| <a name="module_s3"></a> [s3](#module\_s3) | ./modules/s3 | n/a |
+| <a name="module_websocket_api"></a> [websocket\_api](#module\_websocket\_api) | ./modules/websocket_api | n/a |
 
 ## Resources
 

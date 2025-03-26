@@ -3,6 +3,7 @@ import boto3
 import os
 import uuid
 from datetime import datetime
+from boto3.dynamodb.conditions import Key
 
 # DynamoDBのリソースとテーブルの取得
 dynamodb = boto3.resource("dynamodb")
@@ -14,6 +15,8 @@ def lambda_handler(event, context):
     # API GatewayのリクエストコンテキストからCognitoのclaimsを取得し、subを抽出
     claims = event.get("requestContext", {}).get("authorizer", {}).get("claims", {})
     user_id = claims.get("sub")
+
+    print(event)
     
     headers = {
         "Content-Type": "application/json",
@@ -33,7 +36,11 @@ def lambda_handler(event, context):
     try:
         # パスパラメータから親テーマのメッセージIDを取得
         path_parameters = event.get("pathParameters", {})
+        query_parameters = event.get("queryStringParameters", {})
         parent_id = path_parameters.get("messageId")
+        group_id = query_parameters.get("groupId")
+        print(f"parent_id: {parent_id}")
+        print(f"group_id: {group_id}")  
         
         if not parent_id:
             return {
@@ -63,10 +70,21 @@ def lambda_handler(event, context):
                 "body": json.dumps({"message": "回答テキストまたは画像が必要です"})
             }
         
-        # 親テーマが存在するか確認
-        parent_message = messages_table.get_item(
-            Key={"messageId": parent_id}
-        ).get("Item")
+        # パーテーションキーとソートキーの両方を指定してクエリ
+        response = messages_table.query(
+            KeyConditionExpression=Key("messageId").eq(parent_id) & Key("groupId").eq(group_id)
+        )
+        print(f"response: {response}")
+        parent_message = response.get("Items")[0] if response.get("Items") else None
+
+        if not parent_message:
+            # スキャンを試す（最終手段）
+            scan_response = messages_table.scan(
+                FilterExpression=Key("messageId").eq(parent_id) & Key("groupId").eq(group_id),
+                Limit=1
+            )
+            parent_message = scan_response.get("Items")[0] if scan_response.get("Items") else None
+            print(f"Fallback scan result: {json.dumps(parent_message is not None, default=str)}")
         
         if not parent_message:
             return {
@@ -113,15 +131,10 @@ def lambda_handler(event, context):
         
         # DynamoDBに回答を保存
         answers_table.put_item(Item=answer_item)
-        
-        # ユーザー情報の取得（レスポンス用）
-        user_info = users_table.get_item(
-            Key={"userId": user_id}
-        ).get("Item", {})
-        
+
         return {
             "statusCode": 201,
-            "headers": headers,
+            "headers": headers
         }
         
     except Exception as e:

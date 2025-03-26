@@ -87,8 +87,8 @@ def lambda_handler(event, context):
                 "answerId": answer.get("answerId"),
                 "parentId": answer.get("parentId"),
                 "answerText": answer.get("answerText", ""),
-                "createdAt": int(answer.get("createdAt", "")),
-                "goodCount": answer.get("goodCount", 0),
+                "createdAt": answer.get("createdAt", ""),
+                "goodCount": int(answer.get("goodCount", 0)),
                 "isliked": liked,
                 "createdBy": user_info
             }
