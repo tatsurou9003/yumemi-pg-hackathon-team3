@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "@tanstack/react-router";
 import RoomForm, { FormSchema } from "./room-form";
-import {
-  Add,
-  Album,
-  Clear,
-  CreateOogiri,
-  PhotoCamera,
-} from "@/components/common/icon";
+import { Add, Clear, CreateOogiri } from "@/components/common/icon";
 
 type RoomFooterProps = {
   onSend: (data: FormSchema) => void;
@@ -37,7 +31,7 @@ const RoomFooter = ({ onSend }: RoomFooterProps) => {
             onClick={toggleCreateOogiri}
           />
         )}
-        <PhotoCamera
+        {/* <PhotoCamera
           width="24px"
           height="24px"
           className="cursor-pointer"
@@ -52,7 +46,7 @@ const RoomFooter = ({ onSend }: RoomFooterProps) => {
           onClick={() => {
             navigate({ to: "/home" });
           }}
-        />
+        /> */}
         <RoomForm onSend={onSend} />
       </div>
       {isCreateOogiriOpen && (
