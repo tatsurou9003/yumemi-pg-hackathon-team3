@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import LoginForm from "@/features/login/login-form";
-import SkipButton from "@/features/login/skip-button";
 import ToSignUpButton from "@/features/login/to-signup-button";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -27,7 +26,6 @@ function RouteComponent() {
       <div className="text-black font-inter font-normal flex flex-col justify-center items-center top-[109px] relative">
         <ToSignUpButton />
       </div>
-      <SkipButton />
     </div>
   );
 }
