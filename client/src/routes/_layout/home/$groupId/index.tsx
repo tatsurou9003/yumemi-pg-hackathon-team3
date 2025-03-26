@@ -27,20 +27,22 @@ function RouteComponent() {
   useEffect(() => {
     const websocket = new WebSocket(`${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`);
     socketRef.current = websocket
-    // メッセージの受信
-    const onMessage = (event: any) => {
-      setMessages((prev) => [...prev, event.data]);
-    };
-    websocket.addEventListener('message', onMessage)
-    // コンポーネントがアンマウントされたときにクリーンアップ
 
-    websocket.onerror = (error) => {
-      console.error("WebSocket Error:", error);
+    socketRef.current.onopen = () => {
+      console.log("コネクションを確立しました");
     };
 
-    return () => {
-      websocket.close()
-      websocket.removeEventListener('message', onMessage)
+    socketRef.current.onmessage = (event: any) => {
+      const parsedData = JSON.parse(event.data);
+      setMessages((prev) => [...prev, parsedData]);
+    };
+
+    socketRef.current.onerror = (error: any) => {
+      console.error("エラーが発生しました:", error);
+    };
+
+    socketRef.current.onclose = () => {
+      console.log("サーバとのコネクションをクローズしました");
     }
   }, []);
 
@@ -113,7 +115,7 @@ function RouteComponent() {
 
   const handleSend = (data: FormSchema) => {
     if (!socketRef.current) {
-      return
+      return;
     }
     const newMessage = {
       action: "sendMessage",
@@ -122,8 +124,7 @@ function RouteComponent() {
       messageType: "CHAT",
       messageText: data.message,
     };
-    console.log(newMessage)
-    socketRef.current?.send(newMessage);
+    socketRef.current?.send(JSON.stringify(newMessage));
   };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
