@@ -27,7 +27,6 @@ function RouteComponent() {
     const fetchMessages = async () => {
       try {
         const data = await getGroups().getGroupsThemesGroupId(groupId);
-        console.log(data)
         if (data.data[0].themes) {
           const formattedData = data.data[0].themes.map((theme) => ({
             messageId: theme.messageId,
@@ -40,7 +39,14 @@ function RouteComponent() {
             createdBy: theme.createdBy,
             createdAt: theme.createdAt,
           }));
-          setOogiris(formattedData);
+
+          // createdAtで並べ替え（新しいものが後ろ）
+          const sortedData = formattedData.sort((a, b) => {
+            const dateA = new Date(a.createdAt);
+            const dateB = new Date(b.createdAt);
+            return dateA.getTime() - dateB.getTime(); // 昇順（新しいものが後ろ）
+          });
+          setOogiris(sortedData);
         }
 
         // メッセージが追加された後にスクロール
