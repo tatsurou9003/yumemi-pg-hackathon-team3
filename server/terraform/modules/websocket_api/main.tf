@@ -51,6 +51,7 @@ resource "aws_apigatewayv2_integration" "send_message" {
   integration_uri           = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/${var.lambda_send_message_arn}/invocations"
   content_handling_strategy = "CONVERT_TO_TEXT"
   passthrough_behavior      = "WHEN_NO_MATCH"
+  integration_method        = "POST"
 }
 
 # Lambda関数の呼び出し権限（$connect）

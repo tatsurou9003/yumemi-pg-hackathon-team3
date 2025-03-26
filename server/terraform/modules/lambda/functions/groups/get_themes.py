@@ -50,7 +50,7 @@ def lambda_handler(event, context):
             
         # グループのテーマメッセージを取得
         messages_response = messages_table.query(
-            IndexName="GroupAllThemesIndex",
+            IndexName="GetAllThemesIndex",
             KeyConditionExpression=Key("groupId").eq(group_id) & Key("messageTypeCreatedAt").begins_with("THEME#"),
             ScanIndexForward=False  # 降順（最新のテーマから）
         )
