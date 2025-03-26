@@ -6,14 +6,14 @@ import {
   Album,
   Clear,
   CreateOogiri,
-  PhotoCamera,
 } from "@/components/common/icon";
 
 type RoomFooterProps = {
   onSend: (data: FormSchema) => void;
+  onImg: (file: File) => void;
 };
 
-const RoomFooter = ({ onSend }: RoomFooterProps) => {
+const RoomFooter = ({ onSend, onImg }: RoomFooterProps) => {
   const location = useLocation();
   const path = location.pathname ?? "";
   const groupId = path.split("/")[2];
@@ -22,6 +22,14 @@ const RoomFooter = ({ onSend }: RoomFooterProps) => {
   const [isCreateOogiriOpen, setCreateOogiriOpen] = useState<boolean>(false);
   const toggleCreateOogiri = () => {
     setCreateOogiriOpen((prev) => !prev);
+  };
+
+  const handleFileSelect = (event: Event) => {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (file) {
+      onImg(file);
+    }
   };
 
   return (
@@ -37,20 +45,17 @@ const RoomFooter = ({ onSend }: RoomFooterProps) => {
             onClick={toggleCreateOogiri}
           />
         )}
-        <PhotoCamera
-          width="24px"
-          height="24px"
-          className="cursor-pointer"
-          onClick={() => {
-            navigate({ to: "/home" });
-          }}
-        />
         <Album
           width="24px"
           height="24px"
           className="cursor-pointer"
           onClick={() => {
-            navigate({ to: "/home" });
+            // 画像選択ダイアログを開く
+            const fileInput = document.createElement("input");
+            fileInput.type = "file";
+            fileInput.accept = "image/*";
+            fileInput.onchange = handleFileSelect;
+            fileInput.click();
           }}
         />
         <RoomForm onSend={onSend} />
