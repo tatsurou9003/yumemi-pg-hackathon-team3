@@ -2,6 +2,9 @@ import { UserCardProps } from "@/types/common";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
 import { FlipCamera, SettingsIcon } from "../icon";
 import { Copy } from "lucide-react";
+import { useRef } from "react";
+import { getUsers } from "@/hooks/orval/users/users";
+import { toast } from "react-toastify";
 
 const UserCard = ({
   isPreview,
@@ -10,8 +13,11 @@ const UserCard = ({
   id,
   profileColor,
   onSettings,
-  onCamera,
+  onImageUpdate,
 }: UserCardProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { putUsersProfileUserId } = getUsers();
+
   const truncateId = (id: string, maxLength = 8) => {
     if (id.length <= maxLength) return id;
     return `${id.substring(0, maxLength)}...`;
@@ -22,12 +28,41 @@ const UserCard = ({
     navigator.clipboard
       .writeText(id)
       .then(() => {
-        // コピー成功時の処理（オプション）
-        alert("IDをコピーしました");
+        toast.success("IDをコピーしました");
       })
       .catch((err) => {
         console.error("コピーに失敗しました:", err);
       });
+  };
+
+  const handleCameraClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      const base64Image = event.target?.result as string;
+
+      try {
+        await putUsersProfileUserId(id, {
+          userName: name,
+          profileImage: base64Image,
+          profileColor: profileColor,
+        });
+
+        if (onImageUpdate) {
+          onImageUpdate(base64Image);
+        }
+      } catch (error) {
+        console.error("プロフィール画像の更新に失敗しました", error);
+      }
+    };
+
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -52,12 +87,21 @@ const UserCard = ({
               <AvatarFallback>{name.charAt(0)}</AvatarFallback>
             </Avatar>
             {isPreview ? null : (
-              <FlipCamera
-                width="24px"
-                height="24px"
-                className="absolute bottom-0 right-0 cursor-pointer"
-                onClick={onCamera}
-              />
+              <>
+                <FlipCamera
+                  width="24px"
+                  height="24px"
+                  className="absolute bottom-0 right-0 cursor-pointer"
+                  onClick={handleCameraClick}
+                />
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              </>
             )}
           </div>
         </div>
