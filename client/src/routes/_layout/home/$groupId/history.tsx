@@ -16,18 +16,31 @@ export const Route = createFileRoute("/_layout/home/$groupId/history")({
 });
 
 function RouteComponent() {
-  const [messages, setMessages] = useState<MessageData[]>([])
+  const [oogiris, setOogiris] = useState<MessageData[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const location = useLocation();
   const path = location.pathname ?? "";
-  const groupId = path.split("/")[2]
+  const groupId = path.split("/")[2];
 
   useEffect(() => {
     // 非同期関数の定義
     const fetchMessages = async () => {
       try {
-        const { data } = await getGroups().getGroupsThemesGroupId(groupId);
-        // setMessages(data);
+        const data = await getGroups().getGroupsThemesGroupId(groupId);
+        if (data.data[0].themes) {
+          const formattedData = data.data[0].themes.map((theme) => ({
+            messageId: theme.messageId,
+            messageType: theme.messageType,
+            messageText: theme.messageText,
+            messageImage: theme.messageImage ?? undefined,
+            prizeText: theme.prizeText ?? undefined,
+            deadline: theme.deadline ?? undefined,
+            winner: theme.winner ?? undefined,
+            createdBy: theme.createdBy,
+            createdAt: theme.createdAt,
+          }));
+          setOogiris(formattedData);
+        }
 
         // メッセージが追加された後にスクロール
         if (messagesEndRef.current) {
@@ -47,11 +60,11 @@ function RouteComponent() {
         <RoomHeader title="過去の大喜利" />
       </div>
       <div className="flex flex-col gap-4 p-5 overflow-y-auto">
-        {messages.map(
-          (message) =>
-            message.messageType === "oogiri" && (
-              <div className="flex justify-start" key={message.messageId}>
-                <OogiriHistoryMessage {...message} />
+        {oogiris.map(
+          (oogiri) =>
+            oogiri.messageType === "THEME" && (
+              <div className="flex justify-start" key={oogiri.messageId}>
+                <OogiriHistoryMessage {...oogiri} />
               </div>
             ),
         )}
