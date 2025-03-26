@@ -23,9 +23,10 @@ export interface LoadingIndicatorProps {
 export interface UserCardProps {
   isPreview: boolean;
   name: string;
-  src: string;
+  src?: string;
   id: string;
   profileColor: string;
-  onSettings: () => void;
-  onCamera: () => void;
+  onSettings?: () => void;
+  onCamera?: () => void;
+  onImageUpdate?: (newImageSrc: string) => void;
 }
