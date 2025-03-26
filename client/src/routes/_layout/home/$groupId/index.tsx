@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_layout/home/$groupId/")({
 
 function RouteComponent() {
   const [messages, setMessages] = useState<MessageData[]>([]);
-  const socketRef = useRef(null);
+  const socketRef = useRef<WebSocket | null>(null);
   const location = useLocation();
 
   const userId =
