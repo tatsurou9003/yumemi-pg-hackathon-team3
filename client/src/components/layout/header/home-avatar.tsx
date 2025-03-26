@@ -40,8 +40,7 @@ const HomeAvatar = ({
   };
 
   // ユーザー名の先頭文字を取得（空の場合は'U'をデフォルト値とする）
-  const userInitial =
-    userName && userName.length > 0 ? userName.charAt(0) : "U";
+  const userInitial = userName && userName.length > 0 ? userName.charAt(0) : "";
 
   return (
     <div className="relative inline-block">

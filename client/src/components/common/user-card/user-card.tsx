@@ -11,7 +11,6 @@ const UserCard = ({
   onSettings,
   onCamera,
 }: UserCardProps) => {
-  console.log(profileColor);
   const truncateId = (id: string, maxLength = 8) => {
     if (id.length <= maxLength) return id;
     return `${id.substring(0, maxLength)}...`;

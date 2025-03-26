@@ -179,7 +179,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
                 <Avatar>
                   <AvatarImage src={avatar} />
                   <AvatarFallback>
-                    {groupInfo?.groupName ? groupInfo.groupName.charAt(0) : "G"}
+                    {groupInfo?.groupName ? groupInfo.groupName.charAt(0) : ""}
                   </AvatarFallback>
                 </Avatar>
               </button>
