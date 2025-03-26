@@ -112,7 +112,7 @@ function RouteComponent() {
             text={oogiri.messageText}
             image={oogiri.messageImage}
             isDead={isDead}
-          />d
+          />
           {isDead && answers ? (
             <div className="flex flex-col gap-4 overflow-y-auto w-full">
               {answers.map((answer: AnswerData) => (
