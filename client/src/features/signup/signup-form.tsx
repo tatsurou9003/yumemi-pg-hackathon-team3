@@ -27,7 +27,7 @@ const SignupForm = () => {
       return user;
     } catch (error) {
       toast.error(
-        `サインアップに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`
+        `サインアップに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`,
       );
       throw error;
     }

@@ -5,9 +5,12 @@ import { useState, useRef } from "react";
 import { UserCard } from "@/components/common/user-card/user-card";
 import { User, Camera, Palette } from "lucide-react";
 import { getUsers } from "@/hooks/orval/users/users";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { env } from "../../../env";
+
+const { USER_POOL_CLIENT_ID } = env;
 
 const SettingForm = () => {
   const { handleSubmit, register, watch } = useForm<UserData>({
@@ -22,11 +25,14 @@ const SettingForm = () => {
   const [previewImage, setPreviewImage] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const router = useRouter();
   const { putUsersProfileUserId } = getUsers();
 
   const userName = watch("userName") || "お名前";
   const profileColor = watch("profileColor") || "#FF8A65";
-  const userId = watch("userId");
+  const userId = localStorage.getItem(
+    `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.LastAuthUser`,
+  );
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -58,6 +64,8 @@ const SettingForm = () => {
         profileColor: formData.profileColor,
       });
 
+      // ルーターキャッシュを無効化して強制的に再ロードを行う
+      router.invalidate();
       toast.success("プロフィール設定に成功しました");
       navigate({
         to: "/home",
