@@ -13,6 +13,7 @@ import {
 } from "@/components/common/icon";
 import { HeaderProps } from "@/types/layout";
 import { getUsers } from "@/hooks/orval/users/users";
+import { toast } from "react-toastify";
 
 export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -76,6 +77,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
         }
       } catch (error) {
         console.error("情報の取得に失敗しました", error);
+        toast.error("情報の取得に失敗しました");
       } finally {
         setIsLoading(false);
       }

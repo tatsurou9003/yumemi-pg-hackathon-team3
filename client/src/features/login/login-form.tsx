@@ -5,6 +5,7 @@ import { formData } from "@/types/formData";
 import { useNavigate } from "@tanstack/react-router";
 import axios, { AxiosError } from "axios"; // AxiosErrorをインポート
 import { getUsers } from "@/hooks/orval/users/users";
+import { toast } from "react-toastify";
 
 // Amplify の設定
 Amplify.configure({
@@ -27,6 +28,9 @@ const LoginForm = () => {
       return user;
     } catch (error) {
       console.log("認証されていません:", error);
+      toast.error(
+        `ログインに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`,
+      );
       return null;
     }
   };
@@ -36,7 +40,7 @@ const LoginForm = () => {
       await handleLogin(data.email, data.password);
       try {
         await getUsers().postUsersFirstLoginCheck();
-        // navigate({ to: "/setting" }); // 初回ログイン (200 OK) 場合の遷移先
+        navigate({ to: "/setting" }); // 初回ログイン (200 OK) 場合の遷移先
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError;
@@ -47,10 +51,16 @@ const LoginForm = () => {
           }
         } else {
           console.error("予期せぬエラー:", error);
+          toast.error(
+            `ログインに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`,
+          );
         }
       }
     } catch (error: unknown) {
       console.error("ログインエラー:", error);
+      toast.error(
+        `ログインに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`,
+      );
     }
   };
 

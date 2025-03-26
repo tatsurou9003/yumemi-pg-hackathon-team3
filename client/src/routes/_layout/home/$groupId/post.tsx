@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/common/input/input";
 import { Textarea } from "@/components/common/textarea/textarea";
 import { SendSlantBrown, PaperClip } from "@/components/common/icon";
+import { toast } from "react-toastify";
 
 export const Route = createFileRoute("/_layout/home/$groupId/post")({
   component: RouteComponent,
@@ -80,29 +81,53 @@ function RouteComponent() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  const handlePost = (data: FormSchema) => {
-    if (!socketRef.current) {
-      return;
-    }
-    const newMessage = {
-      action: "sendMessage",
-      groupId: groupId,
-      createdBy: userId,
-      messageType: "THEME",
-      messageText: data.text,
-      messageImage: data.image ?? null,
-      prizeText: data.prize ?? null,
-      deadline: data.deadline ?? null,
-    };
-    socketRef.current?.send(JSON.stringify(newMessage));
+  const handlePost = (data: FormSchema): Promise<boolean> => {
+    return new Promise((resolve) => {
+      if (!socketRef.current) {
+        resolve(false);
+        return;
+      }
+      const newMessage = {
+        action: "sendMessage",
+        groupId: groupId,
+        createdBy: userId,
+        messageType: "THEME",
+        messageText: data.text,
+        messageImage: data.image ?? null,
+        prizeText: data.prize ?? null,
+        deadline: data.deadline ?? null,
+      };
+
+      try {
+        socketRef.current.send(JSON.stringify(newMessage));
+        resolve(true);
+      } catch (error) {
+        toast.error("投稿に失敗しました");
+        console.error("メッセージ送信エラー:", error);
+        resolve(false);
+      }
+    });
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmit = async (data: FormSchema) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
-    await handlePost(data);
-    navigate({ to: `/home/${groupId}` });
+
+    try {
+      const success = await handlePost(data);
+      if (success) {
+        toast.success("投稿が完了しました");
+        navigate({ to: `/home/${groupId}` });
+      } else {
+        toast.error("投稿に失敗しました");
+      }
+    } catch (error) {
+      toast.error("投稿に失敗しました");
+      console.log("投稿エラー", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

@@ -21,11 +21,17 @@ function RouteComponent() {
     //TODO: APIでグループ作成を叩いて、ホーム画面に戻す
     if (data) {
       setIsLoading(true);
-      // APIからユーザーホーム情報を取得
-      await getGroups().postGroupsCreate(data);
-      //TODO: エラーだったらエラートーストを表示
-      toast.success("グループを作成しました");
-      navigate({ to: "/home" });
+      try {
+        // APIからユーザーホーム情報を取得
+        await getGroups().postGroupsCreate(data);
+        toast.success("グループを作成しました");
+        navigate({ to: "/home" });
+      } catch (error) {
+        console.log("グループ作成エラー", error);
+        toast.error("グループの作成に失敗しました");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 

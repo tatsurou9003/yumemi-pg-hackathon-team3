@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { Amplify, Auth } from "aws-amplify";
 import { useNavigate } from "@tanstack/react-router";
 import { env } from "@/env";
+import { toast } from "react-toastify";
 
 // Amplify の設定（コンポーネント外で実行）
 Amplify.configure({
@@ -31,6 +32,7 @@ const VerifyForm = () => {
       return user;
     } catch (error) {
       console.error("確認/サインインエラー:", error);
+      toast.error("確認コードの検証に失敗しました");
     }
   }
 
@@ -43,6 +45,7 @@ const VerifyForm = () => {
       navigate({ to: "/login" });
     } catch (error) {
       console.error("確認エラー:", error);
+      toast.error("確認コードの検証に失敗しました");
     }
   };
 
