@@ -18,6 +18,7 @@ import { MessageData } from "@/types/messageData";
 import { AnswerData } from "@/types/answerData";
 import { getGroups } from "@/hooks/orval/groups/groups";
 import { getAnswers } from "@/hooks/orval/answers/answers";
+import { getLikes } from "@/hooks/orval/likes/likes";
 import { useEffect, useState } from "react";
 
 const formSchema = z.object({
@@ -101,6 +102,14 @@ function RouteComponent() {
     });
   };
 
+  const handleGood = async (id: string, liked: boolean) => {
+    if (liked) {
+      await getLikes().deleteAnswersLikeAnswerId(id);
+    } else {
+      await getLikes().putAnswersLikeAnswerId(id);
+    }
+  };
+
   return (
     <div className="h-[calc(100vh_-_56px)] flex flex-col justify-between bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)]">
       <div className="w-full">
@@ -117,7 +126,7 @@ function RouteComponent() {
             <div className="flex flex-col gap-4 overflow-y-auto w-full">
               {answers.map((answer: AnswerData) => (
                 <div className="flex justify-start" key={answer.answerId}>
-                  <Answer {...answer} />
+                  <Answer {...answer} onGood={handleGood} />
                 </div>
               ))}
             </div>
