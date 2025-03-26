@@ -5,6 +5,7 @@ import { Copy } from "lucide-react";
 import { useRef } from "react";
 import { getUsers } from "@/hooks/orval/users/users";
 import { toast } from "react-toastify";
+import { useNavigate } from "@tanstack/react-router";
 
 const UserCard = ({
   isPreview,
@@ -17,6 +18,7 @@ const UserCard = ({
 }: UserCardProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { putUsersProfileUserId } = getUsers();
+  const navigate = useNavigate();
 
   const truncateId = (id: string, maxLength = 8) => {
     if (id.length <= maxLength) return id;
@@ -65,6 +67,14 @@ const UserCard = ({
     reader.readAsDataURL(file);
   };
 
+  const handleSettingsClick = () => {
+    if (onSettings) {
+      onSettings();
+    } else {
+      navigate({ to: "/profile" });
+    }
+  };
+
   return (
     <div
       className={`w-[150px] h-[224px] flex flex-col rounded-[4px] p-[36px] shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] relative text-[#FFF] font-inter text-[12px] font-[700] leading-normal`}
@@ -75,7 +85,7 @@ const UserCard = ({
           width="12px"
           height="12px"
           className="absolute top-2 right-2 cursor-pointer"
-          onClick={onSettings}
+          onClick={handleSettingsClick}
         />
       )}
       <div className="flex flex-col h-full justify-between items-center gap-4">
@@ -109,6 +119,7 @@ const UserCard = ({
           <div className="text-center whitespace-nowrap flex items-center justify-center">
             ID: {truncateId(id)}
             <button
+              type="button" // ボタンをクリックしてもフォーム送信が発生しないようにする
               onClick={isPreview ? undefined : copyIdToClipboard}
               className={`${isPreview ? "" : "cursor-pointer"} rounded-full ml-2 `}
               title="IDをコピー"
