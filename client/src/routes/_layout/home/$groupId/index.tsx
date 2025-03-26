@@ -30,12 +30,9 @@ function RouteComponent() {
     const fetchData = async () => {
       try {
         const chatResponse = await getGroups().getGroupsChatGroupId(groupId);
-        const themeResponse = await getGroups().getGroupsThemesGroupId(groupId);
-        console.log(chatResponse);
-        console.log(themeResponse);
         const chatDataFormatted = chatResponse.data.messages.map((message) => ({
           messageId: message.messageId,
-          messageType: "CHAT",
+          messageType: message.messageType,
           messageText: message.messageText,
           messageImage: message.messageImage ?? undefined,
           prizeText: message.prizeText ?? undefined,
@@ -44,26 +41,7 @@ function RouteComponent() {
           createdBy: message.createdBy ?? undefined,
           createdAt: message.createdAt ?? undefined,
         }));
-        const themeDataFormatted = themeResponse.data.flatMap((theme: Themes) =>
-          (theme.themes ?? []).map((message) => ({
-            messageId: message.messageId,
-            messageType: "THEME",
-            messageText: message.messageText,
-            messageImage: message.messageImage ?? undefined,
-            prizeText: message.prizeText ?? undefined,
-            deadline: message.deadline ?? undefined,
-            winner: message.winner ?? undefined,
-            createdBy: message.createdBy,
-            createdAt: message.createdAt,
-          })),
-        );
-        const combinedData = [...chatDataFormatted, ...themeDataFormatted];
-        setMessages(combinedData);
-
-        // combinedDataを1つずつsetMessagesに追加
-        combinedData.forEach((message) => {
-          setMessages((prev) => [...prev, message]);
-        });
+        setMessages(chatDataFormatted);
 
         const websocket = new WebSocket(
           `${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`,
