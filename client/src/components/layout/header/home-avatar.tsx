@@ -8,6 +8,7 @@ import { UserCard } from "@/components/common/user-card/user-card";
 import { HomeAvatarProps } from "@/types/layout";
 
 const HomeAvatar = ({
+  isPreview,
   src,
   userName,
   profileColor,
@@ -60,6 +61,7 @@ const HomeAvatar = ({
           className="absolute top-[calc(100%_+_3px)] right-0 z-10 transition-opacity duration-200"
         >
           <UserCard
+            isPreview={isPreview}
             name={userName || ""}
             src={src}
             id={userId || ""}

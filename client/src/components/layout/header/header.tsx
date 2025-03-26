@@ -183,6 +183,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
             </>
           ) : (
             <HomeAvatar
+              isPreview={false}
               src={userInfo?.profileImage || avatar}
               userName={userInfo?.userName || ""}
               profileColor={userInfo?.profileColor || ""}

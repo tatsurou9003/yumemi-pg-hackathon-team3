@@ -10,6 +10,16 @@ import LoadingIndicator from "@/components/common/loading/loading";
 import { Group } from "@/types/common";
 
 export const Route = createFileRoute("/_layout/home/")({
+  // ローダーを追加してデータ取得を行う
+  loader: async () => {
+    try {
+      const response = await getUsers().getUsersHome();
+      return response.data;
+    } catch (error) {
+      console.error("ユーザーデータの取得に失敗しました:", error);
+      return { groups: [] };
+    }
+  },
   component: RouteComponent,
 });
 
@@ -25,19 +35,18 @@ function RouteComponent() {
   const [invitedGroups, setInvitedGroups] = useState<Group[]>();
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        setIsLoading(true);
-        // APIからユーザーホーム情報を取得
-        const { data } = await getUsers().getUsersHome();
+  const userData = Route.useLoaderData();
 
-        if (data.groups) {
+  useEffect(() => {
+    if (userData) {
+      setIsLoading(true);
+      try {
+        if (userData.groups) {
           // グループを参加中と招待中で分類
           const joined: Group[] = [];
           const invited: Group[] = [];
 
-          data.groups.forEach((group) => {
+          userData.groups.forEach((group) => {
             // statusが"invited"なら招待中グループ、それ以外なら参加中グループ
             const groupItem = {
               groupId: group.groupId || "",
@@ -58,15 +67,13 @@ function RouteComponent() {
           setInvitedGroups(invited);
         }
       } catch (error) {
-        console.error("ユーザーデータの取得に失敗しました:", error);
+        console.error("データの処理に失敗しました:", error);
         toast.error("グループ情報の読み込みに失敗しました");
       } finally {
         setIsLoading(false);
       }
-    };
-
-    fetchUserData();
-  }, []);
+    }
+  }, [userData]);
 
   if (isLoading) {
     return <LoadingIndicator />;
