@@ -1,7 +1,13 @@
-import { useState, useRef } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState, useEffect, useRef } from "react";
 import { useForm, ControllerRenderProps } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import {
+  createFileRoute,
+  useLocation,
+  useNavigate,
+} from "@tanstack/react-router";
+import { env } from "@/env";
 import RoomHeader from "@/features/room/room-header";
 import { Button } from "@/components/common/button/button";
 import {
@@ -14,7 +20,6 @@ import {
 import { Input } from "@/components/common/input/input";
 import { Textarea } from "@/components/common/textarea/textarea";
 import { SendSlantBrown, PaperClip } from "@/components/common/icon";
-import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_layout/home/$groupId/post")({
   component: RouteComponent,
@@ -23,27 +28,82 @@ export const Route = createFileRoute("/_layout/home/$groupId/post")({
 const formSchema = z.object({
   text: z.string().min(1, { message: "必須入力項目です。" }),
   prize: z.string().optional(),
-  deadline: z.string().min(1, { message: "必須入力項目です。" }),
+  deadline: z.string().optional(),
   image: z.instanceof(File).optional(),
 });
 
 type FormSchema = z.infer<typeof formSchema>;
 
 function RouteComponent() {
+  const socketRef = useRef<WebSocket | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const userId =
+    localStorage.getItem(
+      `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
+    ) ?? "";
+  const path = location.pathname ?? "";
+  const groupId = path.split("/")[2];
+
+  useEffect(() => {
+    if (
+      !socketRef.current ||
+      socketRef.current.readyState === WebSocket.CLOSED
+    ) {
+      const websocket = new WebSocket(
+        `${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`,
+      );
+      socketRef.current = websocket;
+
+      socketRef.current.onopen = () => {
+        console.log("コネクションを確立しました");
+      };
+
+      socketRef.current.onerror = (error) => {
+        console.error("エラーが発生しました:", error);
+      };
+
+      socketRef.current.onclose = () => {
+        console.log("サーバとのコネクションをクローズしました");
+      };
+    }
+  }, [groupId, userId]);
+
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
-      deadline: "",
     },
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  function onSubmit(values: FormSchema) {
-    console.log(values);
-  }
+  const handlePost = (data: FormSchema) => {
+    if (!socketRef.current) {
+      return;
+    }
+    const newMessage = {
+      action: "sendMessage",
+      groupId: groupId,
+      createdBy: userId,
+      messageType: "THEME",
+      messageText: data.text,
+      messageImage: data.image ?? null,
+      prizeText: data.prize ?? null,
+      deadline: data.deadline ?? null,
+    };
+    socketRef.current?.send(JSON.stringify(newMessage));
+  };
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const onSubmit = async (data: FormSchema) => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    await handlePost(data);
+    navigate({ to: `/home/${groupId}` });
+  };
 
   return (
     <div className="h-[calc(100vh_-_56px)] flex flex-col bg-[#FFBC92] text-xs bg-[url(/src/assets/character-room.webp)]">

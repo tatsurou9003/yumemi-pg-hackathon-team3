@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useLocation } from "@tanstack/react-router";
 import RoomForm, { FormSchema } from "./room-form";
 import {
   Add,
@@ -14,7 +14,11 @@ type RoomFooterProps = {
 };
 
 const RoomFooter = ({ onSend }: RoomFooterProps) => {
+  const location = useLocation();
+  const path = location.pathname ?? "";
+  const groupId = path.split("/")[2];
   const navigate = useNavigate();
+
   const [isCreateOogiriOpen, setCreateOogiriOpen] = useState<boolean>(false);
   const toggleCreateOogiri = () => {
     setCreateOogiriOpen((prev) => !prev);
@@ -58,7 +62,7 @@ const RoomFooter = ({ onSend }: RoomFooterProps) => {
             height="113.8px"
             className="cursor-pointer"
             onClick={() => {
-              navigate({ to: "/home" });
+              navigate({ to: `/home/${groupId}/post` });
             }}
           />
         </div>
