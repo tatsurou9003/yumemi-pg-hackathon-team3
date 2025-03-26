@@ -22,6 +22,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   const avatarRef = useRef<HTMLButtonElement | null>(null);
   const [groupInfo, setGroupInfo] = useState<{
     groupName: string;
+    groupImage: string;
     memberCount: number;
   } | null>(null);
   const [userInfo, setUserInfo] = useState<{
@@ -63,10 +64,13 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
             if (
               targetGroup &&
               targetGroup.groupName &&
+              targetGroup.groupImage &&
               targetGroup.memberCount !== undefined
             ) {
+              console.log(targetGroup.groupImage);
               setGroupInfo({
                 groupName: targetGroup.groupName,
+                groupImage: targetGroup.groupImage,
                 memberCount: targetGroup.memberCount,
               });
             }
@@ -183,7 +187,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
                 className="border-none bg-transparent cursor-pointer"
               >
                 <Avatar>
-                  <AvatarImage src={avatar} />
+                  <AvatarImage src={groupInfo?.groupImage || avatar} />
                   <AvatarFallback>
                     {groupInfo?.groupName ? groupInfo.groupName.charAt(0) : ""}
                   </AvatarFallback>
