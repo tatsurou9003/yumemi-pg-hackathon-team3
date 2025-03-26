@@ -82,7 +82,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     };
 
     fetchData();
-  }, [groupId]);
+  }, [groupId, path]);
 
   // タイトルを取得する関数
   const getTitle = () => {
