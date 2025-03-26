@@ -17,7 +17,6 @@ import { SendBrown } from "@/components/common/icon";
 import { MessageData } from "@/types/messageData";
 import { AnswerData } from "@/types/answerData";
 import { getGroups } from "@/hooks/orval/groups/groups";
-import { getAnswers } from "@/hooks/orval/answers/answers";
 import { getLikes } from "@/hooks/orval/likes/likes";
 import { useEffect, useState } from "react";
 import { env } from "@/env";

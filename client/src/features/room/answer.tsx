@@ -46,7 +46,9 @@ const Answer = ({
               onClick={() => {
                 setCount(count - 1);
                 setFlag(!flag);
-                onGood && onGood(answerId, true);
+                if (onGood) {
+                  onGood(answerId, true);
+                }
               }}
             />
           ) : (
@@ -56,7 +58,9 @@ const Answer = ({
               onClick={() => {
                 setCount(count + 1);
                 setFlag(!flag);
-                onGood && onGood(answerId, false);
+                if (onGood) {
+                  onGood(answerId, false);
+                }
               }}
             />
           )}
