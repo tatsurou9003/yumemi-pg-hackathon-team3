@@ -18,7 +18,6 @@ const SignupForm = () => {
   const { handleSubmit, register } = useForm<formData>();
   const navigate = useNavigate();
 
-  // サインアップ処理を実行する関数
   const handleSignUp = async (email: string, password: string) => {
     try {
       const { user } = await Auth.signUp({
@@ -28,23 +27,20 @@ const SignupForm = () => {
       return user;
     } catch (error) {
       toast.error(
-        `サインアップに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`,
+        `サインアップに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`
       );
+      throw error;
     }
   };
 
-  // フォーム送信時の処理
   const onSubmit = async (data: formData) => {
     try {
       await handleSignUp(data.email, data.password);
       localStorage.setItem("email", data.email);
       localStorage.setItem("password", data.password);
-      navigate({ to: "/verify" }); // サインアップ成功時に遷移
+      navigate({ to: "/verify" });
     } catch (error) {
       console.error("サインアップエラー:", error);
-      toast.error(
-        `サインアップに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`,
-      );
     }
   };
 
