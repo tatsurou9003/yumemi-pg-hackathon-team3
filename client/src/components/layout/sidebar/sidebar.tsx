@@ -2,8 +2,19 @@ import { useNavigate } from "@tanstack/react-router";
 import SidebarListItem from "./sidebar-list-item";
 import { CharacterWink, InfoIcon } from "@/components/common/icon";
 import { SidebarProps } from "@/types/layout";
+import { Amplify, Auth } from "aws-amplify";
+import { env } from "@/env";
 
-export const Sidebar = ({ version, onLogout }: SidebarProps) => {
+// Amplify の設定
+Amplify.configure({
+  Auth: {
+    region: "ap-northeast-1",
+    userPoolId: env.USER_POOL_ID,
+    userPoolWebClientId: env.USER_POOL_CLIENT_ID,
+  },
+});
+
+export const Sidebar = ({ version }: SidebarProps) => {
   const navigate = useNavigate();
 
   return (
@@ -30,7 +41,13 @@ export const Sidebar = ({ version, onLogout }: SidebarProps) => {
         </div>
       </div>
       <CharacterWink width="197px" height="221.246px" />
-      <SidebarListItem text="ログアウト" onClick={onLogout} />
+      <SidebarListItem
+        text="ログアウト"
+        onClick={async () => {
+          await Auth.signOut();
+          navigate({ to: "/login" });
+        }}
+      />
     </div>
   );
 };

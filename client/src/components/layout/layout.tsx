@@ -3,12 +3,7 @@ import { Header } from "./header/header";
 import { Sidebar } from "./sidebar/sidebar";
 import { LayoutProps } from "@/types/layout";
 
-export const Layout = ({
-  version,
-  avatar,
-  children,
-  onLogout,
-}: LayoutProps) => {
+export const Layout = ({ version, avatar, children }: LayoutProps) => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const handleSidebar = () => {
     setSidebarOpen((prevState) => !prevState);
@@ -28,7 +23,7 @@ export const Layout = ({
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <Sidebar version={version} onLogout={onLogout} />
+        <Sidebar version={version} />
       </div>
       <main className="flex-1 bg-white">{children}</main>
     </div>

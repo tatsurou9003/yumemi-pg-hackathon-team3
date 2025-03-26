@@ -2,7 +2,6 @@ export interface LayoutProps {
   version: string;
   avatar: string;
   children: React.ReactNode;
-  onLogout: () => void;
 }
 
 export interface HeaderProps {
@@ -20,7 +19,6 @@ export interface HomeAvatarProps {
 
 export interface SidebarProps {
   version: string;
-  onLogout: () => void;
 }
 
 export interface SidebarListItemProps {
