@@ -75,8 +75,6 @@ const HomeAvatar = ({
             src={avatarSrc}
             id={userId || ""}
             profileColor={profileColor || ""}
-            onSettings={() => console.log("Settings clicked")}
-            onCamera={() => console.log("Camera clicked")}
             onImageUpdate={handleImageUpdate}
           />
         </div>
