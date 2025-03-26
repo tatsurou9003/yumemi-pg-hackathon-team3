@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import SettingForm from "@/components/common/form/settingfrom";
+import SettingForm from "@/components/common/form/settingform";
 
 export const Route = createFileRoute("/_layout/setting")({
   component: RouteComponent,
