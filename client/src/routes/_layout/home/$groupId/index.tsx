@@ -21,7 +21,7 @@ function RouteComponent() {
 
   const userId =
     localStorage.getItem(
-      `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`
+      `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
     ) ?? "";
   const path = location.pathname ?? "";
   const groupId = path.split("/")[2];
@@ -44,7 +44,7 @@ function RouteComponent() {
         setMessages(chatDataFormatted);
 
         const websocket = new WebSocket(
-          `${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`
+          `${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`,
         );
         socketRef.current = websocket;
 
@@ -99,7 +99,7 @@ function RouteComponent() {
       if (!message.createdBy || !message.createdBy.userId) {
         console.error(
           "message.createdBy is null or does not have userId:",
-          message
+          message,
         );
         toast.error("エラーが発生しました");
         return null; // エラーハンドリング、表示しない

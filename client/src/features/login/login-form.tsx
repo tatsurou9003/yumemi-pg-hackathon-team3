@@ -29,7 +29,7 @@ const LoginForm = () => {
     } catch (error) {
       console.log("認証されていません:", error);
       toast.error(
-        `ログインに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`
+        `ログインに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`,
       );
       return null;
     }
@@ -52,14 +52,14 @@ const LoginForm = () => {
         } else {
           console.error("予期せぬエラー:", error);
           toast.error(
-            `ログインに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`
+            `ログインに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`,
           );
         }
       }
     } catch (error: unknown) {
       console.error("ログインエラー:", error);
       toast.error(
-        `ログインに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`
+        `ログインに失敗しました${error instanceof Error ? `: ${error.message}` : ""}`,
       );
     }
   };

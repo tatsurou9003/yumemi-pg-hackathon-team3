@@ -42,7 +42,7 @@ function RouteComponent() {
 
   const userId =
     localStorage.getItem(
-      `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`
+      `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
     ) ?? "";
   const path = location.pathname ?? "";
   const groupId = path.split("/")[2];
@@ -53,7 +53,7 @@ function RouteComponent() {
       socketRef.current.readyState === WebSocket.CLOSED
     ) {
       const websocket = new WebSocket(
-        `${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`
+        `${env.WS_API_URL}?userId=${userId}&groupId=${groupId}`,
       );
       socketRef.current = websocket;
 

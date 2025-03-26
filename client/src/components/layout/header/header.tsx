@@ -59,7 +59,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
           // グループ情報を設定（既存のコード）
           if (groupId && data.groups) {
             const targetGroup = data.groups.find(
-              (group) => group.groupId === groupId
+              (group) => group.groupId === groupId,
             );
             if (
               targetGroup &&

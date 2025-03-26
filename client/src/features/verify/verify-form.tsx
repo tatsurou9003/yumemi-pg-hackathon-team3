@@ -21,7 +21,7 @@ const VerifyForm = () => {
   async function handleConfirmSignUp(
     email: string,
     code: string,
-    password: string
+    password: string,
   ) {
     console.log(email, code, password);
     try {
