@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_layout/setting")({
 
 function RouteComponent() {
   return (
-    <div className="min-h-screen bg-[#FFBC92] text-xs bg-contain bg-center ">
+    <div className="h-full bg-[#FFBC92] text-xs bg-contain bg-center ">
       <SettingForm />
     </div>
   );

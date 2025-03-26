@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_layout/verify")({
 
 function RouteComponent() {
   return (
-    <div className="min-h-screen bg-[url(/src/assets/icons/character.svg)]">
+    <div className="h-full bg-[url(/src/assets/icons/character.svg)]">
       <div className="w-full flex justify-center">
         <VerifyForm />
       </div>
