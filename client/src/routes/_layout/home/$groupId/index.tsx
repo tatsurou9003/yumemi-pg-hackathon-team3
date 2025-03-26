@@ -16,7 +16,7 @@ export const Route = createFileRoute("/_layout/home/$groupId/")({
 
 function RouteComponent() {
   const [messages, setMessages] = useState<MessageData[]>([]);
-  const socketRef = useRef<any>(null);
+  const socketRef = useRef(null);
   const location = useLocation();
 
   const userId =
@@ -34,7 +34,7 @@ function RouteComponent() {
         console.log(chatResponse);
         console.log(themeResponse);
         const chatDataFormatted = chatResponse.data.messages.map(
-          (message: any) => ({
+          (message) => ({
             messageId: message.messageId,
             messageType: "CHAT",
             messageText: message.messageText,
@@ -76,12 +76,12 @@ function RouteComponent() {
           console.log("コネクションを確立しました");
         };
 
-        socketRef.current.onmessage = (event: any) => {
+        socketRef.current.onmessage = (event) => {
           const parsedData = JSON.parse(event.data);
           setMessages((prev) => [...prev, parsedData]);
         };
 
-        socketRef.current.onerror = (error: any) => {
+        socketRef.current.onerror = (error) => {
           console.error("エラーが発生しました:", error);
         };
 
