@@ -7,7 +7,7 @@ export const Route = createFileRoute("/_layout/signup")({
 });
 function RouteComponent() {
   return (
-    <div className="min-h-screen bg-[url(/src/assets/icons/character.svg)]">
+    <div className="h-full bg-[url(/src/assets/icons/character.svg)]">
       <SignupForm />
       <div className="h-3" />
       <LoginBackButton />

@@ -11,6 +11,7 @@ export interface HeaderProps {
 }
 
 export interface HomeAvatarProps {
+  isPreview: boolean;
   src: string;
   userName?: string;
   userId?: string;

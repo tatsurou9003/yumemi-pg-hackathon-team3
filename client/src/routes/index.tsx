@@ -33,7 +33,7 @@ function Index() {
   }, [navigate]);
   return (
     <div
-      className={`flex flex-col justify-center items-center min-h-screen bg-[#FF9350] transition-opacity duration-500 ease-in-out ${
+      className={`flex flex-col justify-center items-center h-full bg-[#FF9350] transition-opacity duration-500 ease-in-out ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
     >

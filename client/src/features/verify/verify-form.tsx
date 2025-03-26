@@ -42,6 +42,7 @@ const VerifyForm = () => {
 
     try {
       await handleConfirmSignUp(email, data.code, password);
+      toast.success("確認コードの検証に成功しました");
       navigate({ to: "/login" });
     } catch (error) {
       console.error("確認エラー:", error);

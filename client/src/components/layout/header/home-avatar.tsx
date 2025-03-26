@@ -8,14 +8,20 @@ import { UserCard } from "@/components/common/user-card/user-card";
 import { HomeAvatarProps } from "@/types/layout";
 
 const HomeAvatar = ({
+  isPreview,
   src,
   userName,
   profileColor,
   userId,
 }: HomeAvatarProps) => {
   const [isUserCardOpen, setIsUserCardOpen] = useState(false);
+  const [avatarSrc, setAvatarSrc] = useState(src);
   const userCardRef = useRef<HTMLDivElement | null>(null);
   const avatarRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    setAvatarSrc(src);
+  }, [src]);
 
   const handleClickOutside = useCallback((event: MouseEvent) => {
     if (
@@ -39,6 +45,10 @@ const HomeAvatar = ({
     setIsUserCardOpen((prev) => !prev);
   };
 
+  const handleImageUpdate = (newImageSrc: string) => {
+    setAvatarSrc(newImageSrc);
+  };
+
   // ユーザー名の先頭文字を取得（空の場合は'U'をデフォルト値とする）
   const userInitial = userName && userName.length > 0 ? userName.charAt(0) : "";
 
@@ -50,7 +60,7 @@ const HomeAvatar = ({
         className="border-none bg-transparent cursor-pointer"
       >
         <Avatar>
-          <AvatarImage src={src} />
+          <AvatarImage src={avatarSrc} />
           <AvatarFallback>{userInitial}</AvatarFallback>
         </Avatar>
       </button>
@@ -60,12 +70,14 @@ const HomeAvatar = ({
           className="absolute top-[calc(100%_+_3px)] right-0 z-10 transition-opacity duration-200"
         >
           <UserCard
+            isPreview={isPreview}
             name={userName || ""}
-            src={src}
+            src={avatarSrc}
             id={userId || ""}
             profileColor={profileColor || ""}
             onSettings={() => console.log("Settings clicked")}
             onCamera={() => console.log("Camera clicked")}
+            onImageUpdate={handleImageUpdate}
           />
         </div>
       )}
