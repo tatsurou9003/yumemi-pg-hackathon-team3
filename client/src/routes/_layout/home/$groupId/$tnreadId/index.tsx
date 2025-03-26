@@ -89,7 +89,7 @@ function RouteComponent() {
           answerText: answer.answerText,
           createdAt: answer.createdAt,
           goodCount: answer.goodCount,
-          isLiked: answer.isLiked,
+          isliked: answer.isliked,
         }));
         setAnswers(formattedAnswers);
       } catch (error) {

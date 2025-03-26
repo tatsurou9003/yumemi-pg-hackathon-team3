@@ -16,11 +16,11 @@ const Answer = ({
   answerText,
   createdBy,
   goodCount,
-  isLiked,
+  isliked,
   onGood,
 }: AnswerProps) => {
   const [count, setCount] = useState<number>(goodCount);
-  const [flag, setFlag] = useState<boolean>(isLiked);
+  const [flag, setFlag] = useState<boolean>(isliked);
 
   return (
     <div className="flex items-start gap-6">

@@ -217,7 +217,7 @@ export interface GetThemeAnswer {
   /** いいねの数 */
   goodCount: number;
   /** 自分がいいねした回答かどうか */
-  isLiked: boolean;
+  isliked: boolean;
 }
 
 /**
