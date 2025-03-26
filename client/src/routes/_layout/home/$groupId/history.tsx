@@ -27,6 +27,7 @@ function RouteComponent() {
     const fetchMessages = async () => {
       try {
         const data = await getGroups().getGroupsThemesGroupId(groupId);
+        console.log(data)
         if (data.data[0].themes) {
           const formattedData = data.data[0].themes.map((theme) => ({
             messageId: theme.messageId,
