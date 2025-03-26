@@ -8,7 +8,6 @@ import { FormSchema } from "@/features/room/room-form";
 import { MessageData } from "@/types/messageData";
 import { env } from "@/env";
 import { getGroups } from "@/hooks/orval/groups/groups";
-import { Themes } from "@/hooks/orval/oogiriAppAPI.schemas";
 
 export const Route = createFileRoute("/_layout/home/$groupId/")({
   component: RouteComponent,
