@@ -5,9 +5,10 @@ import { Add } from "@/components/common/icon";
 
 type ThreadFooterProps = {
   answers: AnswerData[];
+  onGood: (id: string, liked: boolean) => void;
 };
 
-const ThreadFooter = ({ answers }: ThreadFooterProps) => {
+const ThreadFooter = ({ answers, onGood }: ThreadFooterProps) => {
   const [answerListOpen, setAnswerListOpen] = useState<boolean>(false);
   const toggleAnswerList = () => {
     setAnswerListOpen((prev) => !prev);
@@ -25,10 +26,10 @@ const ThreadFooter = ({ answers }: ThreadFooterProps) => {
         <Add width="24px" height="24px" />
       </button>
       {answerListOpen && (
-        <div className="flex flex-col gap-4 p-5 overflow-y-auto w-full h-[272px] bg-[#CAE071]">
+        <div className="flex flex-col gap-4 p-5 overflow-y-auto w-full h-[400px] bg-[#CAE071]">
           {answers.map((answer) => (
             <div className="flex justify-start" key={answer.answerId}>
-              <Answer {...answer} />
+              <Answer {...answer} onGood={onGood} />
             </div>
           ))}
         </div>

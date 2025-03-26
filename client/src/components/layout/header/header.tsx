@@ -32,7 +32,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   } | null>(null);
 
   // URLからgroupIdを取得
-  const isRoomPath = path.match(/^\/home\/[\w-]+(\/?|\/history)$/);
+  const isRoomPath = path.match(/^\/home\/[\w-]+(\/[\w-]+)?$/);
   let groupId = isRoomPath ? path.split("/")[2] : null;
   if (groupId === "policy" || groupId === "group") {
     groupId = null;
@@ -82,7 +82,7 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     };
 
     fetchData();
-  }, [groupId]);
+  }, [groupId, path]);
 
   // タイトルを取得する関数
   const getTitle = () => {
@@ -98,7 +98,17 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
       return "メンバー編集";
     }
     // グループページまたは履歴ページ
-    if (path.match(/^\/home\/[\w-]+(\/?|\/history)$/)) {
+    if (path.match(/^\/home\/[\w-]+(\/?|\/[a-fA-F0-9-]{36})$/)) {
+      // ロード中の場合
+      if (isLoading) {
+        return "";
+      }
+      if (groupInfo) {
+        return `${groupInfo.groupName} (${groupInfo.memberCount})`;
+      }
+    }
+    // グループページまたは履歴ページ
+    if (path.match(/^\/home\/[\w-]+(\/?|\/[\w-]+)$/)) {
       // ロード中の場合
       if (isLoading) {
         return "";
@@ -114,7 +124,6 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     if (
       path === "/profile" ||
       path === "/home/group" ||
-      path.match(/^\/home\/\w+\/\w+\/edit$/) ||
       path.match(/^\/home\/\w+\/\w+\/edit$/) ||
       path.match(/^\/home\/[\w-]+$/)
     )

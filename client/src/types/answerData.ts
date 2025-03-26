@@ -9,5 +9,5 @@ export type AnswerData = {
   answerText: string;
   createdAt: string;
   goodCount: number;
-  isLiked: boolean;
+  isliked: boolean;
 };
