@@ -2,13 +2,19 @@ import json
 import boto3
 import os
 import uuid
+import base64
 from datetime import datetime
+from io import BytesIO
 
 # DynamoDBのリソースとテーブルの取得
 dynamodb = boto3.resource("dynamodb")
 users_table = dynamodb.Table("users")
 groups_table = dynamodb.Table("groups")
 group_members_table = dynamodb.Table("group_members")
+
+# S3クライアント
+s3 = boto3.client('s3')
+GROUP_IMAGES_BUCKET = 'wa-live-images-bucket-j9a3tvch'
 
 def lambda_handler(event, context):
     # API GatewayのリクエストコンテキストからCognitoのclaimsを取得し、subを抽出
@@ -79,6 +85,37 @@ def lambda_handler(event, context):
         
         # 作成者を含めたメンバー数を計算
         member_count = len(invited_users) + 1  # 招待ユーザー + 作成者
+
+        # 画像のS3アップロード処理
+        group_image_url = ""
+        if group_image and group_image.startswith('data:'):
+            try:
+                # データURLの形式: "data:image/jpeg;base64,/9j/4AAQS..."
+                content_type = group_image.split(';')[0].split(':')[1]
+                base64_data = group_image.split(',')[1]
+                file_extension = content_type.split('/')[1]
+                
+                # Base64データをデコード
+                image_data = base64.b64decode(base64_data)
+                
+                # S3にアップロード
+                image_key = f"group-images/{group_id}.{file_extension}"
+                s3.upload_fileobj(
+                    BytesIO(image_data),
+                    GROUP_IMAGES_BUCKET,
+                    image_key,
+                    ExtraArgs={
+                        'ContentType': content_type,
+                    }
+                )
+                
+                # S3の公開URLを生成
+                region = 'ap-northeast-1'
+                group_image_url = f"https://{GROUP_IMAGES_BUCKET}.s3.{region}.amazonaws.com/{image_key}"
+                print(f"画像をアップロードしました: {group_image_url}")
+            except Exception as img_error:
+                print(f"画像アップロードエラー: {str(img_error)}")
+                # 画像アップロードに失敗してもグループ作成は続行
         
         # グループの作成
         groups_table.put_item(

@@ -1,14 +1,21 @@
 import json
 import boto3
 import uuid
+import base64
 from datetime import datetime
 from boto3.dynamodb.conditions import Key
+from io import BytesIO
+import os
 
 # クライアントで初期化
 dynamodb = boto3.resource("dynamodb")
 connections_table = dynamodb.Table("ws-connections")
 messages_table = dynamodb.Table("messages")
 users_table = dynamodb.Table("users")
+
+# S3クライアント
+s3 = boto3.client('s3')
+MESSAGE_IMAGES_BUCKET = 'wa-live-images-bucket-j9a3tvch'
 
 def lambda_handler(event, context):
     # 接続IDの取得
@@ -35,6 +42,49 @@ def lambda_handler(event, context):
 
         # 複合ソートキーを作成
         message_type_created_at = f"{body['messageType']}#{created_at}"
+
+        # 画像のS3アップロード処理
+        message_image_url = ""
+        message_image = body.get("messageImage", "")
+        
+        if message_image and isinstance(message_image, str) and message_image.startswith('data:'):
+            try:
+                print("画像データのアップロードを開始します")
+                # データURLの形式: "data:image/jpeg;base64,/9j/4AAQS..."
+                content_type = message_image.split(';')[0].split(':')[1]
+                base64_data = message_image.split(',')[1]
+                file_extension = content_type.split('/')[1]
+                
+                # Base64データをデコード
+                image_data = base64.b64decode(base64_data)
+                
+                # 一意のファイル名を生成
+                image_file_name = f"message-{message_id}.{file_extension}"
+                
+                # S3にアップロード
+                image_key = f"message-images/{body['groupId']}/{image_file_name}"
+                s3.upload_fileobj(
+                    BytesIO(image_data),
+                    MESSAGE_IMAGES_BUCKET,
+                    image_key,
+                    ExtraArgs={
+                        'ContentType': content_type
+                    }
+                )
+                
+                # S3の公開URLを生成
+                region = 'ap-northeast-1'
+                message_image_url = f"https://{MESSAGE_IMAGES_BUCKET}.s3.{region}.amazonaws.com/{image_key}"
+                print(f"画像をアップロードしました: {message_image_url}")
+                
+            except Exception as img_error:
+                print(f"画像アップロードエラー: {str(img_error)}")
+                import traceback
+                print(traceback.format_exc())
+                # 画像アップロードに失敗してもメッセージ送信は続行
+        else:
+            print(f"画像データなし、または不正な形式: {message_image[:30]}...")
+
         
         # メッセージデータを作成
         message_data = {
@@ -42,7 +92,7 @@ def lambda_handler(event, context):
             "groupId": body["groupId"],
             "messageType": body["messageType"], # CHAT, THEME
             "messageText": body["messageText"],
-            "messageImage": body.get("messageImage", ""),
+            "messageImage": message_image_url,
             "createdBy": user_id, # 送信者の情報
             "createdAt": created_at,
             "messageTypeCreatedAt": message_type_created_at,
@@ -81,7 +131,7 @@ def lambda_handler(event, context):
             "groupId": body["groupId"],
             "messageType": body["messageType"], # CHAT, THEME
             "messageText": body["messageText"],
-            "messageImage": body.get("messageImage", ""),
+            "messageImage": message_image_url,
             "createdBy": user_info, # 送信者の情報
             "createdAt": created_at,
             "prizeText": body.get("prizeText", ""),

@@ -30,6 +30,7 @@ module "amplify" {
 
 module "lambda" {
   source               = "./modules/lambda"
+  group_images_bucket_name = module.s3.group_images_bucket_name
 }
 
 module "api_gateway" {
@@ -75,6 +76,12 @@ module "cloudwatch_event" {
   lambda_decide_winner_arn = module.lambda.lambda_decide_winner_arn
 }
 
+module "s3" {
+  source = "./modules/s3"
+}
+
 output "api_gateway_url" {
   value = module.api_gateway.api_gateway_url
 }
+
+
