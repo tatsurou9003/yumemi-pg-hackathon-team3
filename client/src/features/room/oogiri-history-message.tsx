@@ -14,7 +14,7 @@ const OogiriHistoryMessage = ({
   deadline,
   createdBy,
 }: MessageData) => {
-  const isDead = new Date(deadline) < new Date();
+  const isDead = deadline ? new Date(deadline) < new Date() : false;
   const location = useLocation();
 
   return (

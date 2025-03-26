@@ -199,7 +199,9 @@ function RouteComponent() {
     },
   ];
 
-  const isDead = new Date(oogiri.deadline) < new Date();
+  const isDead = oogiri.deadline
+    ? new Date(oogiri.deadline) < new Date()
+    : false;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

@@ -17,7 +17,7 @@ const OogiriMessage = ({
   createdBy,
   isSameUser,
 }: OogiriMessageProps) => {
-  const isDead = new Date(deadline) < new Date();
+  const isDead = deadline ? new Date(deadline) < new Date() : false;
   const location = useLocation();
 
   return (

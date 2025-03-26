@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, ControllerRenderProps } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/common/button/button";
 import {
@@ -14,9 +14,13 @@ const formSchema = z.object({
   message: z.string().min(1),
 });
 
-type FormSchema = z.infer<typeof formSchema>;
+export type FormSchema = z.infer<typeof formSchema>;
 
-const RoomForm = () => {
+type RoomFormProps = {
+  onSend: (data: FormSchema) => void;
+};
+
+const RoomForm = ({ onSend }: RoomFormProps) => {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -24,24 +28,21 @@ const RoomForm = () => {
     },
   });
 
-  function onSubmit(values: FormSchema) {
-    console.log(values);
-  }
+  const handleSubmit = (data: FormSchema) => {
+    onSend(data); // 入力データを送信する
+    form.reset(); // 送信後にフォームの内容をリセット
+  };
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="w-full flex items-center space-x-2"
       >
         <FormField
           control={form.control}
           name="message"
-          render={({
-            field,
-          }: {
-            field: ControllerRenderProps<FormSchema, "message">;
-          }) => (
+          render={({ field }) => (
             <FormItem className="w-full">
               <FormControl>
                 <Input placeholder="Aa" {...field} className="w-full" />
