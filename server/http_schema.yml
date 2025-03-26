@@ -322,12 +322,25 @@ paths:
             type: string
           required: true
           description: 回答対象のテーマメッセージID
+        - in: path
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: 投稿先のグループID
         - in: header
           name: Authorization
           schema:
             type: string
           required: true
           description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
+      requestBody:
+        description: 回答内容
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Answer"
       responses:
         "201":
           description: 回答投稿成功
@@ -350,13 +363,6 @@ paths:
             type: string
           required: true
           description: "Authorization: Bearer eyJraWQiOiJrZXkxIiwiYWxnIjoiUlMyNTYifQ...（IDトークン）"
-      requestBody:
-        description: 回答取得対象のテーマメッセージID
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ParentIdRequest"
       responses:
         "200":
           description: 回答取得成功
@@ -382,6 +388,12 @@ paths:
             type: string
           required: true
           description: いいね対象の回答ID
+        - in: query
+          name: parentId
+          schema:
+            type: string
+          required: true
+          description: いいね対象の投稿の親テーマID
         - in: header
           name: Authorization
           schema:
@@ -406,6 +418,12 @@ paths:
             type: string
           required: true
           description: いいね対象の回答ID
+        - in: query
+          name: parentId
+          schema:
+            type: string
+          required: true
+          description: いいね対象の投稿の親テーマID
         - in: header
           name: Authorization
           schema:
@@ -508,8 +526,11 @@ components:
       properties:
         groupName:
           type: string
+        groupImage:
+          type: string
       required:
         - groupName
+        - groupImage
 
     GroupMembershipUpdate:
       type: object
