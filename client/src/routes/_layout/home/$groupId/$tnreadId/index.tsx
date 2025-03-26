@@ -117,7 +117,7 @@ function RouteComponent() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await fetch(`${env.API_URL}/answers/${threadId}`, {
+    const response = await fetch(`${env.API_URL}/answers/${threadId}?groupId=${groupId}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json", // Ensure the content type is JSON
@@ -157,7 +157,7 @@ function RouteComponent() {
             <div className="flex flex-col gap-4 overflow-y-auto w-full">
               {answers.map((answer: AnswerData) => (
                 <div className="flex justify-start" key={answer.answerId}>
-                  <Answer {...answer} onGood={handleGood} />
+                  <Answer {...answer} />
                 </div>
               ))}
             </div>

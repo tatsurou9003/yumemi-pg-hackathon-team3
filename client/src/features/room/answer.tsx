@@ -8,7 +8,7 @@ import {
 import { Star, StarGray } from "@/components/common/icon";
 
 interface AnswerProps extends AnswerData {
-  onGood: (id: string, liked: boolean) => void;
+  onGood?: (id: string, liked: boolean) => void;
 }
 
 const Answer = ({
@@ -46,7 +46,7 @@ const Answer = ({
               onClick={() => {
                 setCount(count - 1);
                 setFlag(!flag);
-                onGood(answerId, true);
+                onGood && onGood(answerId, true);
               }}
             />
           ) : (
@@ -56,7 +56,7 @@ const Answer = ({
               onClick={() => {
                 setCount(count + 1);
                 setFlag(!flag);
-                onGood(answerId, false);
+                onGood && onGood(answerId, false);
               }}
             />
           )}
