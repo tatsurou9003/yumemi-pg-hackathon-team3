@@ -32,6 +32,9 @@ def lambda_handler(event, context):
         message_id = str(uuid.uuid4())
         created_at = datetime.now().isoformat()
         user_id = body["createdBy"]
+
+        # 複合ソートキーを作成
+        message_type_created_at = f"{body['messageType']}#{created_at}"
         
         # メッセージデータを作成
         message_data = {
@@ -42,6 +45,7 @@ def lambda_handler(event, context):
             "messageImage": body.get("messageImage", ""),
             "createdBy": user_id, # 送信者の情報
             "createdAt": created_at,
+            "messageTypeCreatedAt": message_type_created_at,
             "prizeText": body.get("prizeText", ""),
             "deadline": body.get("deadline", "")
         }

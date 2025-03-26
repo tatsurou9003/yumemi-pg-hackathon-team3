@@ -38,6 +38,7 @@ def lambda_handler(event, context):
                 'groupId': group_id
             }
         )
+        print(f"グループ情報: {group_response}")
         
         if 'Item' not in group_response:
             return {
@@ -45,21 +46,21 @@ def lambda_handler(event, context):
                 "headers": headers,
                 "body": json.dumps({"message": "Group not found"})
             }
-        
-        group = group_response['Item']
             
         # グループのテーマメッセージを取得
         messages_response = messages_table.query(
-            IndexName="GroupAllThemesIndex",
+            IndexName="GetAllThemesIndex",
             KeyConditionExpression=Key("groupId").eq(group_id) & Key("messageTypeCreatedAt").begins_with("THEME#"),
             ScanIndexForward=False  # 降順（最新のテーマから）
         )
+        print(f"messages_response: {messages_response}")
         
         themes = []
         
         for message in messages_response.get('Items', []):
             # テーマを作成したユーザーの情報を取得
             creator_id = message.get('createdBy')
+            print(f"creator_id: {creator_id}")
             creator_info = {}
             
             if creator_id:
