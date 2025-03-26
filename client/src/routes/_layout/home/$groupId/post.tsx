@@ -87,6 +87,18 @@ function RouteComponent() {
         resolve(false);
         return;
       }
+
+      const formData = new FormData();
+      formData.append("messageText", data.text);
+      formData.append("groupId", groupId);
+      formData.append("createdBy", userId);
+      formData.append("messageType", "THEME");
+      formData.append("prizeText", data.prize ?? "");
+      formData.append("deadline", data.deadline ?? "");
+      if (data.image) {
+        formData.append("messageImage", data.image);
+      }
+
       const newMessage = {
         action: "sendMessage",
         groupId: groupId,
@@ -99,8 +111,10 @@ function RouteComponent() {
       };
 
       try {
-        socketRef.current.send(JSON.stringify(newMessage));
-        resolve(true);
+        if (socketRef.current) {
+          socketRef.current.send(JSON.stringify(newMessage)); // WebSocketで送信
+          resolve(true);
+        }
       } catch (error) {
         toast.error("投稿に失敗しました");
         console.error("メッセージ送信エラー:", error);
