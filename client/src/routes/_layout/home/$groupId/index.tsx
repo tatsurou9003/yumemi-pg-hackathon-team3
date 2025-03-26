@@ -108,7 +108,10 @@ function RouteComponent() {
       if (entry.type === "deadline") {
         return (
           <div key={`deadline-${i}`} className="justify-items-center">
-            <CloseOogiri theme={message.messageText} />
+            <CloseOogiri
+              theme={message.messageText}
+              to={`/home/${groupId}/${message.messageId}`}
+            />
           </div>
         );
       }

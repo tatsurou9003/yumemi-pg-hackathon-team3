@@ -17,6 +17,8 @@ export { default as SendBrown } from "./send-brown";
 export { default as SendSlantBrown } from "./send-slant-brown";
 export { default as SettingsIcon } from "./settings-icon";
 export { default as Smile } from "./smile";
+export { default as StarGray } from "./star-gray";
+export { default as Star } from "./star";
 export { default as StickyNote } from "./sticky-note";
 export { default as TitlePage } from "./title-page";
 export { default as Title } from "./title";
