@@ -11,10 +11,10 @@ export type compressImageType = {
 export const compressImage = async (
   file: File,
   options: compressImageType = {
-    maxSizeMB: 0.05,
+    maxSizeMB: 0.01,
     useWebWorker: true,
     initialQuality: 0.85,
-  }
+  },
 ): Promise<File> => {
   try {
     const compressedFile = await imageCompression(file, options);

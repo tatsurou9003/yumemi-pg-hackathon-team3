@@ -181,7 +181,7 @@ function RouteComponent() {
         <div ref={messagesEndRef} />
       </div>
       <div>
-        <RoomFooter onSend={handleSend} onImg={() => { }} />
+        <RoomFooter onSend={handleSend} />
       </div>
     </div>
   );

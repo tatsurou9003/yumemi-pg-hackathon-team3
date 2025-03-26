@@ -99,7 +99,7 @@ function RouteComponent() {
           messageImage: imageBase64,
           prizeText: data.prize ?? null,
           deadline: data.deadline ?? null,
-        }
+        };
 
         try {
           if (socketRef.current) {
@@ -136,12 +136,10 @@ function RouteComponent() {
     setIsSubmitting(true);
 
     try {
-      // if (data.image) {
-      //   console.log(data.image)
-      //   const compressedFile = await compressImage(data.image);
-      //   data.image = compressedFile;
-      //   console.log(data.image)
-      // }
+      if (data.image) {
+        const compressedFile = await compressImage(data.image);
+        data.image = compressedFile;
+      }
       const success = await handlePost(data);
       if (success) {
         toast.success("投稿が完了しました");
