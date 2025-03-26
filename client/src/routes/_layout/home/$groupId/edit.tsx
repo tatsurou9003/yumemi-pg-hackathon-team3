@@ -1,83 +1,59 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { User } from "@/types/userData";
+import {
+  createFileRoute,
+  useNavigate,
+  useParams,
+} from "@tanstack/react-router";
+import { UserData } from "@/types/userData";
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { toast } from "react-toastify";
+import { getUsers } from "@/hooks/orval/users/users";
+import LoadingIndicator from "@/components/common/loading/loading";
+import { getGroups } from "@/hooks/orval/groups/groups";
 
 export const Route = createFileRoute("/_layout/home/$groupId/edit")({
   component: RouteComponent,
 });
-// TODO: ルーム画面のアイコンからここに飛べるようにする
-
-const mockUsers: User[] = [
-  {
-    userId: "u001",
-    userName: "田中太郎",
-    profileImage: "",
-    profileColor: "#FFB6C1",
-  },
-  {
-    userId: "u002",
-    userName: "鈴木花子",
-    profileImage: "",
-    profileColor: "#ADD8E6",
-  },
-  {
-    userId: "u003",
-    userName: "山田勇気",
-    profileImage: "",
-    profileColor: "#90EE90",
-  },
-  {
-    userId: "u004",
-    userName: "佐藤めぐみ",
-    profileImage: "",
-    profileColor: "#FFFFE0",
-  },
-  {
-    userId: "u005",
-    userName: "中村拓也",
-    profileImage: "",
-    profileColor: "#E6E6FA",
-  },
-  {
-    userId: "u006",
-    userName: "エンジニア太郎",
-    profileImage: "",
-    profileColor: "#FFA07A",
-  },
-  {
-    userId: "u007",
-    userName: "デザイナー花子",
-    profileImage: "",
-    profileColor: "#87CEFA",
-  },
-];
 
 function RouteComponent() {
-  const { handleSubmit, register, watch } = useForm<User>();
-  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const { handleSubmit, register, watch } = useForm<UserData>();
+  const [searchResults, setSearchResults] = useState<UserData[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const params = useParams({ from: "/_layout/home/$groupId/edit" });
 
   const searchTerm = watch("userId") || "";
 
-  const handleSearch = () => {
-    // 検索語が空の場合は結果をクリア
-    if (!searchTerm.trim()) {
-      setSearchResults([]);
-      return;
-    }
+  const handleSearch = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getUsers().getUsersSearch({
+        userId: searchTerm,
+      });
 
-    const term = searchTerm.toLowerCase();
-    const results = mockUsers.filter(
-      (user) =>
-        user.userId.toLowerCase().includes(term) ||
-        user.userName.toLowerCase().includes(term),
-    );
-    setSearchResults(results);
+      if (response.data) {
+        const userData: UserData = {
+          userId: response.data.userId,
+          userName: response.data.userName,
+          profileImage: response.data.profileImage || "",
+          profileColor: response.data.profileColor || "#CCCCCC",
+        };
+
+        setSearchResults([userData]);
+      } else {
+        setSearchResults([]);
+        toast.info("ユーザーが見つかりませんでした");
+      }
+    } catch (error) {
+      console.error("ユーザー検索エラー:", error);
+      toast.error("ユーザー検索中にエラーが発生しました");
+      setSearchResults([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const toggleUserSelection = (userId: string) => {
@@ -95,16 +71,27 @@ function RouteComponent() {
   // 選択されたユーザーオブジェクトの取得
   const getSelectedUserObjects = () => {
     return selectedUsers
-      .map((id) => mockUsers.find((user) => user.userId === id))
-      .filter(Boolean) as User[];
+      .map((id) => searchResults.find((user) => user.userId === id))
+      .filter(Boolean) as UserData[];
   };
 
-  const onSubmit = () => {
-    //TODO: APIでメンバー招待を叩く
-    console.log("選択されたユーザー: ", selectedUsers);
-    //TODO: リクエストが失敗した時はエラートーストを表示
-    toast.success("メンバーを招待しました");
-    navigate({ to: "/home" });
+  const onSubmit = async () => {
+    try {
+      setIsLoading(true);
+
+      await getGroups().postGroupsInviteGroupId(params.groupId, {
+        userIds: selectedUsers,
+      });
+
+      toast.success("メンバーを招待しました");
+
+      navigate({ to: `/home` });
+    } catch (error) {
+      console.error("メンバー招待エラー:", error);
+      toast.error("メンバーの招待に失敗しました");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // スクロール処理
@@ -120,6 +107,10 @@ function RouteComponent() {
       container.scrollBy({ left: scrollAmount, behavior: "smooth" });
     }
   };
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="bg-[#FFEADD] h-full">

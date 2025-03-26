@@ -1,11 +1,7 @@
 import { useNavigate } from "@tanstack/react-router";
 import SidebarListItem from "./sidebar-list-item";
 import { CharacterWink, InfoIcon } from "@/components/common/icon";
-
-interface SidebarProps {
-  version: string;
-  onLogout: () => void;
-}
+import { SidebarProps } from "@/types/layout";
 
 export const Sidebar = ({ version, onLogout }: SidebarProps) => {
   const navigate = useNavigate();
