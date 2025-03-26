@@ -3,7 +3,7 @@ import {
   useNavigate,
   useParams,
 } from "@tanstack/react-router";
-import { User } from "@/types/userData";
+import { UserData } from "@/types/userData";
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
@@ -15,11 +15,10 @@ import { getGroups } from "@/hooks/orval/groups/groups";
 export const Route = createFileRoute("/_layout/home/$groupId/edit")({
   component: RouteComponent,
 });
-// TODO: ルーム画面のアイコンからここに飛べるようにする
 
 function RouteComponent() {
-  const { handleSubmit, register, watch } = useForm<User>();
-  const [searchResults, setSearchResults] = useState<User[]>([]);
+  const { handleSubmit, register, watch } = useForm<UserData>();
+  const [searchResults, setSearchResults] = useState<UserData[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +35,7 @@ function RouteComponent() {
       });
 
       if (response.data) {
-        const userData: User = {
+        const userData: UserData = {
           userId: response.data.userId,
           userName: response.data.userName,
           profileImage: response.data.profileImage || "",
@@ -73,7 +72,7 @@ function RouteComponent() {
   const getSelectedUserObjects = () => {
     return selectedUsers
       .map((id) => searchResults.find((user) => user.userId === id))
-      .filter(Boolean) as User[];
+      .filter(Boolean) as UserData[];
   };
 
   const onSubmit = async () => {
