@@ -40,6 +40,7 @@ function RouteComponent() {
 
   const [oogiri, setOogiri] = useState<MessageData | undefined>(undefined);
   const [answers, setAnswers] = useState<AnswerData[]>([]);
+  const [flag, setFlag] = useState<boolean>(false);
 
   const userId = localStorage.getItem(
     `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
@@ -75,36 +76,29 @@ function RouteComponent() {
             Authorization: `Bearer ${idToken}`,
           },
         });
+        const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch answers");
-        }
-
-        console.log(response)
-
-        // const formattedAnswers = response.data.map(
-        //   (answer: AnswerData) => ({
-        //     answerId: answer.answerId,
-        //     createdBy: {
-        //       userId: answer.createdBy.userId,
-        //       userName: answer.createdBy.userName,
-        //       profileImage: answer.createdBy.profileImage ?? "",
-        //       profileColor: answer.createdBy.profileColor ?? "",
-        //     },
-        //     answerText: answer.answerText,
-        //     createdAt: answer.createdAt,
-        //     goodCount: answer.goodCount,
-        //     isLiked: answer.isLiked,
-        //   }),
-        // );
-        // setAnswers(formattedAnswers);
+        const formattedAnswers = data.map((answer: AnswerData) => ({
+          answerId: answer.answerId,
+          createdBy: {
+            userId: answer.createdBy.userId,
+            userName: answer.createdBy.userName,
+            profileImage: answer.createdBy.profileImage ?? "",
+            profileColor: answer.createdBy.profileColor ?? "",
+          },
+          answerText: answer.answerText,
+          createdAt: answer.createdAt,
+          goodCount: answer.goodCount,
+          isLiked: answer.isLiked,
+        }));
+        setAnswers(formattedAnswers);
       } catch (error) {
         console.error("データの取得に失敗しました:", error);
       }
     };
 
     fetchData();
-  }, [groupId, threadId]);
+  }, [groupId, threadId, flag]);
 
   const isDead =
     oogiri && oogiri.deadline ? new Date(oogiri.deadline) < new Date() : false;
@@ -117,27 +111,29 @@ function RouteComponent() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const response = await fetch(`${env.API_URL}/answers/${threadId}?groupId=${groupId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Ensure the content type is JSON
-        Authorization: `Bearer ${idToken}`, // Add Authorization header
-      },
-      body: JSON.stringify({
-        answerText: values.answer // Ensure it's an array of strings
-      }),
-    });
+    try {
+      await fetch(`${env.API_URL}/answers/${threadId}?groupId=${groupId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          answerText: values.answer,
+        }),
+      });
 
-    if (!response.ok) {
-      throw new Error("Failed to submit answer");
+      setFlag(!flag);
+    } catch (error) {
+      console.error("データ送信エラー:", error);
     }
   };
 
   const handleGood = async (id: string, liked: boolean) => {
     if (liked) {
-      await getLikes().deleteAnswersLikeAnswerId(id);
+      await getLikes().deleteAnswersLikeAnswerId(id, threadId);
     } else {
-      await getLikes().putAnswersLikeAnswerId(id);
+      await getLikes().putAnswersLikeAnswerId(id, threadId);
     }
   };
 

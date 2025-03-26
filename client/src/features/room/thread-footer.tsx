@@ -26,7 +26,7 @@ const ThreadFooter = ({ answers, onGood }: ThreadFooterProps) => {
         <Add width="24px" height="24px" />
       </button>
       {answerListOpen && (
-        <div className="flex flex-col gap-4 p-5 overflow-y-auto w-full h-[272px] bg-[#CAE071]">
+        <div className="flex flex-col gap-4 p-5 overflow-y-auto w-full h-[400px] bg-[#CAE071]">
           {answers.map((answer) => (
             <div className="flex justify-start" key={answer.answerId}>
               <Answer {...answer} onGood={onGood} />
