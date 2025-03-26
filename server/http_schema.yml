@@ -713,7 +713,7 @@ components:
         goodCount:
           type: integer
           description: "いいねの数"
-        isLiked:
+        isliked:
           type: boolean
           description: "自分がいいねした回答かどうか"
       required:
@@ -723,7 +723,7 @@ components:
         - answerText
         - createdAt
         - goodCount
-        - isLiked
+        - isliked
 
     ParentIdRequest:
       type: object

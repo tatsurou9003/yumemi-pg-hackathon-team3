@@ -76,20 +76,36 @@ function RouteComponent() {
 
   const sortedMessages = (() => {
     const now = new Date();
+
     const timestamps = messages.flatMap((message, index) => {
       const entries = [
-        { time: new Date(message.createdAt), type: "message", index },
-      ];
-      if (message.deadline && new Date(message.deadline) < now) {
-        entries.push({
-          time: new Date(message.deadline),
-          type: "deadline",
+        // createdAtはUTCからJSTに変換
+        {
+          time: new Date(
+            new Date(message.createdAt).getTime() + 9 * 60 * 60 * 1000,
+          ),
+          type: "message",
           index,
-        });
+        },
+      ];
+
+      if (message.deadline) {
+        // deadlineは元々JSTのためそのまま使用
+        const deadlineJST = new Date(message.deadline);
+
+        if (deadlineJST < now) {
+          entries.push({
+            time: deadlineJST,
+            type: "deadline",
+            index,
+          });
+        }
       }
+
       return entries;
     });
 
+    // JSTに変換した後、タイムスタンプでソート
     timestamps.sort((a, b) => a.time.getTime() - b.time.getTime());
 
     return timestamps.map((entry, i) => {
@@ -108,7 +124,10 @@ function RouteComponent() {
       if (entry.type === "deadline") {
         return (
           <div key={`deadline-${i}`} className="justify-items-center">
-            <CloseOogiri theme={message.messageText} />
+            <CloseOogiri
+              theme={message.messageText}
+              to={`/home/${groupId}/${message.messageId}`}
+            />
           </div>
         );
       }

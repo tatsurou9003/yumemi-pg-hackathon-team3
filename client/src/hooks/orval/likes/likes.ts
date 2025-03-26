@@ -13,9 +13,9 @@ export const getLikes = () => {
    * 回答に対していいねをします。
    * @summary いいね
    */
-  const putAnswersLikeAnswerId = (answerId: string) => {
+  const putAnswersLikeAnswerId = (answerId: string, parentId: string) => {
     return customInstance<void>({
-      url: `/answers/like/${answerId}`,
+      url: `/answers/like/${answerId}?parentId=${parentId}`,
       method: "PUT",
     });
   };
@@ -23,9 +23,9 @@ export const getLikes = () => {
    * 回答に対していいねを解除します。
    * @summary いいね解除
    */
-  const deleteAnswersLikeAnswerId = (answerId: string) => {
+  const deleteAnswersLikeAnswerId = (answerId: string, parentId: string) => {
     return customInstance<void>({
-      url: `/answers/like/${answerId}`,
+      url: `/answers/like/${answerId}?parentId=${parentId}`,
       method: "DELETE",
     });
   };

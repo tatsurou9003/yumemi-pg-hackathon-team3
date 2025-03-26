@@ -2,9 +2,10 @@ import { Link } from "@tanstack/react-router";
 
 interface CloseOogiriProps {
   theme: string;
+  to: string;
 }
 
-const CloseOogiri = ({ theme }: CloseOogiriProps) => {
+const CloseOogiri = ({ theme, to }: CloseOogiriProps) => {
   const maxLength = 30;
   const truncatedTheme =
     theme.length > maxLength ? theme.substring(0, maxLength) + "..." : theme;
@@ -15,7 +16,7 @@ const CloseOogiri = ({ theme }: CloseOogiriProps) => {
         【大喜利】{truncatedTheme}が終了しました。
       </div>
       <div className="flex justify-end w-full">
-        <Link to="" className="text-[#743E3E] font-bold text-[10px]">
+        <Link to={to} className="text-[#743E3E] font-bold text-[10px]">
           ＞結果を見る
         </Link>
       </div>

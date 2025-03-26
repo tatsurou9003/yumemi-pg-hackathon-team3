@@ -17,8 +17,9 @@ import { SendBrown } from "@/components/common/icon";
 import { MessageData } from "@/types/messageData";
 import { AnswerData } from "@/types/answerData";
 import { getGroups } from "@/hooks/orval/groups/groups";
-import { getAnswers } from "@/hooks/orval/answers/answers";
+import { getLikes } from "@/hooks/orval/likes/likes";
 import { useEffect, useState } from "react";
+import { env } from "@/env";
 
 const formSchema = z.object({
   answer: z.string().min(2, {
@@ -38,6 +39,14 @@ function RouteComponent() {
 
   const [oogiri, setOogiri] = useState<MessageData | undefined>(undefined);
   const [answers, setAnswers] = useState<AnswerData[]>([]);
+  const [flag, setFlag] = useState<boolean>(false);
+
+  const userId = localStorage.getItem(
+    `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
+  );
+  const idToken = localStorage.getItem(
+    `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.${userId}.idToken`,
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,23 +68,28 @@ function RouteComponent() {
         );
         setOogiri(targetOogiri);
 
-        const answersResponse =
-          await getAnswers().getAnswersMessageId(threadId);
-        const formattedAnswers = answersResponse.data.map(
-          (answer: AnswerData) => ({
-            answerId: answer.answerId,
-            createdBy: {
-              userId: answer.createdBy.userId,
-              userName: answer.createdBy.userName,
-              profileImage: answer.createdBy.profileImage ?? "",
-              profileColor: answer.createdBy.profileColor ?? "",
-            },
-            answerText: answer.answerText,
-            createdAt: answer.createdAt,
-            goodCount: answer.goodCount,
-            isLiked: answer.isLiked,
-          }),
-        );
+        const response = await fetch(`${env.API_URL}/answers/${threadId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+        });
+        const data = await response.json();
+
+        const formattedAnswers = data.map((answer: AnswerData) => ({
+          answerId: answer.answerId,
+          createdBy: {
+            userId: answer.createdBy.userId,
+            userName: answer.createdBy.userName,
+            profileImage: answer.createdBy.profileImage ?? "",
+            profileColor: answer.createdBy.profileColor ?? "",
+          },
+          answerText: answer.answerText,
+          createdAt: answer.createdAt,
+          goodCount: answer.goodCount,
+          isliked: answer.isliked,
+        }));
         setAnswers(formattedAnswers);
       } catch (error) {
         console.error("データの取得に失敗しました:", error);
@@ -83,7 +97,7 @@ function RouteComponent() {
     };
 
     fetchData();
-  }, [groupId, threadId]);
+  }, [groupId, threadId, flag]);
 
   const isDead =
     oogiri && oogiri.deadline ? new Date(oogiri.deadline) < new Date() : false;
@@ -96,9 +110,30 @@ function RouteComponent() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await getAnswers().postAnswersMessageId(threadId, {
-      answerText: values.answer,
-    });
+    try {
+      await fetch(`${env.API_URL}/answers/${threadId}?groupId=${groupId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({
+          answerText: values.answer,
+        }),
+      });
+
+      setFlag(!flag);
+    } catch (error) {
+      console.error("データ送信エラー:", error);
+    }
+  };
+
+  const handleGood = async (id: string, liked: boolean) => {
+    if (liked) {
+      await getLikes().deleteAnswersLikeAnswerId(id, threadId);
+    } else {
+      await getLikes().putAnswersLikeAnswerId(id, threadId);
+    }
   };
 
   return (
@@ -150,7 +185,7 @@ function RouteComponent() {
           )}
         </div>
       )}
-      {!isDead && <ThreadFooter answers={answers} />}
+      {!isDead && <ThreadFooter answers={answers} onGood={handleGood} />}
     </div>
   );
 }
