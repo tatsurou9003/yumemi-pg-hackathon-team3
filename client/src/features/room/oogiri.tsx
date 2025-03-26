@@ -7,7 +7,7 @@ type OogiriProps = {
 const Oogiri = ({ text, image, isDead }: OogiriProps) => {
   return (
     <div
-      className={`w-full rounded p-4 w-auto box-shadow[0px 4px 4px 0px rgba(0, 0, 0, 0.25)] ${isDead ? "bg-[#FFE735]" : "bg-[#FFB8BA]"}`}
+      className={`w-full rounded p-4 box-shadow[0px 4px 4px 0px rgba(0, 0, 0, 0.25)] ${isDead ? "bg-[#FFE735]" : "bg-[#FFB8BA]"}`}
     >
       {image && !text ? (
         <img
