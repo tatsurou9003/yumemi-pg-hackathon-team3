@@ -7,7 +7,12 @@ import {
 import { UserCard } from "@/components/common/user-card/user-card";
 import { HomeAvatarProps } from "@/types/layout";
 
-const HomeAvatar = ({ src }: HomeAvatarProps) => {
+const HomeAvatar = ({
+  src,
+  userName,
+  profileColor,
+  userId,
+}: HomeAvatarProps) => {
   const [isUserCardOpen, setIsUserCardOpen] = useState(false);
   const userCardRef = useRef<HTMLDivElement | null>(null);
   const avatarRef = useRef<HTMLButtonElement | null>(null);
@@ -34,6 +39,10 @@ const HomeAvatar = ({ src }: HomeAvatarProps) => {
     setIsUserCardOpen((prev) => !prev);
   };
 
+  // ユーザー名の先頭文字を取得（空の場合は'U'をデフォルト値とする）
+  const userInitial =
+    userName && userName.length > 0 ? userName.charAt(0) : "U";
+
   return (
     <div className="relative inline-block">
       <button
@@ -43,7 +52,7 @@ const HomeAvatar = ({ src }: HomeAvatarProps) => {
       >
         <Avatar>
           <AvatarImage src={src} />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>{userInitial}</AvatarFallback>
         </Avatar>
       </button>
       {isUserCardOpen && (
@@ -52,9 +61,10 @@ const HomeAvatar = ({ src }: HomeAvatarProps) => {
           className="absolute top-[calc(100%_+_3px)] right-0 z-10 transition-opacity duration-200"
         >
           <UserCard
-            name="John Doe"
+            name={userName || ""}
             src={src}
-            id="12345"
+            id={userId || ""}
+            profileColor={profileColor || ""}
             onSettings={() => console.log("Settings clicked")}
             onCamera={() => console.log("Camera clicked")}
           />

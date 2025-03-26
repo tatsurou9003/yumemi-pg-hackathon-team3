@@ -24,6 +24,12 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     groupName: string;
     memberCount: number;
   } | null>(null);
+  const [userInfo, setUserInfo] = useState<{
+    userId: string;
+    userName: string;
+    profileImage: string;
+    profileColor: string;
+  } | null>(null);
 
   // URLからgroupIdを取得
   const isRoomPath = path.match(/^\/home\/[\w-]+(\/?|\/history)$/);
@@ -32,16 +38,25 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     groupId = null;
   }
 
-  // グループ情報を取得する
+  // グループ情報とユーザー情報を取得する
   useEffect(() => {
-    const fetchGroupInfo = async () => {
-      if (groupId) {
-        try {
-          setIsLoading(true);
-          const response = await getUsers().getUsersHome();
-          const data = response.data;
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getUsers().getUsersHome();
+        const data = response.data;
 
-          if (data && data.groups) {
+        if (data) {
+          // ユーザー情報を設定
+          setUserInfo({
+            userId: data.userId || "",
+            userName: data.userName || "",
+            profileImage: data.profileImage || "",
+            profileColor: data.profileColor || "",
+          });
+
+          // グループ情報を設定（既存のコード）
+          if (groupId && data.groups) {
             const targetGroup = data.groups.find(
               (group) => group.groupId === groupId
             );
@@ -55,18 +70,18 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
                 memberCount: targetGroup.memberCount,
               });
             }
+          } else {
+            setGroupInfo(null);
           }
-        } catch (error) {
-          console.error("グループ情報の取得に失敗しました", error);
-        } finally {
-          setIsLoading(false);
         }
-      } else {
-        setGroupInfo(null);
+      } catch (error) {
+        console.error("情報の取得に失敗しました", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    fetchGroupInfo();
+    fetchData();
   }, [groupId]);
 
   // タイトルを取得する関数
@@ -163,12 +178,19 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
               >
                 <Avatar>
                   <AvatarImage src={avatar} />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarFallback>
+                    {groupInfo?.groupName ? groupInfo.groupName.charAt(0) : "G"}
+                  </AvatarFallback>
                 </Avatar>
               </button>
             </>
           ) : (
-            <HomeAvatar src={avatar} />
+            <HomeAvatar
+              src={userInfo?.profileImage || avatar}
+              userName={userInfo?.userName || ""}
+              profileColor={userInfo?.profileColor || ""}
+              userId={userInfo?.userId || ""}
+            />
           )}
         </div>
       )}
