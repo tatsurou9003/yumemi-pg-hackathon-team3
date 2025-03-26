@@ -20,6 +20,7 @@ import { getGroups } from "@/hooks/orval/groups/groups";
 import { getAnswers } from "@/hooks/orval/answers/answers";
 import { getLikes } from "@/hooks/orval/likes/likes";
 import { useEffect, useState } from "react";
+import { env } from "@/env";
 
 const formSchema = z.object({
   answer: z.string().min(2, {
@@ -39,6 +40,13 @@ function RouteComponent() {
 
   const [oogiri, setOogiri] = useState<MessageData | undefined>(undefined);
   const [answers, setAnswers] = useState<AnswerData[]>([]);
+
+  const userId = localStorage.getItem(
+    `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.LastAuthUser`,
+  );
+  const idToken = localStorage.getItem(
+    `CognitoIdentityServiceProvider.${env.USER_POOL_CLIENT_ID}.${userId}.idToken`,
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,24 +68,36 @@ function RouteComponent() {
         );
         setOogiri(targetOogiri);
 
-        const answersResponse =
-          await getAnswers().getAnswersMessageId(threadId);
-        const formattedAnswers = answersResponse.data.map(
-          (answer: AnswerData) => ({
-            answerId: answer.answerId,
-            createdBy: {
-              userId: answer.createdBy.userId,
-              userName: answer.createdBy.userName,
-              profileImage: answer.createdBy.profileImage ?? "",
-              profileColor: answer.createdBy.profileColor ?? "",
-            },
-            answerText: answer.answerText,
-            createdAt: answer.createdAt,
-            goodCount: answer.goodCount,
-            isLiked: answer.isLiked,
-          }),
-        );
-        setAnswers(formattedAnswers);
+        const response = await fetch(`${env.API_URL}/answers/${threadId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch answers");
+        }
+
+        console.log(response)
+
+        // const formattedAnswers = response.data.map(
+        //   (answer: AnswerData) => ({
+        //     answerId: answer.answerId,
+        //     createdBy: {
+        //       userId: answer.createdBy.userId,
+        //       userName: answer.createdBy.userName,
+        //       profileImage: answer.createdBy.profileImage ?? "",
+        //       profileColor: answer.createdBy.profileColor ?? "",
+        //     },
+        //     answerText: answer.answerText,
+        //     createdAt: answer.createdAt,
+        //     goodCount: answer.goodCount,
+        //     isLiked: answer.isLiked,
+        //   }),
+        // );
+        // setAnswers(formattedAnswers);
       } catch (error) {
         console.error("データの取得に失敗しました:", error);
       }
@@ -97,9 +117,20 @@ function RouteComponent() {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    await getAnswers().postAnswersMessageId(threadId, {
-      answerText: values.answer,
+    const response = await fetch(`${env.API_URL}/answers/${threadId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Ensure the content type is JSON
+        Authorization: `Bearer ${idToken}`, // Add Authorization header
+      },
+      body: JSON.stringify({
+        answerText: values.answer // Ensure it's an array of strings
+      }),
     });
+
+    if (!response.ok) {
+      throw new Error("Failed to submit answer");
+    }
   };
 
   const handleGood = async (id: string, liked: boolean) => {
