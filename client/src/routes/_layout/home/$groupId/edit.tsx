@@ -3,7 +3,7 @@ import {
   useNavigate,
   useParams,
 } from "@tanstack/react-router";
-import { User } from "@/types/userData";
+import { UserData } from "@/types/userData";
 import { useForm } from "react-hook-form";
 import { useState, useRef } from "react";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
@@ -35,7 +35,7 @@ function RouteComponent() {
       });
 
       if (response.data) {
-        const userData: User = {
+        const userData: UserData = {
           userId: response.data.userId,
           userName: response.data.userName,
           profileImage: response.data.profileImage || "",
@@ -72,7 +72,7 @@ function RouteComponent() {
   const getSelectedUserObjects = () => {
     return selectedUsers
       .map((id) => searchResults.find((user) => user.userId === id))
-      .filter(Boolean) as User[];
+      .filter(Boolean) as UserData[];
   };
 
   const onSubmit = async () => {
