@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import LoginForm from "@/components/common/form/loginform";
-import LoginButton from "@/features/login/login-button";
-import GoogleButton from "@/features/login/google-login-button";
-import SignUpButton from "@/features/login/sign-up-button";
+import LoginForm from "@/features/login/login-form";
+import SkipButton from "@/features/login/skip-button";
+import ToSignUpButton from "@/features/login/to-signup-button";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_layout/login")({
@@ -25,11 +24,10 @@ function RouteComponent() {
       className={`min-h-screen bg-[#FFBC92] text-xs bg-[url(/src/assets/icons/character.svg)] bg-no-repeat bg-contain bg-center ${isVisible ? "opacity-100" : "opacity-0"} transition-opacity duration-500`}
     >
       <LoginForm />
-      <LoginButton />
       <div className="text-black font-inter font-normal flex flex-col justify-center items-center top-[109px] relative">
-        <SignUpButton />
+        <ToSignUpButton />
       </div>
-      <GoogleButton />
+      <SkipButton />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
-const GoogleButton = () => {
+
+const SkipButton = () => {
   const navigate = useNavigate();
   return (
     <div className="flex flex-col justify-center items-center">
@@ -18,4 +19,4 @@ const GoogleButton = () => {
   );
 };
 
-export default GoogleButton;
+export default SkipButton;

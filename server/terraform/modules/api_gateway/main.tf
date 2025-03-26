@@ -418,6 +418,22 @@ resource "aws_api_gateway_method" "first_login_check_options" {
   authorization = "NONE"
 }
 
+# ホーム用OPTIONSメソッド
+resource "aws_api_gateway_method" "home_options" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.home.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+# ユーザー検索用OPTIONSメソッド
+resource "aws_api_gateway_method" "search_options" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.search.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
 # グループ周り
 # グループ作成用
 resource "aws_api_gateway_method" "create_group_options" {
@@ -431,6 +447,22 @@ resource "aws_api_gateway_method" "create_group_options" {
 resource "aws_api_gateway_method" "invite_groupId_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.invite_groupId.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+# テーマ取得用OPTIONSメソッド
+resource "aws_api_gateway_method" "themes_groupId_options" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.themes_groupId.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+# チャット履歴取得用OPTIONSメソッド
+resource "aws_api_gateway_method" "chat_groupId_options" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.chat_groupId.id
   http_method   = "OPTIONS"
   authorization = "NONE"
 }
@@ -487,6 +519,32 @@ resource "aws_api_gateway_integration" "first_login_check_options" {
   }
 }
 
+# OPTIONSメソッドのモック統合 - ホーム用
+resource "aws_api_gateway_integration" "home_options" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.home.id
+  http_method   = aws_api_gateway_method.home_options.http_method
+  type          = "MOCK"
+  request_templates = {
+    "application/json" = jsonencode({
+      statusCode = 200
+    })
+  }
+}
+
+# OPTIONSメソッドのモック統合 - ユーザー検索用
+resource "aws_api_gateway_integration" "search_options" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.search.id
+  http_method   = aws_api_gateway_method.search_options.http_method
+  type          = "MOCK"
+  request_templates = {
+    "application/json" = jsonencode({
+      statusCode = 200
+    })
+  }
+}
+
 # OPTIONSメソッドのモック統合 - グループ作成用
 resource "aws_api_gateway_integration" "create_group_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
@@ -526,11 +584,39 @@ resource "aws_api_gateway_integration" "update_member_groupId_options" {
   }
 }
 
+
+
 # OPTIONSメソッドのモック統合 - テーマに対する回答用
 resource "aws_api_gateway_integration" "answer_messageId_options" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.answer_messageId.id
   http_method   = aws_api_gateway_method.answer_messageId_options.http_method
+  type          = "MOCK"
+  request_templates = {
+    "application/json" = jsonencode({
+      statusCode = 200
+    })
+  }
+}
+
+# OPTIONSメソッドのモック統合 - テーマ取得用
+resource "aws_api_gateway_integration" "themes_groupId_options" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.themes_groupId.id
+  http_method   = aws_api_gateway_method.themes_groupId_options.http_method
+  type          = "MOCK"
+  request_templates = {
+    "application/json" = jsonencode({
+      statusCode = 200
+    })
+  }
+}
+
+# OPTIONSメソッドのモック統合 - チャット履歴取得用
+resource "aws_api_gateway_integration" "chat_groupId_options" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.chat_groupId.id
+  http_method   = aws_api_gateway_method.chat_groupId_options.http_method
   type          = "MOCK"
   request_templates = {
     "application/json" = jsonencode({
@@ -571,6 +657,34 @@ resource "aws_api_gateway_method_response" "first_login_check_options_200" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
   resource_id   = aws_api_gateway_resource.first_login_check.id
   http_method   = aws_api_gateway_method.first_login_check_options.http_method
+  status_code   = "200"
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+}
+
+# メソッドレスポンスの設定 - ホーム用
+resource "aws_api_gateway_method_response" "home_options_200" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.home.id
+  http_method   = aws_api_gateway_method.home_options.http_method
+  status_code   = "200"
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+}
+
+# メソッドレスポンスの設定 - ユーザー検索用
+resource "aws_api_gateway_method_response" "search_options_200" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.search.id
+  http_method   = aws_api_gateway_method.search_options.http_method
   status_code   = "200"
   
   response_parameters = {
@@ -621,6 +735,34 @@ resource "aws_api_gateway_method_response" "update_member_groupId_options_200" {
     "method.response.header.Access-Control-Allow-Origin"  = true
   }
 } 
+
+# メソッドレスポンスの設定 - テーマ取得用
+resource "aws_api_gateway_method_response" "themes_groupId_options_200" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.themes_groupId.id
+  http_method   = aws_api_gateway_method.themes_groupId_options.http_method
+  status_code   = "200"
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+}
+
+# メソッドレスポンスの設定 - チャット履歴取得用
+resource "aws_api_gateway_method_response" "chat_groupId_options_200" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.chat_groupId.id
+  http_method   = aws_api_gateway_method.chat_groupId_options.http_method
+  status_code   = "200"
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+}
 
 # メソッドレスポンスの設定 - テーマに対する回答用
 resource "aws_api_gateway_method_response" "answer_messageId_options" {
@@ -682,6 +824,38 @@ resource "aws_api_gateway_integration_response" "first_login_check_options_integ
   depends_on = [aws_api_gateway_integration.first_login_check_options]
 }
 
+# 統合レスポンスの設定 - ホーム用
+resource "aws_api_gateway_integration_response" "home_options_integration_response" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.home.id
+  http_method   = aws_api_gateway_method.home_options.http_method
+  status_code   = aws_api_gateway_method_response.home_options_200.status_code
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,PATCH,DELETE'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+
+  depends_on = [aws_api_gateway_integration.home_options]
+}
+
+# 統合レスポンスの設定 - ユーザー検索用
+resource "aws_api_gateway_integration_response" "search_options_integration_response" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.search.id
+  http_method   = aws_api_gateway_method.search_options.http_method
+  status_code   = aws_api_gateway_method_response.search_options_200.status_code
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,PATCH,DELETE'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+
+  depends_on = [aws_api_gateway_integration.search_options]
+}
+
 # 統合レスポンスの設定 - グループ作成用
 resource "aws_api_gateway_integration_response" "create_group_options_integration_response" {
   rest_api_id   = aws_api_gateway_rest_api.api.id
@@ -728,6 +902,38 @@ resource "aws_api_gateway_integration_response" "update_member_groupId_options_i
   }
 
   depends_on = [aws_api_gateway_integration.update_member_groupId_options]
+}
+
+# 統合レスポンスの設定 - テーマ取得用
+resource "aws_api_gateway_integration_response" "themes_groupId_options_integration_response" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.themes_groupId.id
+  http_method   = aws_api_gateway_method.themes_groupId_options.http_method
+  status_code   = aws_api_gateway_method_response.themes_groupId_options_200.status_code
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,PATCH,DELETE'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+
+  depends_on = [aws_api_gateway_integration.themes_groupId_options]
+}
+
+# 統合レスポンスの設定 - チャット履歴取得用
+resource "aws_api_gateway_integration_response" "chat_groupId_options_integration_response" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.chat_groupId.id
+  http_method   = aws_api_gateway_method.chat_groupId_options.http_method
+  status_code   = aws_api_gateway_method_response.chat_groupId_options_200.status_code
+  
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,PATCH,DELETE'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+
+  depends_on = [aws_api_gateway_integration.chat_groupId_options]
 }
 
 # 統合レスポンスの設定 - テーマに対する回答用
@@ -809,9 +1015,13 @@ locals {
   options_methods = [
     aws_api_gateway_method.profile_options.id,
     aws_api_gateway_method.first_login_check_options.id,
+    aws_api_gateway_method.home_options.id,
+    aws_api_gateway_method.search_options.id,
     aws_api_gateway_method.create_group_options.id,
     aws_api_gateway_method.invite_groupId_options.id,
     aws_api_gateway_method.update_member_groupId_options.id,
+    aws_api_gateway_method.themes_groupId_options.id,
+    aws_api_gateway_method.chat_groupId_options.id, 
     aws_api_gateway_method.answer_messageId_options.id,
     aws_api_gateway_method.like_answerId_options.id
   ]
@@ -837,9 +1047,13 @@ locals {
   options_integrations = [
     aws_api_gateway_integration.profile_options.id,
     aws_api_gateway_integration.first_login_check_options.id,
+    aws_api_gateway_integration.home_options.id,
+    aws_api_gateway_integration.search_options.id,
     aws_api_gateway_integration.create_group_options.id,
     aws_api_gateway_integration.invite_groupId_options.id,
     aws_api_gateway_integration.update_member_groupId_options.id,
+    aws_api_gateway_integration.themes_groupId_options.id,
+    aws_api_gateway_integration.chat_groupId_options.id,
     aws_api_gateway_integration.answer_messageId_options.id,
     aws_api_gateway_integration.like_answerId_options.id
   ]
@@ -882,9 +1096,13 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     # CORS統合レスポンス
     aws_api_gateway_integration_response.profile_options_integration_response,
     aws_api_gateway_integration_response.first_login_check_options_integration_response,
+    aws_api_gateway_integration_response.home_options_integration_response,
+    aws_api_gateway_integration_response.search_options_integration_response,
     aws_api_gateway_integration_response.create_group_options_integration_response,
     aws_api_gateway_integration_response.invite_groupId_options_integration_response,
     aws_api_gateway_integration_response.update_member_groupId_options_integration_response,
+    aws_api_gateway_integration_response.themes_groupId_options_integration_response,
+    aws_api_gateway_integration_response.chat_groupId_options_integration_response,
     aws_api_gateway_integration_response.answer_messageId_options_integration_response,
     aws_api_gateway_integration_response.like_answerId_options_integration_response,
   ]

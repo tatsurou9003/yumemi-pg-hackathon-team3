@@ -1,5 +1,5 @@
+import { Group } from "@/types/common";
 import { createContext } from "react";
-import { Group } from "@/types/groupData";
 
 interface GroupContextType {
   groups: Group[];

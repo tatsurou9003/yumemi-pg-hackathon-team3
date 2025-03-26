@@ -1,7 +1,7 @@
-import { Group, GroupData } from "@/types/groupData";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
 import { Link } from "@tanstack/react-router";
 import { useGroup } from "@/hooks/useGroup";
+import { Group, GroupData } from "@/types/common";
 
 const GroupList = ({ groupData }: GroupData) => {
   const { setCurrentGroupById } = useGroup();
@@ -22,7 +22,7 @@ const GroupList = ({ groupData }: GroupData) => {
               {group.groupName.charAt(0)}
             </AvatarFallback>
           </Avatar>
-          {group.groupName}({group.count})
+          {group.groupName}({group.memberCount})
         </Link>
       ))}
     </div>

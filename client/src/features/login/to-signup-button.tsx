@@ -1,19 +1,20 @@
 import { useNavigate } from "@tanstack/react-router";
-const LoginButton = () => {
+
+const ToSignUpButton = () => {
   const navigate = useNavigate();
+
   return (
     <div className="flex flex-col justify-center items-center">
       <button
         onClick={() => {
-          navigate({ to: "/home" });
+          navigate({ to: "/signup" });
         }}
         type="submit"
-        className="relative w-[152px] h-[27px]  top-[104px] rounded-[4px] bg-white text-black text-sm font-medium cursor-pointer  "
+        className="relative w-[152px] h-[27px] top-[5px] text-black text-sm font-medium cursor-pointer"
       >
-        ログイン
+        新規登録
       </button>
     </div>
   );
 };
-
-export default LoginButton;
+export default ToSignUpButton;

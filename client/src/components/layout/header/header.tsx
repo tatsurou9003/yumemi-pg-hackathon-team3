@@ -12,11 +12,7 @@ import {
   StickyNote,
 } from "@/components/common/icon";
 import { useGroup } from "@/hooks/useGroup";
-
-interface HeaderProps {
-  avatar: string;
-  onSidebar: () => void;
-}
+import { HeaderProps } from "@/types/layout";
 
 export const Header = ({ avatar, onSidebar }: HeaderProps) => {
   const navigate = useNavigate();
@@ -30,16 +26,16 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     // 静的なルート
     if (path === "/login") return "ログイン";
     if (path === "/signup") return "新規登録";
-    if (path === "/complete") return "新規登録";
+    if (path === "/verify") return "新規登録";
     if (path === "/home") return "ホーム";
     if (path === "/home/policy") return "ホーム";
     if (path === "/home/group") return "グループ作成";
     if (path === "/profile") return "プロフィール";
     // 動的なルート
-    if (path.match(/^\/home\/\w+\/\w+\/edit$/)) {
+    if (path.match(/^\/home\/[\w-]+\/[\w-]+\/edit$/)) {
       return "メンバー編集";
     }
-    if (path.match(/^\/home\/\w+(\/\w+)?$/)) {
+    if (path.match(/^\/home\/[\w-]+(\/[\w-]+)?$/)) {
       // groupIdに基づいてグループ名を取得
       const groupId = path.split("/")[2] || "";
       // コンテキストからグループ名を取得
@@ -56,17 +52,17 @@ export const Header = ({ avatar, onSidebar }: HeaderProps) => {
     if (path.match(/^\/home\/\w+\/\w+\/edit$/)) {
       return "/home";
     }
-    if (path.match(/^\/home\/\w+$/)) {
+    if (path.match(/^\/home\/[\w-]+$/)) {
       return "/home";
     }
-    if (path.match(/^\/home\/\w+\/\w+$/)) {
-      const groupId = path.split("/")[2]; // "/home/groupId/..." から "groupId" を取得
+    if (path.match(/^\/home\/[\w-]+\/[\w-]+$/)) {
+      const groupId = path.split("/")[2];
       return `/home/${groupId}`;
     }
     return "/";
   };
 
-  const isRoomPath = path.match(/^\/home\/\w+(\/\w+)?$/);
+  const isRoomPath = path.match(/^\/home\/[\w-]+$/);
   let groupId = isRoomPath ? path.split("/")[2] : null;
   if (groupId === "policy" || groupId === "group") {
     groupId = null;

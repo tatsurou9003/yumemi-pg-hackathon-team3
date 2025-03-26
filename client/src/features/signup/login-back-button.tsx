@@ -1,6 +1,8 @@
 import { useNavigate } from "@tanstack/react-router";
-const LginBackButton = () => {
+
+const LoginBackButton = () => {
   const navigate = useNavigate();
+
   return (
     <div className="flex flex-col justify-center items-center">
       <button
@@ -16,4 +18,4 @@ const LginBackButton = () => {
   );
 };
 
-export default LginBackButton;
+export default LoginBackButton;

@@ -28,13 +28,15 @@ client/
 │   │   ├── dashboard/         # ダッシュボード関連
 │   ├── contexts/              # ContextAPIのコンテキスト定義
 │   ├── hooks/                 # カスタムフック
+│   │   ├── orval/             # Orvalのカスタムフック置き場
 │   ├── lib/                   # 外部ライブラリのユーティリティ関数
+│   │   ├── custom-instance.ts # Orvalのaxiosリクエスト用のインスタンス
 │   ├── routes/                # ルート定義とページコンポーネント
 │   ├── types/                 # 型定義
 │   ├── main.tsx               # React アプリのエントリーポイント
 │   ├── routeTree.gen.ts       # TanStack Router の自動生成ルートツリー
 │   ├── tailwind.css           # Tailwind CSSのインポートファイル
-│   ├── vite-env.d.ts          # Vite 環境用の TypeScript 定義
+│   ├── vite-env.d.ts          # Vite 環境変数用の TypeScript 定義
 ├── .gitignore
 ├── components.json            # shadcn/ui用の設定ファイル
 ├── eslint.config.js           # ESLint の設定ファイル
@@ -52,7 +54,16 @@ client/
 
 1. `cd client`
 2. `npm install`
-3. `npm run dev`で開発環境が立ち上がれば ok
+3. `npm run dev`で開発環境が立ち上がることを確認
+4. `cp .env.example .env.local`でファイルをコピーした後、.env.localに必要な値を入れていく
+
+なお、環境変数を呼び出す時は、以下のようにすること。
+
+```
+import { env } from "../env";
+
+const { API_URL } = env;
+```
 
 ## 命名規則
 
@@ -90,9 +101,48 @@ src/routes/
 
 OpenApiのドキュメントから型安全にAPIリクエストのHooksを作成してくれるライブラリ。モックサーバーも立てられるので、`openapi.yaml`さえあれば、API実装が未完了でも容易に繋ぎ込んでいける。
 
-TODO:`openapi.yaml`ファイルが作られた後に、設定ファイルを生成し、`npx orval`を実行
+`openapi.yaml`ファイルが作られた後に、設定ファイル`orval.config.ts`を生成し、`npm run orval`を実行すると、カスタムフックが出来上がる(実施済み)。
 
-TODO: フックの使い方について追記
+カスタムフックは`hooks/orval`下に配置され、フォルダ毎に分けられている。
+`orval/xx/xx.ts`の中をのぞくと、中にフックが用意されている。
+
+使用例) `getUsers`
+
+```
+import { getUsers } from "@/hooks/orval/users/users";
+
+...
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+	...
+        // ローカルストレージからユーザーIDを取得
+        const userId = `CognitoIdentityServiceProvider.${USER_POOL_CLIENT_ID}.LastAuthUser`;
+
+        if (!userId) {
+	  //userIdが取得できなかった場合の処理
+        }
+
+        // 例: getUsersの中のgetUsersHomeを叩く場合
+        // APIリクエストパラメータを設定
+        const params = {
+          params: {
+            userId: userId
+          }
+        };
+
+        const { data } = await getUsers().getUsersHome(params);
+	...
+        }
+      } catch (error) {
+        console.error('ユーザー情報の取得に失敗しました:', error);
+	//エラーの処理の追加
+      }
+    };
+
+    fetchUserData();
+  }, []);
+```
 
 ### SVGR
 

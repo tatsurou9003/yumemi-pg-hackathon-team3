@@ -21,6 +21,18 @@ paths:
             type: string
           required: true
           description: JWTトークンをクエリパラメータに含んで送信する
+        - in: query
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: ログイン中のユーザーIDをクエリパラメータに含んで送信する
+        - in: query
+          name: groupId
+          schema:
+            type: string
+          required: true
+          description: 対象グループのIDをクエリパラメータに含んで送信する
       responses:
         "200":
           description: ステータスコードは無くopenイベントが発生
@@ -82,13 +94,10 @@ components:
           type: string
           format: date-time（ISO8601）
           description: 回答期限（テーマの場合）
-        createdAt:
-          type: string
-          format: date-time（ISO8601）
-          description: メッセージ作成日時
       required:
         - action
         - groupId
+        - createdBy
         - messageType
         - messageText
 
