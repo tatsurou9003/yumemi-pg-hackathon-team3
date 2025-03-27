@@ -24,11 +24,7 @@ export const Route = createFileRoute("/_layout/home/")({
 });
 
 // ヘッダー画像の配列
-const headerImages = [
-  "/src/assets/header1.png",
-  "/src/assets/header2.png",
-  "/src/assets/header3.png",
-];
+const headerImages = ["/header1.png", "/header2.png", "/header3.png"];
 
 function RouteComponent() {
   const [joinedGroups, setJoinedGroups] = useState<Group[]>([]);
