@@ -162,5 +162,5 @@ toast.error("エラーメッセージ")
 toast.info("通知メッセージ")
 ```
 
-スタイルのカスタムも可能。[こちら](https://saunabouya.com/2022/11/16/react-toastify/#i-2)を参考に
+スタイルのカスタムも可能。[こちら](https://saunabouya.com/2022/11/16/react-toastify/#i-2)を参考にしてね
 ...
